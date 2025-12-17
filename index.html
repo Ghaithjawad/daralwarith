@@ -57,10 +57,9 @@ body{
   padding:12px 16px;
   background:#f6fdfd;
 }
-.form-check-input{
-  width:18px; height:18px; margin-left:10px;
-}
+.form-check-input{ width:18px; height:18px; margin-left:10px; }
 .form-check-input:checked{ background-color:var(--main); border-color:var(--main); }
+
 button.main-btn{
   background:var(--main);
   border:none;
@@ -83,6 +82,7 @@ button.main-btn:hover{ background:var(--dark); }
 /* ===== كاميرا احترافية ===== */
 .cam-wrap{ position:relative; width:100%; }
 #camVideo{ width:100%; border-radius:12px; background:#000; }
+
 .cam-overlay{
   position:absolute; inset:0;
   display:flex; align-items:center; justify-content:center;
@@ -90,11 +90,12 @@ button.main-btn:hover{ background:var(--dark); }
 }
 .id-frame{
   width:72%;
-  aspect-ratio: 8.7 / 5.3;   /* إطار بنفس قياس الهوية */
-  border:4px solid red;       /* يتبدل أخضر/أحمر */
+  aspect-ratio: 8.7 / 5.3;
+  border:4px solid red;
   border-radius:14px;
   box-shadow:0 0 0 2000px rgba(0,0,0,.45);
 }
+
 .small-note{ font-size:.9rem; color:#666; }
 </style>
 </head>
@@ -109,10 +110,9 @@ button.main-btn:hover{ background:var(--dark); }
     <p class="mb-0">يرجى إدخال البيانات ورفع المستمسكات المطلوبة</p>
   </div>
 
-  <!-- تنبيه أمان الكاميرا -->
   <div id="secureWarn" class="alert alert-warning d-none">
     الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>.
-    إذا فتحت الملف مباشرة (file://) استخدم الاستوديو أو ارفع المشروع على GitHub Pages.
+    على GitHub Pages راح تشتغل (HTTPS).
   </div>
 
   <!-- اسم الموظف -->
@@ -128,7 +128,7 @@ button.main-btn:hover{ background:var(--dark); }
     <div class="mb-3">
       <label class="fw-bold mb-2 d-block">وجه الهوية</label>
       <div class="d-flex gap-2">
-        <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('empFace')">كاميرا</button>
+        <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empFace')">كاميرا</button>
         <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empFace')">استوديو</button>
       </div>
       <input type="file" id="empFace" class="form-control d-none" accept="image/*">
@@ -138,7 +138,7 @@ button.main-btn:hover{ background:var(--dark); }
     <div>
       <label class="fw-bold mb-2 d-block">ظهر الهوية</label>
       <div class="d-flex gap-2">
-        <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('empBack')">كاميرا</button>
+        <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empBack')">كاميرا</button>
         <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empBack')">استوديو</button>
       </div>
       <input type="file" id="empBack" class="form-control d-none" accept="image/*">
@@ -157,7 +157,7 @@ button.main-btn:hover{ background:var(--dark); }
       <div class="mb-3">
         <label class="fw-bold mb-2 d-block">وجه بطاقة السكن</label>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('resFace')">كاميرا</button>
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('resFace')">كاميرا</button>
           <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('resFace')">استوديو</button>
         </div>
         <input type="file" id="resFace" class="form-control d-none" accept="image/*">
@@ -167,7 +167,7 @@ button.main-btn:hover{ background:var(--dark); }
       <div>
         <label class="fw-bold mb-2 d-block">ظهر بطاقة السكن</label>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('resBack')">كاميرا</button>
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('resBack')">كاميرا</button>
           <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('resBack')">استوديو</button>
         </div>
         <input type="file" id="resBack" class="form-control d-none" accept="image/*">
@@ -214,7 +214,7 @@ button.main-btn:hover{ background:var(--dark); }
     <div id="rationSection" class="section d-none">
       <label class="fw-bold mb-2 d-block">صورة البطاقة التموينية</label>
       <div class="d-flex gap-2">
-        <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('rationFace')">كاميرا</button>
+        <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('rationFace')">كاميرا</button>
         <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('rationFace')">استوديو</button>
       </div>
       <input type="file" id="rationFace" class="form-control d-none" accept="image/*">
@@ -232,7 +232,7 @@ button.main-btn:hover{ background:var(--dark); }
     <div id="certificateSection" class="section d-none">
       <label class="fw-bold mb-2 d-block">صورة شهادة التخرج</label>
       <div class="d-flex gap-2">
-        <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('certificateFile')">كاميرا</button>
+        <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('certificateFile')">كاميرا</button>
         <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('certificateFile')">استوديو</button>
       </div>
       <input type="file" id="certificateFile" class="form-control d-none" accept="image/*">
@@ -243,7 +243,7 @@ button.main-btn:hover{ background:var(--dark); }
   <button class="w-100 main-btn" onclick="generatePDF()">إرسال وإنشاء ملف PDF</button>
 
   <div class="mt-3 small-note">
-    ملاحظة: الكاميرا تحتاج HTTPS أو localhost. الاستوديو يعمل دائمًا.
+    الكاميرا: Auto + Best Shot (سريع). الاستوديو يعمل دائمًا.
   </div>
 
 </div>
@@ -271,7 +271,7 @@ button.main-btn:hover{ background:var(--dark); }
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeCamera()">إغلاق</button>
-        <button type="button" class="btn btn-success" id="captureBtn" onclick="capturePhoto()" disabled>التقاط</button>
+        <button type="button" class="btn btn-success" id="captureBtn" onclick="bestShotCapture()" title="Best Shot">التقاط</button>
       </div>
     </div>
   </div>
@@ -280,22 +280,20 @@ button.main-btn:hover{ background:var(--dark); }
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* =======================
-   A) أمان الكاميرا (HTTPS/localhost)
-======================= */
+/* =========================
+   1) Secure context check
+========================= */
 function isCameraAllowedContext(){
-  const isLocalhost = ["localhost", "127.0.0.1"].includes(location.hostname);
+  const isLocalhost = ["localhost","127.0.0.1"].includes(location.hostname);
   return window.isSecureContext || isLocalhost;
 }
-(function initSecureWarning(){
-  const ok = isCameraAllowedContext();
-  document.getElementById("secureWarn").classList.toggle("d-none", ok);
-  // إذا مو آمن، خلي أزرار الكاميرا تبقى موجودة لكن راح تطلع رسالة واضحة عند الضغط
+(function(){
+  document.getElementById("secureWarn").classList.toggle("d-none", isCameraAllowedContext());
 })();
 
-/* =======================
-   B) استوديو + معاينة
-======================= */
+/* =========================
+   2) Studio + preview
+========================= */
 function openStudio(inputId){
   const el = document.getElementById(inputId);
   if(el) el.click();
@@ -314,17 +312,20 @@ function bindPreview(inputId){
 }
 ["empFace","empBack","resFace","resBack","rationFace","certificateFile"].forEach(bindPreview);
 
-/* =======================
-   C) كاميرا احترافية + إطار أخضر/أحمر
-======================= */
+/* =========================
+   3) Camera + fast green + AutoCapture(0.3s) + BestShot
+========================= */
 let camStream = null;
 let targetInputId = null;
 let camModal = null;
 let validateTimer = null;
+let greenSince = null;
+let lastAuto = 0;
+let bestShotLock = false;
 
 async function openCameraFor(inputId){
   if(!isCameraAllowedContext()){
-    alert("الكاميرا ما تشتغل إلا على HTTPS أو localhost.\nارفعه على GitHub Pages (راح يصير HTTPS) أو شغّله على localhost.\nالاستوديو يشتغل طبيعي.");
+    alert("الكاميرا ما تشتغل إلا على HTTPS أو localhost.\nعلى GitHub Pages راح تشتغل تلقائياً.");
     return;
   }
 
@@ -333,20 +334,24 @@ async function openCameraFor(inputId){
 
   try{
     camStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
-      audio: false
+      video: { facingMode:"environment" },
+      audio:false
     });
 
     const v = document.getElementById("camVideo");
     v.srcObject = camStream;
 
+    bestShotLock = false;
+    greenSince = null;
+    lastAuto = 0;
+
     camModal.show();
 
     if(validateTimer) clearInterval(validateTimer);
-    validateTimer = setInterval(()=>validateFrame(), 200);
+    validateTimer = setInterval(()=>validateFrameFast(), 120); // أسرع
 
   }catch(e){
-    alert("تعذر تشغيل الكاميرا. تأكد أعطيت صلاحية الكاميرا للمتصفح.");
+    alert("تعذر تشغيل الكاميرا. تأكد من إعطاء الصلاحية.");
     console.error(e);
   }
 }
@@ -357,47 +362,21 @@ function closeCamera(){
     camStream.getTracks().forEach(t=>t.stop());
     camStream = null;
   }
-  document.getElementById("captureBtn").disabled = true;
   document.getElementById("idFrame").style.borderColor = "red";
   document.getElementById("camHint").textContent = "وجّه الهوية داخل الإطار";
+  greenSince = null;
+  bestShotLock = false;
 }
 
-function capturePhoto(){
-  const v = document.getElementById("camVideo");
-  const canvas = document.createElement("canvas");
-  canvas.width = v.videoWidth;
-  canvas.height = v.videoHeight;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(v,0,0,canvas.width,canvas.height);
-
-  canvas.toBlob(blob=>{
-    const file = new File([blob], "camera.jpg", {type:"image/jpeg"});
-    const dt = new DataTransfer();
-    dt.items.add(file);
-
-    const input = document.getElementById(targetInputId);
-    input.files = dt.files;
-
-    const prev = document.getElementById(targetInputId+"Preview");
-    if(prev){
-      prev.src = URL.createObjectURL(file);
-      prev.classList.remove("d-none");
-    }
-
-    camModal.hide();
-    closeCamera();
-  }, "image/jpeg", 0.9);
-}
-
-function validateFrame(){
+function validateFrameFast(){
   const v = document.getElementById("camVideo");
   if(!v.videoWidth) return;
 
   const frameEl = document.getElementById("idFrame");
   const hint = document.getElementById("camHint");
-  const capBtn = document.getElementById("captureBtn");
 
-  const testW = 320;
+  // فحص سريع جدًا
+  const testW = 220;
   const testH = Math.round(testW * (v.videoHeight / v.videoWidth));
   const canvas = document.createElement("canvas");
   canvas.width = testW;
@@ -411,33 +390,47 @@ function validateFrame(){
   const roiX = Math.round((testW - roiW)/2);
   const roiY = Math.round((testH - roiH)/2);
 
-  const stats = analyzeROI(img.data, testW, testH, roiX, roiY, roiW, roiH);
+  const stats = analyzeROI_lightSharp(img.data, testW, testH, roiX, roiY, roiW, roiH);
 
-  const okLight = stats.mean > 60 && stats.mean < 200;
-  const okSharp = stats.blurScore > 40;
-  const okEdges = stats.edgeDensity > 0.06;
+  // شروط خفيفة = يصير أخضر بسرعة
+  const okLight = stats.mean > 40 && stats.mean < 230;
+  const okSharp = stats.blurScore > 18; // أخف من قبل
 
-  const ok = okLight && okSharp && okEdges;
+  const ok = okLight && okSharp;
 
   frameEl.style.borderColor = ok ? "lime" : "red";
-  capBtn.disabled = !ok;
 
   if(ok){
-    hint.textContent = "✅ ممتاز — الهوية داخل الإطار";
+    hint.textContent = "✅ ممتاز — سيتم الالتقاط تلقائياً";
+    if(greenSince === null) greenSince = performance.now();
+    autoCaptureTick();
   }else{
-    let msg = "❌ عدّل وضع الهوية داخل الإطار";
-    if(!okLight) msg = "❌ الإضاءة غير مناسبة";
-    else if(!okSharp) msg = "❌ الصورة مو واضحة (ثبّت اليد)";
-    else if(!okEdges) msg = "❌ الهوية مو داخل الإطار بالكامل";
-    hint.textContent = msg;
+    greenSince = null;
+    if(!okLight) hint.textContent = "⚠️ الإضاءة مو مناسبة — قرّب/ابتعد شوي";
+    else if(!okSharp) hint.textContent = "⚠️ مو واضح — ثبّت يدك/قرّب الهوية";
+    else hint.textContent = "⚠️ عدّل وضع الهوية داخل الإطار";
   }
 }
 
-function analyzeROI(data, w, h, x0, y0, rw, rh){
+function autoCaptureTick(){
+  if(bestShotLock) return;
+  const now = performance.now();
+  const needGreenMs = 300;     // ✅ أسرع: 0.3 ثانية
+  const cooldownMs = 1200;
+
+  if(greenSince === null) return;
+  if(now - greenSince < needGreenMs) return;
+  if(now - lastAuto < cooldownMs) return;
+
+  lastAuto = now;
+  bestShotCapture();           // ✅ Best Shot تلقائي
+}
+
+function analyzeROI_lightSharp(data, w, h, x0, y0, rw, rh){
   let sum=0, count=0;
   const gray = new Uint8ClampedArray(rw*rh);
-
   let k=0;
+
   for(let y=y0; y<y0+rh; y++){
     for(let x=x0; x<x0+rw; x++){
       const i=(y*w+x)*4;
@@ -446,8 +439,10 @@ function analyzeROI(data, w, h, x0, y0, rw, rh){
       sum += g; count++;
     }
   }
+
   const mean = sum / count;
 
+  // sharpness
   let lapSum=0;
   for(let y=1; y<rh-1; y++){
     for(let x=1; x<rw-1; x++){
@@ -460,35 +455,105 @@ function analyzeROI(data, w, h, x0, y0, rw, rh){
   }
   const blurScore = lapSum / ((rw-2)*(rh-2));
 
-  let edges=0;
-  const thresh = 20;
-  for(let y=1; y<rh-1; y++){
-    for(let x=1; x<rw-1; x++){
-      const gx = gray[y*rw+(x+1)] - gray[y*rw+(x-1)];
-      const gy = gray[(y+1)*rw+x] - gray[(y-1)*rw+x];
-      const mag = Math.abs(gx) + Math.abs(gy);
-      if(mag > thresh) edges++;
-    }
-  }
-  const edgeDensity = edges / (rw*rh);
-
-  return { mean, blurScore, edgeDensity };
+  return { mean, blurScore };
 }
 
-/* =======================
-   D) ديناميكية الزوجات/الأطفال + معاينة
-======================= */
+function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
+
+/* ===== Best Shot: 3 frames -> pick sharpest -> save ===== */
+async function bestShotCapture(){
+  if(bestShotLock) return;
+  bestShotLock = true;
+
+  const hint = document.getElementById("camHint");
+  hint.textContent = "⏳ جاري الالتقاط...";
+
+  try{
+    const shots = [];
+    for(let i=0;i<3;i++){
+      const shot = grabFrameWithScore();
+      shots.push(shot);
+      await sleep(120); // سريع
+    }
+
+    // اختر الأفضل
+    shots.sort((a,b)=>b.score - a.score);
+    const best = shots[0];
+
+    await saveDataUrlToInput(best.dataUrl);
+
+    if(camModal) camModal.hide();
+    closeCamera();
+
+  }catch(e){
+    console.error(e);
+    alert("صار خطأ بالالتقاط. جرّب مرة ثانية.");
+    bestShotLock = false;
+  }
+}
+
+function grabFrameWithScore(){
+  const v = document.getElementById("camVideo");
+  const canvas = document.createElement("canvas");
+  canvas.width = v.videoWidth;
+  canvas.height = v.videoHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(v,0,0,canvas.width,canvas.height);
+
+  // Score سريع على ROI
+  const testW = 260;
+  const testH = Math.round(testW * (canvas.height / canvas.width));
+  const c2 = document.createElement("canvas");
+  c2.width = testW;
+  c2.height = testH;
+  const x2 = c2.getContext("2d");
+  x2.drawImage(canvas,0,0,testW,testH);
+  const img = x2.getImageData(0,0,testW,testH);
+
+  const roiW = Math.round(testW * 0.72);
+  const roiH = Math.round(roiW * (5.3/8.7));
+  const roiX = Math.round((testW - roiW)/2);
+  const roiY = Math.round((testH - roiH)/2);
+
+  const st = analyzeROI_lightSharp(img.data, testW, testH, roiX, roiY, roiW, roiH);
+
+  // dataURL النهائي (JPEG)
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+
+  return { dataUrl, score: st.blurScore };
+}
+
+async function saveDataUrlToInput(dataUrl){
+  const blob = await (await fetch(dataUrl)).blob();
+  const file = new File([blob], "camera.jpg", {type:"image/jpeg"});
+  const dt = new DataTransfer();
+  dt.items.add(file);
+
+  const input = document.getElementById(targetInputId);
+  input.files = dt.files;
+
+  const prev = document.getElementById(targetInputId+"Preview");
+  if(prev){
+    prev.src = URL.createObjectURL(file);
+    prev.classList.remove("d-none");
+  }
+}
+
+/* =========================
+   4) Dynamic wife/child blocks
+========================= */
 function makeUploadBlock(prefix, i){
   const faceId = `${prefix}Face_${i}`;
   const backId = `${prefix}Back_${i}`;
   const title = (prefix==="wife") ? `زوجة ${i}` : `طفل ${i}`;
+
   return `
     <div class="mb-3 p-3 rounded border bg-white">
       <strong class="d-block mb-2">${title}</strong>
 
       <div class="mb-2">
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('${faceId}')">كاميرا (وجه)</button>
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${faceId}')">كاميرا (وجه)</button>
           <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${faceId}')">استوديو (وجه)</button>
         </div>
         <input type="file" id="${faceId}" class="form-control d-none ${prefix}-face" accept="image/*">
@@ -497,7 +562,7 @@ function makeUploadBlock(prefix, i){
 
       <div>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('${backId}')">كاميرا (ظهر)</button>
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${backId}')">كاميرا (ظهر)</button>
           <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${backId}')">استوديو (ظهر)</button>
         </div>
         <input type="file" id="${backId}" class="form-control d-none ${prefix}-back" accept="image/*">
@@ -506,18 +571,21 @@ function makeUploadBlock(prefix, i){
     </div>
   `;
 }
+
 function bindDynamicPreviews(prefix, n){
   for(let i=1;i<=n;i++){
     bindPreview(`${prefix}Face_${i}`);
     bindPreview(`${prefix}Back_${i}`);
   }
 }
+
 wivesCount.oninput = ()=>{
   const n = Number(wivesCount.value || 0);
   wivesUploads.innerHTML = "";
   for(let i=1;i<=n;i++) wivesUploads.innerHTML += makeUploadBlock("wife", i);
   bindDynamicPreviews("wife", n);
 };
+
 childrenCount.oninput = ()=>{
   const n = Number(childrenCount.value || 0);
   childrenUploads.innerHTML = "";
@@ -525,19 +593,20 @@ childrenCount.oninput = ()=>{
   bindDynamicPreviews("child", n);
 };
 
-/* =======================
-   E) إظهار/إخفاء الأقسام
-======================= */
+/* =========================
+   5) show/hide sections
+========================= */
 hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
 isMarried.onchange    = ()=> wivesSection.classList.toggle("d-none", !isMarried.checked);
 hasChildren.onchange  = ()=> childrenSection.classList.toggle("d-none", !hasChildren.checked);
 hasRation.onchange    = ()=> rationSection.classList.toggle("d-none", !hasRation.checked);
 hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
 
-/* =======================
-   F) PDF (هوية 8.7×5.3 سم) بدون نص عربي + بدون قص
-======================= */
+/* =========================
+   6) PDF (8.7x5.3 each) no arabic text, no crop
+========================= */
 const { jsPDF } = window.jspdf;
+
 const CM = 28.35;
 const SAFE_MARGIN = 2 * CM;
 const ID_W = 8.7 * CM;
@@ -560,6 +629,7 @@ async function loadImageDataForPDF(file){
     i.src=dataUrl;
   });
 
+  // تصغير + JPEG لضمان الثبات والحجم
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
   const maxW = 2000;
@@ -643,15 +713,13 @@ async function generatePDF(){
   const wf = document.querySelectorAll(".wife-face");
   const wb = document.querySelectorAll(".wife-back");
   for(let i=0;i<wf.length;i++){
-    if(wf[i].files[0] && wb[i].files[0])
-      await addIDPage(pdf, wf[i].files[0], wb[i].files[0]);
+    if(wf[i].files[0] && wb[i].files[0]) await addIDPage(pdf, wf[i].files[0], wb[i].files[0]);
   }
 
   const cf = document.querySelectorAll(".child-face");
   const cb = document.querySelectorAll(".child-back");
   for(let i=0;i<cf.length;i++){
-    if(cf[i].files[0] && cb[i].files[0])
-      await addIDPage(pdf, cf[i].files[0], cb[i].files[0]);
+    if(cf[i].files[0] && cb[i].files[0]) await addIDPage(pdf, cf[i].files[0], cb[i].files[0]);
   }
 
   if(hasRation.checked){
