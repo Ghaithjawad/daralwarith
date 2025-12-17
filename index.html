@@ -88,23 +88,13 @@ button.main-btn:hover{ background:var(--dark); }
   pointer-events:none;
 }
 .id-frame{
-  width:74%;
+  width:72%;
   aspect-ratio: 8.7 / 5.3;
   border:4px solid red;
   border-radius:14px;
   box-shadow:0 0 0 2000px rgba(0,0,0,.45);
 }
-#cvDebug{
-  position:absolute;
-  bottom:10px;
-  left:10px;
-  background:rgba(0,0,0,.45);
-  color:#fff;
-  padding:6px 10px;
-  border-radius:10px;
-  font-size:12px;
-  display:none;
-}
+
 .footer-note{
   text-align:center;
   margin:14px auto 25px;
@@ -113,6 +103,10 @@ button.main-btn:hover{ background:var(--dark); }
   font-weight:600;
 }
 .small-note{ font-size:.9rem; color:#666; }
+
+.req-hint{ font-size:.85rem; color:#b42318; display:none; }
+.req-hint.show{ display:block; }
+
 </style>
 </head>
 
@@ -130,19 +124,99 @@ button.main-btn:hover{ background:var(--dark); }
     الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>. على GitHub Pages راح تشتغل (HTTPS).
   </div>
 
-  <div id="cvWarn" class="alert alert-info d-none">
-    جاري تحميل نظام التعرّف الذكي على الهوية… إذا تأخر، جرّب تحديث الصفحة.
+  <!-- ====== بيانات الموظف ====== -->
+  <div class="card p-4">
+    <label class="fw-bold">الاسم الرباعي (إجباري)</label>
+    <input type="text" id="employeeName" class="form-control" placeholder="مثال: محمد علي حسن عباس">
+    <div id="nameError" class="req-hint">الاسم لازم يكون 4 كلمات بالضبط</div>
   </div>
 
-  <!-- اسم الموظف -->
   <div class="card p-4">
-    <label class="fw-bold">اسم الموظف الكامل</label>
-    <input type="text" id="employeeName" class="form-control">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="fw-bold">محل الولادة</label>
+        <input type="text" id="birthPlace" class="form-control" placeholder="مثال: كربلاء">
+      </div>
+      <div class="col-md-6">
+        <label class="fw-bold">المواليد (تاريخ الولادة)</label>
+        <input type="date" id="birthDate" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="fw-bold">رقم الهاتف</label>
+        <input type="tel" id="phone" class="form-control" placeholder="07xxxxxxxxx">
+      </div>
+      <div class="col-md-6">
+        <label class="fw-bold">رقم باج العتبة الحسينية المقدسة</label>
+        <input type="text" id="badgeNumber" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label class="fw-bold">التحصيل الدراسي</label>
+        <select id="education" class="form-control">
+          <option value="">اختر</option>
+          <option>ابتدائية</option>
+          <option>متوسطة</option>
+          <option>إعدادية</option>
+          <option>دبلوم</option>
+          <option>بكالوريوس</option>
+          <option>ماجستير</option>
+          <option>دكتوراه</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="fw-bold">التخصص الدقيق</label>
+        <input type="text" id="specialty" class="form-control" placeholder="مثال: شبكات / محاسبة / تمريض...">
+      </div>
+      <div class="col-12">
+        <label class="fw-bold">عنوان السكن الحالي</label>
+        <textarea id="address" class="form-control" rows="2" placeholder="المحافظة - القضاء - الناحية - المحلة - الزقاق - الدار"></textarea>
+      </div>
+    </div>
   </div>
 
-  <!-- البطاقة الوطنية -->
+  <!-- ====== الحالة الاجتماعية (بدل checkbox) ====== -->
   <div class="card p-4">
-    <h5 class="mb-3">البطاقة الوطنية للموظف</h5>
+    <label class="fw-bold mb-2 d-block">الحالة الاجتماعية</label>
+    <select id="maritalStatus" class="form-control">
+      <option value="">اختر</option>
+      <option value="single">أعزب</option>
+      <option value="married">متزوج</option>
+    </select>
+
+    <div id="socialSection" class="section d-none">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="fw-bold">اسم الزوجة الثلاثي</label>
+          <input type="text" id="wifeName" class="form-control" placeholder="مثال: زهراء علي حسن">
+        </div>
+        <div class="col-md-6">
+          <label class="fw-bold">هل الزوجة موظفة؟</label>
+          <select id="wifeIsEmployee" class="form-control">
+            <option value="">اختر</option>
+            <option value="yes">نعم</option>
+            <option value="no">لا</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="fw-bold">اسم أم الأبناء</label>
+          <input type="text" id="childrenMother" class="form-control" placeholder="عادةً نفس الزوجة (حسب الحاجة)">
+        </div>
+
+        <div class="col-md-6">
+          <label class="fw-bold">عدد الأبناء</label>
+          <input type="number" id="childrenCount" min="0" class="form-control" value="0">
+        </div>
+
+        <div class="col-12">
+          <div id="childrenNamesWrap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== البطاقة الوطنية (قص + فحص) ====== -->
+  <div class="card p-4">
+    <h5 class="mb-3">البطاقة الوطنية للموظف (قصّ ذكي داخل الإطار)</h5>
 
     <div class="mb-3">
       <label class="fw-bold mb-2 d-block">وجه الهوية</label>
@@ -165,7 +239,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- بطاقة السكن -->
+  <!-- ====== بطاقة السكن (قص + فحص) ====== -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد بطاقة سكن؟</label>
@@ -195,53 +269,25 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- متزوج -->
+  <!-- ====== باج العتبة (بدل التموينية) - تصوير/رفع كامل بدون قص ====== -->
   <div class="card p-4">
     <div class="check-box form-check">
-      <label class="form-check-label">هل أنت متزوج؟</label>
-      <input class="form-check-input" type="checkbox" id="isMarried">
+      <label class="form-check-label">هل توجد صورة/باج العتبة الحسينية؟</label>
+      <input class="form-check-input" type="checkbox" id="hasBadge">
     </div>
 
-    <div id="wivesSection" class="section d-none">
-      <label class="fw-bold">عدد الزوجات</label>
-      <input type="number" id="wivesCount" min="1" class="form-control mb-3">
-      <div id="wivesUploads"></div>
-    </div>
-  </div>
-
-  <!-- أطفال -->
-  <div class="card p-4">
-    <div class="check-box form-check">
-      <label class="form-check-label">هل يوجد أطفال؟</label>
-      <input class="form-check-input" type="checkbox" id="hasChildren">
-    </div>
-
-    <div id="childrenSection" class="section d-none">
-      <label class="fw-bold">عدد الأطفال</label>
-      <input type="number" id="childrenCount" min="1" class="form-control mb-3">
-      <div id="childrenUploads"></div>
-    </div>
-  </div>
-
-  <!-- التموينية (بدون ذكاء/بدون قص) -->
-  <div class="card p-4">
-    <div class="check-box form-check">
-      <label class="form-check-label">هل توجد بطاقة تموينية؟</label>
-      <input class="form-check-input" type="checkbox" id="hasRation">
-    </div>
-
-    <div id="rationSection" class="section d-none">
-      <label class="fw-bold mb-2 d-block">صورة البطاقة التموينية</label>
+    <div id="badgeSection" class="section d-none">
+      <label class="fw-bold mb-2 d-block">رفع/تصوير باج العتبة (بدون قص)</label>
       <div class="d-flex gap-2">
-        <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('rationFace')">كاميرا</button>
-        <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('rationFace')">استوديو</button>
+        <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('badgeFile')">كاميرا</button>
+        <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('badgeFile')">استوديو</button>
       </div>
-      <input type="file" id="rationFace" class="form-control d-none" accept="image/*">
-      <img id="rationFacePreview" class="preview-img mt-2 d-none" alt="preview">
+      <input type="file" id="badgeFile" class="form-control d-none" accept="image/*">
+      <img id="badgeFilePreview" class="preview-img mt-2 d-none" alt="preview">
     </div>
   </div>
 
-  <!-- الشهادة (بدون ذكاء/بدون قص) -->
+  <!-- ====== شهادة التخرج (بدون قص) ====== -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد شهادة تخرج؟</label>
@@ -249,7 +295,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
 
     <div id="certificateSection" class="section d-none">
-      <label class="fw-bold mb-2 d-block">صورة شهادة التخرج</label>
+      <label class="fw-bold mb-2 d-block">صورة شهادة التخرج (بدون قص)</label>
       <div class="d-flex gap-2">
         <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('certificateFile')">كاميرا</button>
         <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('certificateFile')">استوديو</button>
@@ -262,7 +308,8 @@ button.main-btn:hover{ background:var(--dark); }
   <button class="w-100 main-btn" onclick="generatePDF()">إرسال وإنشاء ملف PDF</button>
 
   <div class="mt-3 small-note">
-    الوطني + السكن: قصّ ذكي للهوية فقط. التموينية/الشهادة: التقاط عادي.
+    الوطني + السكن: قص داخل الإطار + فحص إضاءة/وضوح + Best Shot. <br>
+    الباج + الشهادة: التقاط/رفع كامل بدون قص.
   </div>
 
 </div>
@@ -274,7 +321,7 @@ button.main-btn:hover{ background:var(--dark); }
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">كاميرا</h5>
+        <h5 class="modal-title" id="camTitle">كاميرا</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeCamera()"></button>
       </div>
 
@@ -284,16 +331,15 @@ button.main-btn:hover{ background:var(--dark); }
           <div class="cam-overlay">
             <div id="idFrame" class="id-frame"></div>
           </div>
-          <div id="cvDebug"></div>
         </div>
         <div class="mt-2">
-          <small class="text-muted" id="camHint">وجّه الهوية داخل الإطار</small>
+          <small class="text-muted" id="camHint">وجّه المستند داخل الإطار</small>
         </div>
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeCamera()">إغلاق</button>
-        <button type="button" class="btn btn-success" id="captureBtn" onclick="captureAction()">التقاط</button>
+        <button type="button" class="btn btn-success" id="captureBtn" onclick="captureNow()">التقاط</button>
       </div>
     </div>
   </div>
@@ -301,13 +347,12 @@ button.main-btn:hover{ background:var(--dark); }
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- OpenCV.js (للذكاء والدقة في الهوية) -->
-<script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady()"></script>
-
 <script>
-/* =========================
-   A) HTTPS / localhost
-========================= */
+/* =======================
+   0) Helpers
+======================= */
+const ID_INPUTS = new Set(["empFace","empBack","resFace","resBack"]); // فقط الوطني + السكن
+
 function isCameraAllowedContext(){
   const isLocalhost = ["localhost","127.0.0.1"].includes(location.hostname);
   return window.isSecureContext || isLocalhost;
@@ -316,9 +361,6 @@ function isCameraAllowedContext(){
   document.getElementById("secureWarn").classList.toggle("d-none", isCameraAllowedContext());
 })();
 
-/* =========================
-   B) Studio + preview
-========================= */
 function openStudio(inputId){
   const el = document.getElementById(inputId);
   if(el) el.click();
@@ -335,99 +377,83 @@ function bindPreview(inputId){
     }
   });
 }
-["empFace","empBack","resFace","resBack","rationFace","certificateFile"].forEach(bindPreview);
+["empFace","empBack","resFace","resBack","badgeFile","certificateFile"].forEach(bindPreview);
 
-/* =========================
-   C) Sections
-========================= */
+/* =======================
+   1) Validation: الاسم الرباعي
+======================= */
+function isQuadName(name){
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  return words.length === 4;
+}
+employeeName.addEventListener("input", ()=>{
+  const ok = isQuadName(employeeName.value);
+  document.getElementById("nameError").classList.toggle("show", !ok && employeeName.value.trim().length>0);
+});
+
+/* =======================
+   2) Social logic (اعزب/متزوج)
+======================= */
+maritalStatus.addEventListener("change", ()=>{
+  const married = maritalStatus.value === "married";
+  socialSection.classList.toggle("d-none", !married);
+
+  if(!married){
+    // تنظيف حقول الزوجة/الأطفال
+    wifeName.value = "";
+    wifeIsEmployee.value = "";
+    childrenMother.value = "";
+    childrenCount.value = 0;
+    childrenNamesWrap.innerHTML = "";
+  }
+});
+
+childrenCount.addEventListener("input", ()=>{
+  const n = Math.max(0, Number(childrenCount.value || 0));
+  childrenNamesWrap.innerHTML = "";
+
+  if(n === 0) return;
+
+  // أسماء الأبناء
+  const box = document.createElement("div");
+  box.className = "section";
+  box.innerHTML = `<div class="fw-bold mb-2">أسماء الأبناء</div>`;
+  for(let i=1;i<=n;i++){
+    const div = document.createElement("div");
+    div.className = "mb-2";
+    div.innerHTML = `
+      <label class="fw-bold">اسم الابن ${i}</label>
+      <input type="text" class="form-control childName" placeholder="اسم ثلاثي/رباعي حسب المتوفر">
+    `;
+    box.appendChild(div);
+  }
+  childrenNamesWrap.appendChild(box);
+});
+
+/* =======================
+   3) Toggle sections
+======================= */
 hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
-isMarried.onchange    = ()=> wivesSection.classList.toggle("d-none", !isMarried.checked);
-hasChildren.onchange  = ()=> childrenSection.classList.toggle("d-none", !hasChildren.checked);
-hasRation.onchange    = ()=> rationSection.classList.toggle("d-none", !hasRation.checked);
+hasBadge.onchange     = ()=> badgeSection.classList.toggle("d-none", !hasBadge.checked);
 hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
 
-/* =========================
-   D) Dynamic wife/child (عادي بدون ذكاء)
-========================= */
-function makeUploadBlock(prefix, i){
-  const faceId = `${prefix}Face_${i}`;
-  const backId = `${prefix}Back_${i}`;
-  const title = (prefix==="wife") ? `زوجة ${i}` : `طفل ${i}`;
-
-  return `
-    <div class="mb-3 p-3 rounded border bg-white">
-      <strong class="d-block mb-2">${title}</strong>
-
-      <div class="mb-2">
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${faceId}')">كاميرا (وجه)</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${faceId}')">استوديو (وجه)</button>
-        </div>
-        <input type="file" id="${faceId}" class="form-control d-none ${prefix}-face" accept="image/*">
-        <img id="${faceId}Preview" class="preview-img mt-2 d-none" alt="preview">
-      </div>
-
-      <div>
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${backId}')">كاميرا (ظهر)</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${backId}')">استوديو (ظهر)</button>
-        </div>
-        <input type="file" id="${backId}" class="form-control d-none ${prefix}-back" accept="image/*">
-        <img id="${backId}Preview" class="preview-img mt-2 d-none" alt="preview">
-      </div>
-    </div>
-  `;
-}
-function bindDynamicPreviews(prefix, n){
-  for(let i=1;i<=n;i++){
-    bindPreview(`${prefix}Face_${i}`);
-    bindPreview(`${prefix}Back_${i}`);
-  }
-}
-wivesCount.oninput = ()=>{
-  const n = Number(wivesCount.value || 0);
-  wivesUploads.innerHTML = "";
-  for(let i=1;i<=n;i++) wivesUploads.innerHTML += makeUploadBlock("wife", i);
-  bindDynamicPreviews("wife", n);
-};
-childrenCount.oninput = ()=>{
-  const n = Number(childrenCount.value || 0);
-  childrenUploads.innerHTML = "";
-  for(let i=1;i<=n;i++) childrenUploads.innerHTML += makeUploadBlock("child", i);
-  bindDynamicPreviews("child", n);
-};
-
-/* =========================
-   E) Smart ID only for national + residence
-========================= */
-const SMART_ID_INPUTS = new Set(["empFace","empBack","resFace","resBack"]); // فقط هذني
-function isSmartIdInput(inputId){ return SMART_ID_INPUTS.has(inputId); }
-
-/* =========================
-   F) OpenCV readiness
-========================= */
-let cvReady = false;
-function onOpenCvReady(){
-  // بعض الأحيان cv.onload يسبق تهيئة cv.Mat
-  const t = setInterval(()=>{
-    if(window.cv && cv.Mat){
-      cvReady = true;
-      document.getElementById("cvWarn").classList.add("d-none");
-      clearInterval(t);
-    }
-  }, 80);
-}
-
-/* =========================
-   G) Camera controller
-========================= */
+/* =======================
+   4) CAMERA controller:
+   - الوطني+السكن: قص داخل الإطار + فحص + Auto + BestShot
+   - الباج+الشهادة: تصوير كامل بدون قص/بدون فحص
+======================= */
 let camStream = null;
 let targetInputId = null;
 let camModal = null;
 let validateTimer = null;
-let stableSince = null;
-let lastFoundQuad = null;
-let currentMode = "NORMAL"; // "SMART_ID" | "NORMAL"
+
+// ID-mode vars
+let greenSince = null;
+let lastAuto = 0;
+let bestShotLock = false;
+
+// mode: "ID" or "FULL"
+let captureMode = "ID";
 
 async function openCameraFor(inputId){
   if(!isCameraAllowedContext()){
@@ -436,12 +462,7 @@ async function openCameraFor(inputId){
   }
 
   targetInputId = inputId;
-  currentMode = isSmartIdInput(inputId) ? "SMART_ID" : "NORMAL";
-
-  // لو Smart لازم OpenCV
-  if(currentMode === "SMART_ID" && !cvReady){
-    document.getElementById("cvWarn").classList.remove("d-none");
-  }
+  captureMode = ID_INPUTS.has(inputId) ? "ID" : "FULL";
 
   if(!camModal) camModal = new bootstrap.Modal(document.getElementById("camModal"));
 
@@ -454,23 +475,35 @@ async function openCameraFor(inputId){
     const v = document.getElementById("camVideo");
     v.srcObject = camStream;
 
-    // UI mode
+    // UI per mode
     const frameEl = document.getElementById("idFrame");
-    frameEl.style.display = (currentMode === "SMART_ID") ? "block" : "none";
+    const titleEl = document.getElementById("camTitle");
+    const hint = document.getElementById("camHint");
+    const capBtn = document.getElementById("captureBtn");
 
-    document.getElementById("camHint").textContent =
-      (currentMode === "SMART_ID")
-        ? "وجّه الهوية داخل الإطار (يصبح أخضر عند اكتشاف الهوية)"
-        : "التقاط عادي (للشهادة/التموينية وغيرها)";
-
-    document.getElementById("captureBtn").disabled = (currentMode === "SMART_ID"); // يتفعل عند الاخضر
-    lastFoundQuad = null;
-    stableSince = null;
+    if(captureMode === "ID"){
+      frameEl.style.display = "block";
+      frameEl.style.borderColor = "red";
+      titleEl.textContent = "كاميرا الهوية (قص ذكي)";
+      hint.textContent = "وجّه الهوية داخل الإطار — يتحول أخضر عند وضوح وإضاءة مناسبة";
+      capBtn.textContent = "التقاط";
+      capBtn.disabled = false; // متاح، لكن الأفضل الأخضر
+      // start validator
+      bestShotLock = false; greenSince = null; lastAuto = 0;
+      if(validateTimer) clearInterval(validateTimer);
+      validateTimer = setInterval(()=>validateFrameFast(), 110);
+    }else{
+      frameEl.style.display = "none";
+      titleEl.textContent = "كاميرا (بدون قص)";
+      hint.textContent = "التقاط صورة كاملة";
+      capBtn.textContent = "التقاط";
+      capBtn.disabled = false;
+      // stop validator
+      if(validateTimer) { clearInterval(validateTimer); validateTimer=null; }
+      bestShotLock = false; greenSince = null; lastAuto = 0;
+    }
 
     camModal.show();
-
-    if(validateTimer) clearInterval(validateTimer);
-    validateTimer = setInterval(()=>tickValidate(), 140);
 
   }catch(e){
     alert("تعذر تشغيل الكاميرا. تأكد من إعطاء الصلاحية.");
@@ -485,79 +518,109 @@ function closeCamera(){
     camStream = null;
   }
   document.getElementById("idFrame").style.borderColor = "red";
-  document.getElementById("captureBtn").disabled = (currentMode === "SMART_ID");
-  stableSince = null;
-  lastFoundQuad = null;
+  document.getElementById("camHint").textContent = "—";
+  greenSince = null;
+  bestShotLock = false;
 }
 
-function captureAction(){
-  if(currentMode === "SMART_ID"){
-    // قص ذكي للهوية فقط
-    captureSmartIdNow();
-  }else{
-    // التقاط كامل بدون قص
-    captureNormalNow();
-  }
+function captureNow(){
+  if(captureMode === "ID") bestShotCapture();
+  else captureFullNow();
 }
 
-/* =========================
-   H) SMART detection (OpenCV): find a 4-point card with correct aspect
-========================= */
-const CARD_ASPECT = 8.7 / 5.3; // ~1.6415
-const ASPECT_TOL  = 0.18;      // سماحية
-const MIN_AREA_FRAC = 0.30;    // لازم تغطي جزء من الإطار
+/* ===== ID-mode validation + auto ===== */
+function analyzeLightSharpFastFromVideoROI(){
+  const v = document.getElementById("camVideo");
+  const roi = getCropRectInVideoPixels();
+  if(!roi) return null;
 
-function tickValidate(){
-  if(currentMode !== "SMART_ID"){
-    // normal mode: nothing to validate
-    return;
-  }
+  const testW = 220;
+  const testH = Math.max(1, Math.round(testW * (roi.h / roi.w)));
+
+  const c = document.createElement("canvas");
+  c.width = testW;
+  c.height = testH;
+  const ctx = c.getContext("2d", { willReadFrequently:true });
+  ctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0, 0, testW, testH);
+
+  const img = ctx.getImageData(0,0,testW,testH);
+  return analyzeROI_lightSharp(img.data, testW, testH, 0, 0, testW, testH);
+}
+
+function validateFrameFast(){
+  if(captureMode !== "ID") return;
 
   const frameEl = document.getElementById("idFrame");
   const hint = document.getElementById("camHint");
-  const capBtn = document.getElementById("captureBtn");
 
-  if(!cvReady){
-    frameEl.style.borderColor = "red";
-    capBtn.disabled = true;
-    hint.textContent = "⏳ جاري تحميل نظام التعرف…";
-    return;
-  }
+  const stats = analyzeLightSharpFastFromVideoROI();
+  if(!stats) return;
 
-  const v = document.getElementById("camVideo");
-  if(!v.videoWidth) return;
+  // شروط دقيقة أكثر (إضاءة جيدة + وضوح)
+  const okLight = stats.mean > 60 && stats.mean < 205;
+  const okSharp = stats.blurScore > 20;
 
-  // نقرأ ROI حسب إطار الـ DOM ثم نشتغل عليه
-  const roi = getFrameRoiInVideoPixels();
-  if(!roi) return;
+  const ok = okLight && okSharp;
 
-  const quad = detectCardQuadInROI(v, roi);
-  if(quad){
-    frameEl.style.borderColor = "lime";
-    capBtn.disabled = false;
-    hint.textContent = "✅ تم اكتشاف الهوية — ثبّت لحظة للتقاط تلقائي";
+  frameEl.style.borderColor = ok ? "lime" : "red";
 
-    lastFoundQuad = { roi, quad }; // quad نقاط داخل ROI (px)
-
-    // auto capture بعد ثبات قصير
-    const now = performance.now();
-    if(stableSince === null) stableSince = now;
-
-    // أسرع بس ما يكون مزعج: 350ms ثبات
-    if(now - stableSince > 350){
-      stableSince = null;
-      captureSmartIdNow(); // تلقائي
-    }
+  if(ok){
+    hint.textContent = "✅ ممتاز — سيتم الالتقاط تلقائياً";
+    if(greenSince === null) greenSince = performance.now();
+    autoCaptureTick();
   }else{
-    frameEl.style.borderColor = "red";
-    capBtn.disabled = true;
-    hint.textContent = "❌ لم يتم اكتشاف الهوية — قرّب الهوية وخليها داخل الإطار وبإضاءة جيدة";
-    stableSince = null;
-    lastFoundQuad = null;
+    greenSince = null;
+    if(!okLight) hint.textContent = "⚠️ الإضاءة غير مناسبة — قرّب للضوء أو ابتعد شوي";
+    else hint.textContent = "⚠️ مو واضح — ثبّت يدك/قرّب الهوية";
   }
 }
 
-function getFrameRoiInVideoPixels(){
+function autoCaptureTick(){
+  if(bestShotLock) return;
+  const now = performance.now();
+  const needGreenMs = 260;
+  const cooldownMs  = 900;
+
+  if(greenSince === null) return;
+  if(now - greenSince < needGreenMs) return;
+  if(now - lastAuto < cooldownMs) return;
+
+  lastAuto = now;
+  bestShotCapture();
+}
+
+function analyzeROI_lightSharp(data, w, h, x0, y0, rw, rh){
+  let sum=0, count=0;
+  const gray = new Uint8ClampedArray(rw*rh);
+  let k=0;
+
+  for(let y=y0; y<y0+rh; y++){
+    for(let x=x0; x<x0+rw; x++){
+      const i=(y*w+x)*4;
+      const g = (data[i]*0.299 + data[i+1]*0.587 + data[i+2]*0.114) | 0;
+      gray[k++] = g;
+      sum += g; count++;
+    }
+  }
+  const mean = sum / count;
+
+  let lapSum=0;
+  for(let y=1; y<rh-1; y++){
+    for(let x=1; x<rw-1; x++){
+      const c = gray[y*rw+x];
+      const lap = Math.abs(
+        (gray[(y-1)*rw+x] + gray[(y+1)*rw+x] + gray[y*rw+(x-1)] + gray[y*rw+(x+1)]) - 4*c
+      );
+      lapSum += lap;
+    }
+  }
+  const blurScore = lapSum / ((rw-2)*(rh-2));
+  return { mean, blurScore };
+}
+
+function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
+
+function getCropRectInVideoPixels(){
   const v = document.getElementById("camVideo");
   const frame = document.getElementById("idFrame");
   if(!v.videoWidth || !v.videoHeight) return null;
@@ -587,171 +650,65 @@ function getFrameRoiInVideoPixels(){
   return { x, y, w, h };
 }
 
-function detectCardQuadInROI(videoEl, roi){
-  // نرسم ROI على canvas صغير لتسريع
-  const targetW = 420;
-  const scale = targetW / roi.w;
-  const targetH = Math.max(1, Math.round(roi.h * scale));
+/* ===== ID-mode: Best Shot + CROP ===== */
+async function bestShotCapture(){
+  if(bestShotLock) return;
+  bestShotLock = true;
+
+  const hint = document.getElementById("camHint");
+  hint.textContent = "⏳ جاري الالتقاط...";
+
+  try{
+    const shots = [];
+    for(let i=0;i<3;i++){
+      const shot = grabCroppedFrameWithScore();
+      if(shot) shots.push(shot);
+      await sleep(110);
+    }
+    if(!shots.length) throw new Error("No shots");
+
+    shots.sort((a,b)=>b.score - a.score);
+    const best = shots[0];
+
+    await saveDataUrlToInput(best.dataUrl);
+
+    camModal.hide();
+    closeCamera();
+
+  }catch(e){
+    console.error(e);
+    alert("صار خطأ بالالتقاط. جرّب مرة ثانية.");
+    bestShotLock = false;
+  }
+}
+
+function grabCroppedFrameWithScore(){
+  const v = document.getElementById("camVideo");
+  const roi = getCropRectInVideoPixels();
+  if(!roi) return null;
 
   const canvas = document.createElement("canvas");
-  canvas.width = targetW;
-  canvas.height = targetH;
+  canvas.width = Math.max(1, Math.round(roi.w));
+  canvas.height = Math.max(1, Math.round(roi.h));
   const ctx = canvas.getContext("2d", { willReadFrequently:true });
-  ctx.drawImage(videoEl, roi.x, roi.y, roi.w, roi.h, 0, 0, targetW, targetH);
+  ctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0, 0, canvas.width, canvas.height);
 
-  let src = cv.imread(canvas);
-  let gray = new cv.Mat();
-  cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+  const testW = 240;
+  const testH = Math.max(1, Math.round(testW * (canvas.height / canvas.width)));
+  const c2 = document.createElement("canvas");
+  c2.width = testW;
+  c2.height = testH;
+  const x2 = c2.getContext("2d", { willReadFrequently:true });
+  x2.drawImage(canvas,0,0,testW,testH);
+  const img = x2.getImageData(0,0,testW,testH);
+  const st = analyzeROI_lightSharp(img.data, testW, testH, 0, 0, testW, testH);
 
-  // تحسين بسيط للإضاءة
-  let blur = new cv.Mat();
-  cv.GaussianBlur(gray, blur, new cv.Size(5,5), 0);
-
-  // Edge
-  let edges = new cv.Mat();
-  cv.Canny(blur, edges, 60, 160);
-
-  // أغلاق فجوات الحواف
-  let kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(5,5));
-  let closed = new cv.Mat();
-  cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
-
-  // Contours
-  let contours = new cv.MatVector();
-  let hierarchy = new cv.Mat();
-  cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-
-  let best = null;
-  let bestArea = 0;
-
-  const roiArea = targetW * targetH;
-
-  for(let i=0;i<contours.size();i++){
-    const cnt = contours.get(i);
-    const area = cv.contourArea(cnt);
-    if(area < roiArea * MIN_AREA_FRAC) { cnt.delete(); continue; }
-
-    const peri = cv.arcLength(cnt, true);
-    const approx = new cv.Mat();
-    cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
-
-    if(approx.rows === 4){
-      // aspect by boundingRect (سريع)
-      const rect = cv.boundingRect(approx);
-      const aspect = rect.width / rect.height;
-      const a1 = aspect;
-      const a2 = 1/aspect;
-
-      const okAspect = (Math.abs(a1 - CARD_ASPECT) < ASPECT_TOL) || (Math.abs(a2 - CARD_ASPECT) < ASPECT_TOL);
-      if(okAspect && area > bestArea){
-        bestArea = area;
-        best = approx.clone();
-      }
-    }
-
-    approx.delete();
-    cnt.delete();
-  }
-
-  // cleanup
-  src.delete(); gray.delete(); blur.delete(); edges.delete(); kernel.delete(); closed.delete(); contours.delete(); hierarchy.delete();
-
-  if(!best) return null;
-
-  // best نقاط داخل canvas المصغر (targetW,targetH) => نرجعها بإحداثيات ROI الأصلية
-  const pts = [];
-  for(let r=0;r<4;r++){
-    const x = best.intPtr(r,0)[0];
-    const y = best.intPtr(r,0)[1];
-    pts.push({x, y});
-  }
-  best.delete();
-
-  // ترتيب النقاط (tl,tr,br,bl)
-  const ordered = orderQuadPoints(pts);
-
-  // تحويل من target -> roi px
-  const invScale = roi.w / targetW;
-  const quadInRoi = ordered.map(p=>({ x: p.x * invScale, y: p.y * invScale }));
-
-  return quadInRoi;
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+  return { dataUrl, score: st.blurScore };
 }
 
-function orderQuadPoints(pts){
-  // sum and diff technique
-  const sum = pts.map(p=>p.x+p.y);
-  const diff = pts.map(p=>p.x-p.y);
-
-  const tl = pts[sum.indexOf(Math.min(...sum))];
-  const br = pts[sum.indexOf(Math.max(...sum))];
-  const tr = pts[diff.indexOf(Math.max(...diff))];
-  const bl = pts[diff.indexOf(Math.min(...diff))];
-
-  return [tl,tr,br,bl];
-}
-
-/* =========================
-   I) Capture SMART: perspective crop to exact 8.7:5.3
-========================= */
-async function captureSmartIdNow(){
-  if(!lastFoundQuad) return;
-
-  const v = document.getElementById("camVideo");
-  const { roi, quad } = lastFoundQuad; // quad points inside roi (px)
-
-  // output size ثابت للهوية (يناسب PDF)
-  const outW = 870;
-  const outH = 530;
-
-  // نرسم ROI كامل أولاً
-  const roiCanvas = document.createElement("canvas");
-  roiCanvas.width = Math.round(roi.w);
-  roiCanvas.height = Math.round(roi.h);
-  const rctx = roiCanvas.getContext("2d", { willReadFrequently:true });
-  rctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0, 0, roiCanvas.width, roiCanvas.height);
-
-  // OpenCV perspective transform
-  const srcMat = cv.imread(roiCanvas);
-  const dstMat = new cv.Mat();
-
-  const srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
-    quad[0].x, quad[0].y,
-    quad[1].x, quad[1].y,
-    quad[2].x, quad[2].y,
-    quad[3].x, quad[3].y
-  ]);
-
-  const dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
-    0, 0,
-    outW, 0,
-    outW, outH,
-    0, outH
-  ]);
-
-  const M = cv.getPerspectiveTransform(srcTri, dstTri);
-  const dsize = new cv.Size(outW, outH);
-  cv.warpPerspective(srcMat, dstMat, M, dsize, cv.INTER_LINEAR, cv.BORDER_REPLICATE);
-
-  const outCanvas = document.createElement("canvas");
-  outCanvas.width = outW;
-  outCanvas.height = outH;
-  cv.imshow(outCanvas, dstMat);
-
-  // cleanup
-  srcMat.delete(); dstMat.delete(); srcTri.delete(); dstTri.delete(); M.delete();
-
-  const dataUrl = outCanvas.toDataURL("image/jpeg", 0.92);
-  await saveDataUrlToInput(dataUrl);
-
-  // close
-  camModal.hide();
-  closeCamera();
-}
-
-/* =========================
-   J) Capture NORMAL: full frame (no crop)
-========================= */
-async function captureNormalNow(){
+/* ===== FULL-mode: capture full frame ===== */
+async function captureFullNow(){
   const v = document.getElementById("camVideo");
   if(!v.videoWidth) return;
 
@@ -768,9 +725,7 @@ async function captureNormalNow(){
   closeCamera();
 }
 
-/* =========================
-   K) save to input + preview
-========================= */
+/* ===== Save to input + preview ===== */
 async function saveDataUrlToInput(dataUrl){
   const blob = await (await fetch(dataUrl)).blob();
   const file = new File([blob], "camera.jpg", {type:"image/jpeg"});
@@ -788,7 +743,7 @@ async function saveDataUrlToInput(dataUrl){
 }
 
 /* =========================
-   L) PDF (8.7×5.3) + no Arabic text + safe margins
+   5) PDF: 8.7×5.3 سم للوطني/السكن + صفحات كاملة للباج/الشهادة
 ========================= */
 const { jsPDF } = window.jspdf;
 const CM = 28.35;
@@ -871,15 +826,29 @@ async function addSingleImagePage(pdf, file){
   drawContainPDF(pdf, data.dataUrl, data.format, x, y, w, h);
 }
 
-async function generatePDF(){
-  const name = employeeName.value.trim();
-  if(!name){ alert("يرجى إدخال اسم الموظف"); return; }
+function getChildNames(){
+  return Array.from(document.querySelectorAll(".childName")).map(i=>i.value.trim()).filter(Boolean);
+}
 
+async function generatePDF(){
+  // 1) validate name (quad)
+  const name = employeeName.value.trim();
+  if(!name){
+    alert("يرجى إدخال الاسم");
+    return;
+  }
+  if(!isQuadName(name)){
+    alert("الاسم يجب أن يكون رباعي (4 كلمات)");
+    return;
+  }
+
+  // 2) validate national card
   if(!empFace.files[0] || !empBack.files[0]){
     alert("يرجى رفع وجه وظهر البطاقة الوطنية");
     return;
   }
 
+  // 3) validate residence if checked
   if(hasResidence.checked){
     if(!resFace.files[0] || !resBack.files[0]){
       alert("رفّع وجه وظهر بطاقة السكن");
@@ -887,33 +856,52 @@ async function generatePDF(){
     }
   }
 
+  // 4) validate social only if married
+  const married = maritalStatus.value === "married";
+  if(married){
+    if(!wifeName.value.trim()){
+      alert("يرجى إدخال اسم الزوجة الثلاثي");
+      return;
+    }
+    const n = Number(childrenCount.value || 0);
+    if(n > 0){
+      const names = getChildNames();
+      if(names.length < n){
+        alert("يرجى إدخال أسماء الأبناء كاملة حسب العدد");
+        return;
+      }
+      if(!childrenMother.value.trim()){
+        alert("يرجى إدخال اسم أم الأبناء");
+        return;
+      }
+    }
+  }
+
   const pdf = new jsPDF({unit:"px", format:"a4"});
 
+  // الوطني
   await addIDPage(pdf, empFace.files[0], empBack.files[0]);
 
-  if(hasResidence.checked)
+  // السكن
+  if(hasResidence.checked){
     await addIDPage(pdf, resFace.files[0], resBack.files[0]);
-
-  const wf = document.querySelectorAll(".wife-face");
-  const wb = document.querySelectorAll(".wife-back");
-  for(let i=0;i<wf.length;i++){
-    if(wf[i].files[0] && wb[i].files[0]) await addIDPage(pdf, wf[i].files[0], wb[i].files[0]);
   }
 
-  const cf = document.querySelectorAll(".child-face");
-  const cb = document.querySelectorAll(".child-back");
-  for(let i=0;i<cf.length;i++){
-    if(cf[i].files[0] && cb[i].files[0]) await addIDPage(pdf, cf[i].files[0], cb[i].files[0]);
+  // باج العتبة (صفحة كاملة)
+  if(hasBadge.checked){
+    if(!badgeFile.files[0]){
+      alert("يرجى رفع صورة باج العتبة");
+      return;
+    }
+    await addSingleImagePage(pdf, badgeFile.files[0]);
   }
 
-  // التموينية/الشهادة: صفحات كاملة عادي
-  if(hasRation.checked){
-    if(!rationFace.files[0]){ alert("رفّع البطاقة التموينية"); return; }
-    await addSingleImagePage(pdf, rationFace.files[0]);
-  }
-
+  // الشهادة (صفحة كاملة)
   if(hasCertificate.checked){
-    if(!certificateFile.files[0]){ alert("رفّع شهادة التخرج"); return; }
+    if(!certificateFile.files[0]){
+      alert("يرجى رفع شهادة التخرج");
+      return;
+    }
     await addSingleImagePage(pdf, certificateFile.files[0]);
   }
 
