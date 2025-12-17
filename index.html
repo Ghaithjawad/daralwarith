@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>استمارة تحديث بيانات موظفي دار الوارث</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+:root{
+  --main:#1aa6a6;
+  --dark:#148c8c;
+  --border:#d9eeee;
+  --text:#0f3f3f;
+}
+body{
+  font-family:"Segoe UI",Tahoma,sans-serif;
+  color:var(--text);
+  background-image:url("background.png");
+  background-repeat:repeat;
+  background-size:420px 420px;
+  background-attachment:fixed;
+}
+.container{
+  background:#ffffff;
+  border-radius:22px;
+  padding:30px;
+  margin:30px auto 50px;
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
+}
+.header{
+  background:linear-gradient(135deg,var(--main),var(--dark));
+  color:#fff;
+  padding:30px;
+  border-radius:18px;
+  text-align:center;
+  margin-bottom:30px;
+}
+.logo{ max-width:150px; display:block; margin:auto; }
+.card{
+  border:1px solid var(--border);
+  border-radius:16px;
+  margin-bottom:22px;
+}
+.section{
+  border:2px dashed var(--main);
+  border-radius:14px;
+  padding:16px;
+  margin-top:14px;
+  background:#f9fefe;
+}
+.check-box{
+  border:1.8px solid var(--main);
+  border-radius:12px;
+  padding:12px 16px;
+  background:#f6fdfd;
+}
+.form-check-input{
+  width:18px; height:18px; margin-left:10px;
+}
+.form-check-input:checked{ background-color:var(--main); border-color:var(--main); }
+button.main-btn{
+  background:var(--main);
+  border:none;
+  padding:16px;
+  font-size:18px;
+  border-radius:14px;
+  color:#fff;
+}
+button.main-btn:hover{ background:var(--dark); }
+
+.preview-img{
+  max-height:180px;
+  width:100%;
+  object-fit:contain;
+  border-radius:12px;
+  border:1px solid #e8e8e8;
+  background:#fff;
+}
+
+/* ===== كاميرا احترافية ===== */
+.cam-wrap{ position:relative; width:100%; }
+#camVideo{ width:100%; border-radius:12px; background:#000; }
+.cam-overlay{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.id-frame{
+  width:72%;
+  aspect-ratio: 8.7 / 5.3;   /* إطار بنفس قياس الهوية */
+  border:4px solid red;       /* يتبدل أخضر/أحمر */
+  border-radius:14px;
+  box-shadow:0 0 0 2000px rgba(0,0,0,.45);
+}
+.small-note{ font-size:.9rem; color:#666; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <img src="logo.png" class="logo mb-3" alt="دار الوارث">
+    <h4 class="mb-1">استمارة تحديث بيانات موظفي دار الوارث</h4>
+    <p class="mb-0">يرجى إدخال البيانات ورفع المستمسكات المطلوبة</p>
+  </div>
+
+  <!-- تنبيه أمان الكاميرا -->
+  <div id="secureWarn" class="alert alert-warning d-none">
+    الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>.
+    إذا فتحت الملف مباشرة (file://) استخدم الاستوديو أو ارفع المشروع على GitHub Pages.
+  </div>
+
+  <!-- اسم الموظف -->
+  <div class="card p-4">
+    <label class="fw-bold">اسم الموظف الكامل</label>
+    <input type="text" id="employeeName" class="form-control">
+  </div>
+
+  <!-- البطاقة الوطنية -->
+  <div class="card p-4">
+    <h5 class="mb-3">البطاقة الوطنية للموظف</h5>
+
+    <div class="mb-3">
+      <label class="fw-bold mb-2 d-block">وجه الهوية</label>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('empFace')">كاميرا</button>
+        <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empFace')">استوديو</button>
+      </div>
+      <input type="file" id="empFace" class="form-control d-none" accept="image/*">
+      <img id="empFacePreview" class="preview-img mt-2 d-none" alt="preview">
+    </div>
+
+    <div>
+      <label class="fw-bold mb-2 d-block">ظهر الهوية</label>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('empBack')">كاميرا</button>
+        <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empBack')">استوديو</button>
+      </div>
+      <input type="file" id="empBack" class="form-control d-none" accept="image/*">
+      <img id="empBackPreview" class="preview-img mt-2 d-none" alt="preview">
+    </div>
+  </div>
+
+  <!-- بطاقة السكن -->
+  <div class="card p-4">
+    <div class="check-box form-check">
+      <label class="form-check-label">هل توجد بطاقة سكن؟</label>
+      <input class="form-check-input" type="checkbox" id="hasResidence">
+    </div>
+
+    <div id="residenceSection" class="section d-none">
+      <div class="mb-3">
+        <label class="fw-bold mb-2 d-block">وجه بطاقة السكن</label>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('resFace')">كاميرا</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('resFace')">استوديو</button>
+        </div>
+        <input type="file" id="resFace" class="form-control d-none" accept="image/*">
+        <img id="resFacePreview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
+
+      <div>
+        <label class="fw-bold mb-2 d-block">ظهر بطاقة السكن</label>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('resBack')">كاميرا</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('resBack')">استوديو</button>
+        </div>
+        <input type="file" id="resBack" class="form-control d-none" accept="image/*">
+        <img id="resBackPreview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
+    </div>
+  </div>
+
+  <!-- متزوج -->
+  <div class="card p-4">
+    <div class="check-box form-check">
+      <label class="form-check-label">هل أنت متزوج؟</label>
+      <input class="form-check-input" type="checkbox" id="isMarried">
+    </div>
+
+    <div id="wivesSection" class="section d-none">
+      <label class="fw-bold">عدد الزوجات</label>
+      <input type="number" id="wivesCount" min="1" class="form-control mb-3">
+      <div id="wivesUploads"></div>
+    </div>
+  </div>
+
+  <!-- أطفال -->
+  <div class="card p-4">
+    <div class="check-box form-check">
+      <label class="form-check-label">هل يوجد أطفال؟</label>
+      <input class="form-check-input" type="checkbox" id="hasChildren">
+    </div>
+
+    <div id="childrenSection" class="section d-none">
+      <label class="fw-bold">عدد الأطفال</label>
+      <input type="number" id="childrenCount" min="1" class="form-control mb-3">
+      <div id="childrenUploads"></div>
+    </div>
+  </div>
+
+  <!-- البطاقة التموينية -->
+  <div class="card p-4">
+    <div class="check-box form-check">
+      <label class="form-check-label">هل توجد بطاقة تموينية؟</label>
+      <input class="form-check-input" type="checkbox" id="hasRation">
+    </div>
+
+    <div id="rationSection" class="section d-none">
+      <label class="fw-bold mb-2 d-block">صورة البطاقة التموينية</label>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('rationFace')">كاميرا</button>
+        <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('rationFace')">استوديو</button>
+      </div>
+      <input type="file" id="rationFace" class="form-control d-none" accept="image/*">
+      <img id="rationFacePreview" class="preview-img mt-2 d-none" alt="preview">
+    </div>
+  </div>
+
+  <!-- شهادة التخرج -->
+  <div class="card p-4">
+    <div class="check-box form-check">
+      <label class="form-check-label">هل توجد شهادة تخرج؟</label>
+      <input class="form-check-input" type="checkbox" id="hasCertificate">
+    </div>
+
+    <div id="certificateSection" class="section d-none">
+      <label class="fw-bold mb-2 d-block">صورة شهادة التخرج</label>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('certificateFile')">كاميرا</button>
+        <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('certificateFile')">استوديو</button>
+      </div>
+      <input type="file" id="certificateFile" class="form-control d-none" accept="image/*">
+      <img id="certificateFilePreview" class="preview-img mt-2 d-none" alt="preview">
+    </div>
+  </div>
+
+  <button class="w-100 main-btn" onclick="generatePDF()">إرسال وإنشاء ملف PDF</button>
+
+  <div class="mt-3 small-note">
+    ملاحظة: الكاميرا تحتاج HTTPS أو localhost. الاستوديو يعمل دائمًا.
+  </div>
+
+</div>
+
+<!-- مودال الكاميرا -->
+<div class="modal fade" id="camModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">كاميرا الهوية</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeCamera()"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="cam-wrap">
+          <video id="camVideo" autoplay playsinline></video>
+          <div class="cam-overlay">
+            <div id="idFrame" class="id-frame"></div>
+          </div>
+        </div>
+        <div class="mt-2">
+          <small class="text-muted" id="camHint">وجّه الهوية داخل الإطار</small>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeCamera()">إغلاق</button>
+        <button type="button" class="btn btn-success" id="captureBtn" onclick="capturePhoto()" disabled>التقاط</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* =======================
+   A) أمان الكاميرا (HTTPS/localhost)
+======================= */
+function isCameraAllowedContext(){
+  const isLocalhost = ["localhost", "127.0.0.1"].includes(location.hostname);
+  return window.isSecureContext || isLocalhost;
+}
+(function initSecureWarning(){
+  const ok = isCameraAllowedContext();
+  document.getElementById("secureWarn").classList.toggle("d-none", ok);
+  // إذا مو آمن، خلي أزرار الكاميرا تبقى موجودة لكن راح تطلع رسالة واضحة عند الضغط
+})();
+
+/* =======================
+   B) استوديو + معاينة
+======================= */
+function openStudio(inputId){
+  const el = document.getElementById(inputId);
+  if(el) el.click();
+}
+function bindPreview(inputId){
+  const input = document.getElementById(inputId);
+  if(!input) return;
+  input.addEventListener("change", ()=>{
+    const file = input.files && input.files[0];
+    const prev = document.getElementById(inputId+"Preview");
+    if(file && prev){
+      prev.src = URL.createObjectURL(file);
+      prev.classList.remove("d-none");
+    }
+  });
+}
+["empFace","empBack","resFace","resBack","rationFace","certificateFile"].forEach(bindPreview);
+
+/* =======================
+   C) كاميرا احترافية + إطار أخضر/أحمر
+======================= */
+let camStream = null;
+let targetInputId = null;
+let camModal = null;
+let validateTimer = null;
+
+async function openCameraFor(inputId){
+  if(!isCameraAllowedContext()){
+    alert("الكاميرا ما تشتغل إلا على HTTPS أو localhost.\nارفعه على GitHub Pages (راح يصير HTTPS) أو شغّله على localhost.\nالاستوديو يشتغل طبيعي.");
+    return;
+  }
+
+  targetInputId = inputId;
+  if(!camModal) camModal = new bootstrap.Modal(document.getElementById("camModal"));
+
+  try{
+    camStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" },
+      audio: false
+    });
+
+    const v = document.getElementById("camVideo");
+    v.srcObject = camStream;
+
+    camModal.show();
+
+    if(validateTimer) clearInterval(validateTimer);
+    validateTimer = setInterval(()=>validateFrame(), 200);
+
+  }catch(e){
+    alert("تعذر تشغيل الكاميرا. تأكد أعطيت صلاحية الكاميرا للمتصفح.");
+    console.error(e);
+  }
+}
+
+function closeCamera(){
+  if(validateTimer){ clearInterval(validateTimer); validateTimer=null; }
+  if(camStream){
+    camStream.getTracks().forEach(t=>t.stop());
+    camStream = null;
+  }
+  document.getElementById("captureBtn").disabled = true;
+  document.getElementById("idFrame").style.borderColor = "red";
+  document.getElementById("camHint").textContent = "وجّه الهوية داخل الإطار";
+}
+
+function capturePhoto(){
+  const v = document.getElementById("camVideo");
+  const canvas = document.createElement("canvas");
+  canvas.width = v.videoWidth;
+  canvas.height = v.videoHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(v,0,0,canvas.width,canvas.height);
+
+  canvas.toBlob(blob=>{
+    const file = new File([blob], "camera.jpg", {type:"image/jpeg"});
+    const dt = new DataTransfer();
+    dt.items.add(file);
+
+    const input = document.getElementById(targetInputId);
+    input.files = dt.files;
+
+    const prev = document.getElementById(targetInputId+"Preview");
+    if(prev){
+      prev.src = URL.createObjectURL(file);
+      prev.classList.remove("d-none");
+    }
+
+    camModal.hide();
+    closeCamera();
+  }, "image/jpeg", 0.9);
+}
+
+function validateFrame(){
+  const v = document.getElementById("camVideo");
+  if(!v.videoWidth) return;
+
+  const frameEl = document.getElementById("idFrame");
+  const hint = document.getElementById("camHint");
+  const capBtn = document.getElementById("captureBtn");
+
+  const testW = 320;
+  const testH = Math.round(testW * (v.videoHeight / v.videoWidth));
+  const canvas = document.createElement("canvas");
+  canvas.width = testW;
+  canvas.height = testH;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(v,0,0,testW,testH);
+  const img = ctx.getImageData(0,0,testW,testH);
+
+  const roiW = Math.round(testW * 0.72);
+  const roiH = Math.round(roiW * (5.3/8.7));
+  const roiX = Math.round((testW - roiW)/2);
+  const roiY = Math.round((testH - roiH)/2);
+
+  const stats = analyzeROI(img.data, testW, testH, roiX, roiY, roiW, roiH);
+
+  const okLight = stats.mean > 60 && stats.mean < 200;
+  const okSharp = stats.blurScore > 40;
+  const okEdges = stats.edgeDensity > 0.06;
+
+  const ok = okLight && okSharp && okEdges;
+
+  frameEl.style.borderColor = ok ? "lime" : "red";
+  capBtn.disabled = !ok;
+
+  if(ok){
+    hint.textContent = "✅ ممتاز — الهوية داخل الإطار";
+  }else{
+    let msg = "❌ عدّل وضع الهوية داخل الإطار";
+    if(!okLight) msg = "❌ الإضاءة غير مناسبة";
+    else if(!okSharp) msg = "❌ الصورة مو واضحة (ثبّت اليد)";
+    else if(!okEdges) msg = "❌ الهوية مو داخل الإطار بالكامل";
+    hint.textContent = msg;
+  }
+}
+
+function analyzeROI(data, w, h, x0, y0, rw, rh){
+  let sum=0, count=0;
+  const gray = new Uint8ClampedArray(rw*rh);
+
+  let k=0;
+  for(let y=y0; y<y0+rh; y++){
+    for(let x=x0; x<x0+rw; x++){
+      const i=(y*w+x)*4;
+      const g = (data[i]*0.299 + data[i+1]*0.587 + data[i+2]*0.114) | 0;
+      gray[k++] = g;
+      sum += g; count++;
+    }
+  }
+  const mean = sum / count;
+
+  let lapSum=0;
+  for(let y=1; y<rh-1; y++){
+    for(let x=1; x<rw-1; x++){
+      const c = gray[y*rw+x];
+      const lap = Math.abs(
+        (gray[(y-1)*rw+x] + gray[(y+1)*rw+x] + gray[y*rw+(x-1)] + gray[y*rw+(x+1)]) - 4*c
+      );
+      lapSum += lap;
+    }
+  }
+  const blurScore = lapSum / ((rw-2)*(rh-2));
+
+  let edges=0;
+  const thresh = 20;
+  for(let y=1; y<rh-1; y++){
+    for(let x=1; x<rw-1; x++){
+      const gx = gray[y*rw+(x+1)] - gray[y*rw+(x-1)];
+      const gy = gray[(y+1)*rw+x] - gray[(y-1)*rw+x];
+      const mag = Math.abs(gx) + Math.abs(gy);
+      if(mag > thresh) edges++;
+    }
+  }
+  const edgeDensity = edges / (rw*rh);
+
+  return { mean, blurScore, edgeDensity };
+}
+
+/* =======================
+   D) ديناميكية الزوجات/الأطفال + معاينة
+======================= */
+function makeUploadBlock(prefix, i){
+  const faceId = `${prefix}Face_${i}`;
+  const backId = `${prefix}Back_${i}`;
+  const title = (prefix==="wife") ? `زوجة ${i}` : `طفل ${i}`;
+  return `
+    <div class="mb-3 p-3 rounded border bg-white">
+      <strong class="d-block mb-2">${title}</strong>
+
+      <div class="mb-2">
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('${faceId}')">كاميرا (وجه)</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${faceId}')">استوديو (وجه)</button>
+        </div>
+        <input type="file" id="${faceId}" class="form-control d-none ${prefix}-face" accept="image/*">
+        <img id="${faceId}Preview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
+
+      <div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50 cam-btn" onclick="openCameraFor('${backId}')">كاميرا (ظهر)</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${backId}')">استوديو (ظهر)</button>
+        </div>
+        <input type="file" id="${backId}" class="form-control d-none ${prefix}-back" accept="image/*">
+        <img id="${backId}Preview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
+    </div>
+  `;
+}
+function bindDynamicPreviews(prefix, n){
+  for(let i=1;i<=n;i++){
+    bindPreview(`${prefix}Face_${i}`);
+    bindPreview(`${prefix}Back_${i}`);
+  }
+}
+wivesCount.oninput = ()=>{
+  const n = Number(wivesCount.value || 0);
+  wivesUploads.innerHTML = "";
+  for(let i=1;i<=n;i++) wivesUploads.innerHTML += makeUploadBlock("wife", i);
+  bindDynamicPreviews("wife", n);
+};
+childrenCount.oninput = ()=>{
+  const n = Number(childrenCount.value || 0);
+  childrenUploads.innerHTML = "";
+  for(let i=1;i<=n;i++) childrenUploads.innerHTML += makeUploadBlock("child", i);
+  bindDynamicPreviews("child", n);
+};
+
+/* =======================
+   E) إظهار/إخفاء الأقسام
+======================= */
+hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
+isMarried.onchange    = ()=> wivesSection.classList.toggle("d-none", !isMarried.checked);
+hasChildren.onchange  = ()=> childrenSection.classList.toggle("d-none", !hasChildren.checked);
+hasRation.onchange    = ()=> rationSection.classList.toggle("d-none", !hasRation.checked);
+hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
+
+/* =======================
+   F) PDF (هوية 8.7×5.3 سم) بدون نص عربي + بدون قص
+======================= */
+const { jsPDF } = window.jspdf;
+const CM = 28.35;
+const SAFE_MARGIN = 2 * CM;
+const ID_W = 8.7 * CM;
+const ID_H = 5.3 * CM;
+const GAP_DEFAULT = 20;
+const TOP_OFFSET = 3.8 * CM;
+
+async function loadImageDataForPDF(file){
+  const dataUrl = await new Promise((resolve,reject)=>{
+    const r=new FileReader();
+    r.onload=e=>resolve(e.target.result);
+    r.onerror=reject;
+    r.readAsDataURL(file);
+  });
+
+  const img = await new Promise((resolve,reject)=>{
+    const i=new Image();
+    i.onload=()=>resolve(i);
+    i.onerror=reject;
+    i.src=dataUrl;
+  });
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  const maxW = 2000;
+  const scale = Math.min(1, maxW / img.width);
+
+  canvas.width = Math.round(img.width * scale);
+  canvas.height = Math.round(img.height * scale);
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  return { dataUrl: canvas.toDataURL("image/jpeg", 0.9), format: "JPEG" };
+}
+
+function drawContainPDF(pdf, dataUrl, format, x, y, w, h){
+  const p = pdf.getImageProperties(dataUrl);
+  const s = Math.min(w/p.width, h/p.height);
+  const nw = p.width*s, nh = p.height*s;
+  const nx = x + (w-nw)/2;
+  const ny = y + (h-nh)/2;
+  pdf.addImage(dataUrl, format, nx, ny, nw, nh);
+}
+
+async function addIDPage(pdf, faceFile, backFile){
+  const face = await loadImageDataForPDF(faceFile);
+  const back = await loadImageDataForPDF(backFile);
+
+  pdf.addPage("a4","p");
+
+  const pageW = pdf.internal.pageSize.getWidth();
+  const safeW = pageW - (SAFE_MARGIN * 2);
+
+  let gap = GAP_DEFAULT;
+  if((ID_W*2 + gap) > safeW){
+    gap = Math.max(8, safeW - (ID_W*2));
+  }
+
+  const neededW = (ID_W*2) + gap;
+  const startX = SAFE_MARGIN + (safeW - neededW)/2;
+  const startY = TOP_OFFSET;
+
+  drawContainPDF(pdf, face.dataUrl, face.format, startX, startY, ID_W, ID_H);
+  drawContainPDF(pdf, back.dataUrl, back.format, startX + ID_W + gap, startY, ID_W, ID_H);
+}
+
+async function addSingleImagePage(pdf, file){
+  const data = await loadImageDataForPDF(file);
+  pdf.addPage("a4","p");
+
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const x = SAFE_MARGIN;
+  const y = SAFE_MARGIN;
+  const w = pageW - (SAFE_MARGIN * 2);
+  const h = pageH - (SAFE_MARGIN * 2);
+
+  drawContainPDF(pdf, data.dataUrl, data.format, x, y, w, h);
+}
+
+async function generatePDF(){
+  const name = employeeName.value.trim();
+  if(!name){ alert("يرجى إدخال اسم الموظف"); return; }
+
+  if(!empFace.files[0] || !empBack.files[0]){
+    alert("يرجى رفع وجه وظهر البطاقة الوطنية");
+    return;
+  }
+
+  if(hasResidence.checked){
+    if(!resFace.files[0] || !resBack.files[0]){
+      alert("رفّع وجه وظهر بطاقة السكن");
+      return;
+    }
+  }
+
+  const pdf = new jsPDF({unit:"px", format:"a4"});
+
+  await addIDPage(pdf, empFace.files[0], empBack.files[0]);
+
+  if(hasResidence.checked)
+    await addIDPage(pdf, resFace.files[0], resBack.files[0]);
+
+  const wf = document.querySelectorAll(".wife-face");
+  const wb = document.querySelectorAll(".wife-back");
+  for(let i=0;i<wf.length;i++){
+    if(wf[i].files[0] && wb[i].files[0])
+      await addIDPage(pdf, wf[i].files[0], wb[i].files[0]);
+  }
+
+  const cf = document.querySelectorAll(".child-face");
+  const cb = document.querySelectorAll(".child-back");
+  for(let i=0;i<cf.length;i++){
+    if(cf[i].files[0] && cb[i].files[0])
+      await addIDPage(pdf, cf[i].files[0], cb[i].files[0]);
+  }
+
+  if(hasRation.checked){
+    if(!rationFace.files[0]){ alert("رفّع البطاقة التموينية"); return; }
+    await addSingleImagePage(pdf, rationFace.files[0]);
+  }
+
+  if(hasCertificate.checked){
+    if(!certificateFile.files[0]){ alert("رفّع شهادة التخرج"); return; }
+    await addSingleImagePage(pdf, certificateFile.files[0]);
+  }
+
+  if(pdf.getNumberOfPages() > 1) pdf.deletePage(1);
+
+  pdf.save(name.replace(/\s+/g,"_") + "_documents.pdf");
+}
+</script>
+
+</body>
+</html>
