@@ -88,13 +88,23 @@ button.main-btn:hover{ background:var(--dark); }
   pointer-events:none;
 }
 .id-frame{
-  width:72%;
+  width:74%;
   aspect-ratio: 8.7 / 5.3;
   border:4px solid red;
   border-radius:14px;
   box-shadow:0 0 0 2000px rgba(0,0,0,.45);
 }
-
+#cvDebug{
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  background:rgba(0,0,0,.45);
+  color:#fff;
+  padding:6px 10px;
+  border-radius:10px;
+  font-size:12px;
+  display:none;
+}
 .footer-note{
   text-align:center;
   margin:14px auto 25px;
@@ -120,11 +130,17 @@ button.main-btn:hover{ background:var(--dark); }
     الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>. على GitHub Pages راح تشتغل (HTTPS).
   </div>
 
+  <div id="cvWarn" class="alert alert-info d-none">
+    جاري تحميل نظام التعرّف الذكي على الهوية… إذا تأخر، جرّب تحديث الصفحة.
+  </div>
+
+  <!-- اسم الموظف -->
   <div class="card p-4">
     <label class="fw-bold">اسم الموظف الكامل</label>
     <input type="text" id="employeeName" class="form-control">
   </div>
 
+  <!-- البطاقة الوطنية -->
   <div class="card p-4">
     <h5 class="mb-3">البطاقة الوطنية للموظف</h5>
 
@@ -149,6 +165,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
+  <!-- بطاقة السكن -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد بطاقة سكن؟</label>
@@ -178,6 +195,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
+  <!-- متزوج -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل أنت متزوج؟</label>
@@ -191,6 +209,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
+  <!-- أطفال -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل يوجد أطفال؟</label>
@@ -204,6 +223,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
+  <!-- التموينية (بدون ذكاء/بدون قص) -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد بطاقة تموينية؟</label>
@@ -221,6 +241,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
+  <!-- الشهادة (بدون ذكاء/بدون قص) -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد شهادة تخرج؟</label>
@@ -241,7 +262,7 @@ button.main-btn:hover{ background:var(--dark); }
   <button class="w-100 main-btn" onclick="generatePDF()">إرسال وإنشاء ملف PDF</button>
 
   <div class="mt-3 small-note">
-    الكاميرا سريعة + قص داخل الإطار + تعتمد على الإضاءة والوضوح.
+    الوطني + السكن: قصّ ذكي للهوية فقط. التموينية/الشهادة: التقاط عادي.
   </div>
 
 </div>
@@ -253,7 +274,7 @@ button.main-btn:hover{ background:var(--dark); }
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">كاميرا الهوية</h5>
+        <h5 class="modal-title">كاميرا</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeCamera()"></button>
       </div>
 
@@ -263,6 +284,7 @@ button.main-btn:hover{ background:var(--dark); }
           <div class="cam-overlay">
             <div id="idFrame" class="id-frame"></div>
           </div>
+          <div id="cvDebug"></div>
         </div>
         <div class="mt-2">
           <small class="text-muted" id="camHint">وجّه الهوية داخل الإطار</small>
@@ -271,7 +293,7 @@ button.main-btn:hover{ background:var(--dark); }
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeCamera()">إغلاق</button>
-        <button type="button" class="btn btn-success" id="captureBtn" onclick="bestShotCapture()">التقاط</button>
+        <button type="button" class="btn btn-success" id="captureBtn" onclick="captureAction()">التقاط</button>
       </div>
     </div>
   </div>
@@ -279,8 +301,13 @@ button.main-btn:hover{ background:var(--dark); }
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- OpenCV.js (للذكاء والدقة في الهوية) -->
+<script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady()"></script>
+
 <script>
-/* ===== HTTPS/localhost check ===== */
+/* =========================
+   A) HTTPS / localhost
+========================= */
 function isCameraAllowedContext(){
   const isLocalhost = ["localhost","127.0.0.1"].includes(location.hostname);
   return window.isSecureContext || isLocalhost;
@@ -289,7 +316,9 @@ function isCameraAllowedContext(){
   document.getElementById("secureWarn").classList.toggle("d-none", isCameraAllowedContext());
 })();
 
-/* ===== Studio + preview ===== */
+/* =========================
+   B) Studio + preview
+========================= */
 function openStudio(inputId){
   const el = document.getElementById(inputId);
   if(el) el.click();
@@ -308,14 +337,18 @@ function bindPreview(inputId){
 }
 ["empFace","empBack","resFace","resBack","rationFace","certificateFile"].forEach(bindPreview);
 
-/* ===== Sections ===== */
+/* =========================
+   C) Sections
+========================= */
 hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
 isMarried.onchange    = ()=> wivesSection.classList.toggle("d-none", !isMarried.checked);
 hasChildren.onchange  = ()=> childrenSection.classList.toggle("d-none", !hasChildren.checked);
 hasRation.onchange    = ()=> rationSection.classList.toggle("d-none", !hasRation.checked);
 hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
 
-/* ===== Dynamic wife/child blocks ===== */
+/* =========================
+   D) Dynamic wife/child (عادي بدون ذكاء)
+========================= */
 function makeUploadBlock(prefix, i){
   const faceId = `${prefix}Face_${i}`;
   const backId = `${prefix}Back_${i}`;
@@ -365,15 +398,36 @@ childrenCount.oninput = ()=>{
 };
 
 /* =========================
-   CAMERA: Fast green + Auto + BestShot + CROP INSIDE FRAME
+   E) Smart ID only for national + residence
+========================= */
+const SMART_ID_INPUTS = new Set(["empFace","empBack","resFace","resBack"]); // فقط هذني
+function isSmartIdInput(inputId){ return SMART_ID_INPUTS.has(inputId); }
+
+/* =========================
+   F) OpenCV readiness
+========================= */
+let cvReady = false;
+function onOpenCvReady(){
+  // بعض الأحيان cv.onload يسبق تهيئة cv.Mat
+  const t = setInterval(()=>{
+    if(window.cv && cv.Mat){
+      cvReady = true;
+      document.getElementById("cvWarn").classList.add("d-none");
+      clearInterval(t);
+    }
+  }, 80);
+}
+
+/* =========================
+   G) Camera controller
 ========================= */
 let camStream = null;
 let targetInputId = null;
 let camModal = null;
 let validateTimer = null;
-let greenSince = null;
-let lastAuto = 0;
-let bestShotLock = false;
+let stableSince = null;
+let lastFoundQuad = null;
+let currentMode = "NORMAL"; // "SMART_ID" | "NORMAL"
 
 async function openCameraFor(inputId){
   if(!isCameraAllowedContext()){
@@ -382,6 +436,13 @@ async function openCameraFor(inputId){
   }
 
   targetInputId = inputId;
+  currentMode = isSmartIdInput(inputId) ? "SMART_ID" : "NORMAL";
+
+  // لو Smart لازم OpenCV
+  if(currentMode === "SMART_ID" && !cvReady){
+    document.getElementById("cvWarn").classList.remove("d-none");
+  }
+
   if(!camModal) camModal = new bootstrap.Modal(document.getElementById("camModal"));
 
   try{
@@ -393,14 +454,23 @@ async function openCameraFor(inputId){
     const v = document.getElementById("camVideo");
     v.srcObject = camStream;
 
-    bestShotLock = false;
-    greenSince = null;
-    lastAuto = 0;
+    // UI mode
+    const frameEl = document.getElementById("idFrame");
+    frameEl.style.display = (currentMode === "SMART_ID") ? "block" : "none";
+
+    document.getElementById("camHint").textContent =
+      (currentMode === "SMART_ID")
+        ? "وجّه الهوية داخل الإطار (يصبح أخضر عند اكتشاف الهوية)"
+        : "التقاط عادي (للشهادة/التموينية وغيرها)";
+
+    document.getElementById("captureBtn").disabled = (currentMode === "SMART_ID"); // يتفعل عند الاخضر
+    lastFoundQuad = null;
+    stableSince = null;
 
     camModal.show();
 
     if(validateTimer) clearInterval(validateTimer);
-    validateTimer = setInterval(()=>validateFrameFast(), 110);
+    validateTimer = setInterval(()=>tickValidate(), 140);
 
   }catch(e){
     alert("تعذر تشغيل الكاميرا. تأكد من إعطاء الصلاحية.");
@@ -415,104 +485,79 @@ function closeCamera(){
     camStream = null;
   }
   document.getElementById("idFrame").style.borderColor = "red";
-  document.getElementById("camHint").textContent = "وجّه الهوية داخل الإطار";
-  greenSince = null;
-  bestShotLock = false;
+  document.getElementById("captureBtn").disabled = (currentMode === "SMART_ID");
+  stableSince = null;
+  lastFoundQuad = null;
 }
 
-function analyzeLightSharpFastFromVideoROI(){
-  const v = document.getElementById("camVideo");
-  const roi = getCropRectInVideoPixels();
-  if(!roi) return null;
-
-  // نأخذ عينة صغيرة من الـ ROI للفحص
-  const testW = 220;
-  const testH = Math.max(1, Math.round(testW * (roi.h / roi.w)));
-
-  const c = document.createElement("canvas");
-  c.width = testW;
-  c.height = testH;
-  const ctx = c.getContext("2d", { willReadFrequently:true });
-  ctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0, 0, testW, testH);
-
-  const img = ctx.getImageData(0,0,testW,testH);
-  return analyzeROI_lightSharp(img.data, testW, testH, 0, 0, testW, testH);
+function captureAction(){
+  if(currentMode === "SMART_ID"){
+    // قص ذكي للهوية فقط
+    captureSmartIdNow();
+  }else{
+    // التقاط كامل بدون قص
+    captureNormalNow();
+  }
 }
 
-function validateFrameFast(){
+/* =========================
+   H) SMART detection (OpenCV): find a 4-point card with correct aspect
+========================= */
+const CARD_ASPECT = 8.7 / 5.3; // ~1.6415
+const ASPECT_TOL  = 0.18;      // سماحية
+const MIN_AREA_FRAC = 0.30;    // لازم تغطي جزء من الإطار
+
+function tickValidate(){
+  if(currentMode !== "SMART_ID"){
+    // normal mode: nothing to validate
+    return;
+  }
+
   const frameEl = document.getElementById("idFrame");
   const hint = document.getElementById("camHint");
+  const capBtn = document.getElementById("captureBtn");
 
-  const stats = analyzeLightSharpFastFromVideoROI();
-  if(!stats) return;
+  if(!cvReady){
+    frameEl.style.borderColor = "red";
+    capBtn.disabled = true;
+    hint.textContent = "⏳ جاري تحميل نظام التعرف…";
+    return;
+  }
 
-  // ✅ شدّد الإضاءة (طلبك) + خلي الوضوح مهم
-  const okLight = stats.mean > 55 && stats.mean < 210;
-  const okSharp = stats.blurScore > 18;
+  const v = document.getElementById("camVideo");
+  if(!v.videoWidth) return;
 
-  const ok = okLight && okSharp;
+  // نقرأ ROI حسب إطار الـ DOM ثم نشتغل عليه
+  const roi = getFrameRoiInVideoPixels();
+  if(!roi) return;
 
-  frameEl.style.borderColor = ok ? "lime" : "red";
+  const quad = detectCardQuadInROI(v, roi);
+  if(quad){
+    frameEl.style.borderColor = "lime";
+    capBtn.disabled = false;
+    hint.textContent = "✅ تم اكتشاف الهوية — ثبّت لحظة للتقاط تلقائي";
 
-  if(ok){
-    hint.textContent = "✅ ممتاز — سيتم الالتقاط تلقائياً";
-    if(greenSince === null) greenSince = performance.now();
-    autoCaptureTick();
+    lastFoundQuad = { roi, quad }; // quad نقاط داخل ROI (px)
+
+    // auto capture بعد ثبات قصير
+    const now = performance.now();
+    if(stableSince === null) stableSince = now;
+
+    // أسرع بس ما يكون مزعج: 350ms ثبات
+    if(now - stableSince > 350){
+      stableSince = null;
+      captureSmartIdNow(); // تلقائي
+    }
   }else{
-    greenSince = null;
-    if(!okLight) hint.textContent = "⚠️ الإضاءة غير مناسبة — قرّب للضوء أو ابتعد شوي";
-    else hint.textContent = "⚠️ مو واضح — ثبّت يدك/قرّب الهوية";
+    frameEl.style.borderColor = "red";
+    capBtn.disabled = true;
+    hint.textContent = "❌ لم يتم اكتشاف الهوية — قرّب الهوية وخليها داخل الإطار وبإضاءة جيدة";
+    stableSince = null;
+    lastFoundQuad = null;
   }
 }
 
-function autoCaptureTick(){
-  if(bestShotLock) return;
-  const now = performance.now();
-
-  const needGreenMs = 220;  // ✅ أسرع
-  const cooldownMs  = 900;
-
-  if(greenSince === null) return;
-  if(now - greenSince < needGreenMs) return;
-  if(now - lastAuto < cooldownMs) return;
-
-  lastAuto = now;
-  bestShotCapture();
-}
-
-function analyzeROI_lightSharp(data, w, h, x0, y0, rw, rh){
-  let sum=0, count=0;
-  const gray = new Uint8ClampedArray(rw*rh);
-  let k=0;
-
-  for(let y=y0; y<y0+rh; y++){
-    for(let x=x0; x<x0+rw; x++){
-      const i=(y*w+x)*4;
-      const g = (data[i]*0.299 + data[i+1]*0.587 + data[i+2]*0.114) | 0;
-      gray[k++] = g;
-      sum += g; count++;
-    }
-  }
-  const mean = sum / count;
-
-  let lapSum=0;
-  for(let y=1; y<rh-1; y++){
-    for(let x=1; x<rw-1; x++){
-      const c = gray[y*rw+x];
-      const lap = Math.abs(
-        (gray[(y-1)*rw+x] + gray[(y+1)*rw+x] + gray[y*rw+(x-1)] + gray[y*rw+(x+1)]) - 4*c
-      );
-      lapSum += lap;
-    }
-  }
-  const blurScore = lapSum / ((rw-2)*(rh-2));
-  return { mean, blurScore };
-}
-
-function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
-
-/* ===== حساب مستطيل القص داخل الفيديو حسب إطار الـ DOM ===== */
-function getCropRectInVideoPixels(){
+function getFrameRoiInVideoPixels(){
   const v = document.getElementById("camVideo");
   const frame = document.getElementById("idFrame");
   if(!v.videoWidth || !v.videoHeight) return null;
@@ -520,7 +565,6 @@ function getCropRectInVideoPixels(){
   const vr = v.getBoundingClientRect();
   const fr = frame.getBoundingClientRect();
 
-  // تقاطع الإطار داخل الفيديو
   const left   = Math.max(fr.left, vr.left);
   const top    = Math.max(fr.top, vr.top);
   const right  = Math.min(fr.right, vr.right);
@@ -530,13 +574,11 @@ function getCropRectInVideoPixels(){
   const hCss = Math.max(0, bottom - top);
   if(wCss < 10 || hCss < 10) return null;
 
-  // تحويل من CSS إلى إحداثيات الفيديو
   const sx = (left - vr.left) * (v.videoWidth  / vr.width);
   const sy = (top  - vr.top ) * (v.videoHeight / vr.height);
   const sw = wCss * (v.videoWidth  / vr.width);
   const sh = hCss * (v.videoHeight / vr.height);
 
-  // قص آمن داخل حدود الفيديو
   const x = Math.max(0, Math.min(v.videoWidth - 1, sx));
   const y = Math.max(0, Math.min(v.videoHeight - 1, sy));
   const w = Math.max(1, Math.min(v.videoWidth  - x, sw));
@@ -545,66 +587,190 @@ function getCropRectInVideoPixels(){
   return { x, y, w, h };
 }
 
-/* ===== Best Shot: 3 لقطات من داخل الإطار (Crop) واختيار الأوضح ===== */
-async function bestShotCapture(){
-  if(bestShotLock) return;
-  bestShotLock = true;
+function detectCardQuadInROI(videoEl, roi){
+  // نرسم ROI على canvas صغير لتسريع
+  const targetW = 420;
+  const scale = targetW / roi.w;
+  const targetH = Math.max(1, Math.round(roi.h * scale));
 
-  const hint = document.getElementById("camHint");
-  hint.textContent = "⏳ جاري الالتقاط...";
-
-  try{
-    const shots = [];
-    for(let i=0;i<3;i++){
-      const shot = grabCroppedFrameWithScore();
-      if(shot) shots.push(shot);
-      await sleep(110);
-    }
-    if(!shots.length) throw new Error("No shots");
-
-    shots.sort((a,b)=>b.score - a.score);
-    const best = shots[0];
-
-    await saveDataUrlToInput(best.dataUrl);
-
-    camModal.hide();
-    closeCamera();
-
-  }catch(e){
-    console.error(e);
-    alert("صار خطأ بالالتقاط. جرّب مرة ثانية.");
-    bestShotLock = false;
-  }
-}
-
-function grabCroppedFrameWithScore(){
-  const v = document.getElementById("camVideo");
-  const roi = getCropRectInVideoPixels();
-  if(!roi) return null;
-
-  // قص داخل الإطار فقط
   const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1, Math.round(roi.w));
-  canvas.height = Math.max(1, Math.round(roi.h));
+  canvas.width = targetW;
+  canvas.height = targetH;
   const ctx = canvas.getContext("2d", { willReadFrequently:true });
-  ctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(videoEl, roi.x, roi.y, roi.w, roi.h, 0, 0, targetW, targetH);
 
-  // Score من نفس القص (سريع)
-  const testW = 240;
-  const testH = Math.max(1, Math.round(testW * (canvas.height / canvas.width)));
-  const c2 = document.createElement("canvas");
-  c2.width = testW;
-  c2.height = testH;
-  const x2 = c2.getContext("2d", { willReadFrequently:true });
-  x2.drawImage(canvas,0,0,testW,testH);
-  const img = x2.getImageData(0,0,testW,testH);
-  const st = analyzeROI_lightSharp(img.data, testW, testH, 0, 0, testW, testH);
+  let src = cv.imread(canvas);
+  let gray = new cv.Mat();
+  cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
 
-  // JPEG النهائي (المقصوص فقط)
-  const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
-  return { dataUrl, score: st.blurScore };
+  // تحسين بسيط للإضاءة
+  let blur = new cv.Mat();
+  cv.GaussianBlur(gray, blur, new cv.Size(5,5), 0);
+
+  // Edge
+  let edges = new cv.Mat();
+  cv.Canny(blur, edges, 60, 160);
+
+  // أغلاق فجوات الحواف
+  let kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(5,5));
+  let closed = new cv.Mat();
+  cv.morphologyEx(edges, closed, cv.MORPH_CLOSE, kernel);
+
+  // Contours
+  let contours = new cv.MatVector();
+  let hierarchy = new cv.Mat();
+  cv.findContours(closed, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+
+  let best = null;
+  let bestArea = 0;
+
+  const roiArea = targetW * targetH;
+
+  for(let i=0;i<contours.size();i++){
+    const cnt = contours.get(i);
+    const area = cv.contourArea(cnt);
+    if(area < roiArea * MIN_AREA_FRAC) { cnt.delete(); continue; }
+
+    const peri = cv.arcLength(cnt, true);
+    const approx = new cv.Mat();
+    cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+
+    if(approx.rows === 4){
+      // aspect by boundingRect (سريع)
+      const rect = cv.boundingRect(approx);
+      const aspect = rect.width / rect.height;
+      const a1 = aspect;
+      const a2 = 1/aspect;
+
+      const okAspect = (Math.abs(a1 - CARD_ASPECT) < ASPECT_TOL) || (Math.abs(a2 - CARD_ASPECT) < ASPECT_TOL);
+      if(okAspect && area > bestArea){
+        bestArea = area;
+        best = approx.clone();
+      }
+    }
+
+    approx.delete();
+    cnt.delete();
+  }
+
+  // cleanup
+  src.delete(); gray.delete(); blur.delete(); edges.delete(); kernel.delete(); closed.delete(); contours.delete(); hierarchy.delete();
+
+  if(!best) return null;
+
+  // best نقاط داخل canvas المصغر (targetW,targetH) => نرجعها بإحداثيات ROI الأصلية
+  const pts = [];
+  for(let r=0;r<4;r++){
+    const x = best.intPtr(r,0)[0];
+    const y = best.intPtr(r,0)[1];
+    pts.push({x, y});
+  }
+  best.delete();
+
+  // ترتيب النقاط (tl,tr,br,bl)
+  const ordered = orderQuadPoints(pts);
+
+  // تحويل من target -> roi px
+  const invScale = roi.w / targetW;
+  const quadInRoi = ordered.map(p=>({ x: p.x * invScale, y: p.y * invScale }));
+
+  return quadInRoi;
 }
 
+function orderQuadPoints(pts){
+  // sum and diff technique
+  const sum = pts.map(p=>p.x+p.y);
+  const diff = pts.map(p=>p.x-p.y);
+
+  const tl = pts[sum.indexOf(Math.min(...sum))];
+  const br = pts[sum.indexOf(Math.max(...sum))];
+  const tr = pts[diff.indexOf(Math.max(...diff))];
+  const bl = pts[diff.indexOf(Math.min(...diff))];
+
+  return [tl,tr,br,bl];
+}
+
+/* =========================
+   I) Capture SMART: perspective crop to exact 8.7:5.3
+========================= */
+async function captureSmartIdNow(){
+  if(!lastFoundQuad) return;
+
+  const v = document.getElementById("camVideo");
+  const { roi, quad } = lastFoundQuad; // quad points inside roi (px)
+
+  // output size ثابت للهوية (يناسب PDF)
+  const outW = 870;
+  const outH = 530;
+
+  // نرسم ROI كامل أولاً
+  const roiCanvas = document.createElement("canvas");
+  roiCanvas.width = Math.round(roi.w);
+  roiCanvas.height = Math.round(roi.h);
+  const rctx = roiCanvas.getContext("2d", { willReadFrequently:true });
+  rctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0, 0, roiCanvas.width, roiCanvas.height);
+
+  // OpenCV perspective transform
+  const srcMat = cv.imread(roiCanvas);
+  const dstMat = new cv.Mat();
+
+  const srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
+    quad[0].x, quad[0].y,
+    quad[1].x, quad[1].y,
+    quad[2].x, quad[2].y,
+    quad[3].x, quad[3].y
+  ]);
+
+  const dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
+    0, 0,
+    outW, 0,
+    outW, outH,
+    0, outH
+  ]);
+
+  const M = cv.getPerspectiveTransform(srcTri, dstTri);
+  const dsize = new cv.Size(outW, outH);
+  cv.warpPerspective(srcMat, dstMat, M, dsize, cv.INTER_LINEAR, cv.BORDER_REPLICATE);
+
+  const outCanvas = document.createElement("canvas");
+  outCanvas.width = outW;
+  outCanvas.height = outH;
+  cv.imshow(outCanvas, dstMat);
+
+  // cleanup
+  srcMat.delete(); dstMat.delete(); srcTri.delete(); dstTri.delete(); M.delete();
+
+  const dataUrl = outCanvas.toDataURL("image/jpeg", 0.92);
+  await saveDataUrlToInput(dataUrl);
+
+  // close
+  camModal.hide();
+  closeCamera();
+}
+
+/* =========================
+   J) Capture NORMAL: full frame (no crop)
+========================= */
+async function captureNormalNow(){
+  const v = document.getElementById("camVideo");
+  if(!v.videoWidth) return;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = v.videoWidth;
+  canvas.height = v.videoHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(v,0,0,canvas.width,canvas.height);
+
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
+  await saveDataUrlToInput(dataUrl);
+
+  camModal.hide();
+  closeCamera();
+}
+
+/* =========================
+   K) save to input + preview
+========================= */
 async function saveDataUrlToInput(dataUrl){
   const blob = await (await fetch(dataUrl)).blob();
   const file = new File([blob], "camera.jpg", {type:"image/jpeg"});
@@ -622,7 +788,7 @@ async function saveDataUrlToInput(dataUrl){
 }
 
 /* =========================
-   PDF: 8.7×5.3 سم لكل وجه + بدون نص عربي
+   L) PDF (8.7×5.3) + no Arabic text + safe margins
 ========================= */
 const { jsPDF } = window.jspdf;
 const CM = 28.35;
@@ -740,6 +906,7 @@ async function generatePDF(){
     if(cf[i].files[0] && cb[i].files[0]) await addIDPage(pdf, cf[i].files[0], cb[i].files[0]);
   }
 
+  // التموينية/الشهادة: صفحات كاملة عادي
   if(hasRation.checked){
     if(!rationFace.files[0]){ alert("رفّع البطاقة التموينية"); return; }
     await addSingleImagePage(pdf, rationFace.files[0]);
