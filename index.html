@@ -191,27 +191,16 @@ button.main-btn:hover{ background:var(--dark); }
     </select>
 
     <div id="socialSection" class="section d-none">
-
       <div class="row g-3">
-        <div class="col-md-6">
-          <label class="fw-bold">اسم الزوجة الثلاثي (للزوجة الأولى)</label>
-          <input type="text" id="wifeName" class="form-control">
-        </div>
-        <div class="col-md-6">
-          <label class="fw-bold">هل الزوجة موظفة؟</label>
-          <select id="wifeIsEmployee" class="form-control">
-            <option value="">اختر</option>
-            <option value="yes">نعم</option>
-            <option value="no">لا</option>
-          </select>
-        </div>
 
+        <!-- ✅ عدد الزوجات قبل الأسماء -->
         <div class="col-md-6">
           <label class="fw-bold">عدد الزوجات</label>
           <input type="number" id="wivesCount" min="1" value="1" class="form-control">
         </div>
 
         <div class="col-12">
+          <div id="wivesInfo"></div>
           <div id="wivesUploads"></div>
         </div>
 
@@ -231,11 +220,10 @@ button.main-btn:hover{ background:var(--dark); }
         </div>
 
       </div>
-
     </div>
   </div>
 
-  <!-- ====== البطاقة الوطنية (تعليم + قص ذكي) ====== -->
+  <!-- ====== البطاقة الوطنية ====== -->
   <div class="card p-4">
     <h5 class="mb-2">البطاقة الوطنية للموظف <span class="text-muted">(قص ذكي داخل قوسين)</span></h5>
     <div class="tip mb-3">
@@ -263,7 +251,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== بطاقة السكن (وجه/ظهر ذكي) ====== -->
+  <!-- ====== بطاقة السكن ====== -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد بطاقة سكن؟</label>
@@ -293,7 +281,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== باج العتبة (وجه/ظهر ذكي + نفس القياس) ====== -->
+  <!-- ====== باج العتبة ====== -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل يوجد باج العتبة؟</label>
@@ -343,16 +331,38 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <button class="w-100 main-btn" onclick="generatePDF()">إرسال وإنشاء ملف PDF</button>
+  <button class="w-100 main-btn" onclick="submitAll()">إرسال (Google Sheet + PDF)</button>
 
   <div class="mt-3 small-note">
-    الوطني + السكن + باج العتبة + زوجات/أطفال: قص داخل الإطار + فحص إضاءة/وضوح + Best Shot. <br>
+    الوطني + السكن + باج + زوجات/أطفال: قص داخل الإطار + فحص إضاءة/وضوح + Best Shot. <br>
     الشهادة: تصوير/رفع كامل بدون قص.
   </div>
 
 </div>
 
 <div class="footer-note">تطوير شعبة تقنية المعلومات لدار الوارث</div>
+
+<!-- ارسال إلى Google Sheet بدون CORS: iframe + form -->
+<iframe id="gsFrame" name="gsFrame" style="display:none;"></iframe>
+<form id="gsForm" target="gsFrame" method="POST" style="display:none;">
+  <input name="employeeName">
+  <input name="birthPlace">
+  <input name="birthDate">
+  <input name="phone">
+  <input name="badgeNumber">
+  <input name="education">
+  <input name="specialty">
+  <input name="address">
+  <input name="maritalStatus">
+  <input name="wivesCount">
+  <input name="wivesInfo">
+  <input name="childrenMother">
+  <input name="childrenCount">
+  <input name="childrenNames">
+  <input name="hasResidence">
+  <input name="hasBadge">
+  <input name="hasCertificate">
+</form>
 
 <!-- مودال الكاميرا -->
 <div class="modal fade" id="camModal" tabindex="-1">
@@ -387,8 +397,12 @@ button.main-btn:hover{ background:var(--dark); }
 
 <script>
 /* =======================
-   0) Helpers
+   ضع رابط Apps Script WebApp (/exec) هنا
+   مثال: https://script.google.com/macros/s/XXXXXXX/exec
 ======================= */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxu7zHafn7oy3TnSgXnawRlTWMwp-_XZz4p_OqYhcTg8muFKbsB_YbLzD0H1hqTJrqcow/exec";
+
+/* ===== HTTPS/localhost check ===== */
 function isCameraAllowedContext(){
   const isLocalhost = ["localhost","127.0.0.1"].includes(location.hostname);
   return window.isSecureContext || isLocalhost;
@@ -397,11 +411,11 @@ function isCameraAllowedContext(){
   document.getElementById("secureWarn").classList.toggle("d-none", isCameraAllowedContext());
 })();
 
+/* ===== Studio + preview ===== */
 function openStudio(inputId){
   const el = document.getElementById(inputId);
   if(el) el.click();
 }
-
 function bindPreview(inputId){
   const input = document.getElementById(inputId);
   if(!input) return;
@@ -414,13 +428,9 @@ function bindPreview(inputId){
     }
   });
 }
-
-// ثابتة
 ["empFace","empBack","resFace","resBack","badgeFace","badgeBack","certificateFile"].forEach(bindPreview);
 
-/* =======================
-   1) Validation: الاسم الرباعي
-======================= */
+/* ===== الاسم الرباعي ===== */
 function isQuadName(name){
   const words = name.trim().split(/\s+/).filter(Boolean);
   return words.length === 4;
@@ -430,46 +440,37 @@ employeeName.addEventListener("input", ()=>{
   document.getElementById("nameError").classList.toggle("show", !ok && employeeName.value.trim().length>0);
 });
 
-/* =======================
-   2) Social logic (اعزب/متزوج)
-======================= */
+/* ===== Sections ===== */
+hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
+hasBadge.onchange     = ()=> badgeSection.classList.toggle("d-none", !hasBadge.checked);
+hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
+
+/* ===== الحالة الاجتماعية ===== */
 maritalStatus.addEventListener("change", ()=>{
   const married = maritalStatus.value === "married";
   socialSection.classList.toggle("d-none", !married);
 
   if(!married){
-    wifeName.value = "";
-    wifeIsEmployee.value = "";
+    wivesCount.value = 1;
+    wivesInfo.innerHTML = "";
+    wivesUploads.innerHTML = "";
     childrenMother.value = "";
     childrenCount.value = 0;
     childrenNamesWrap.innerHTML = "";
     childrenUploads.innerHTML = "";
-    wivesCount.value = 1;
-    wivesUploads.innerHTML = "";
   }else{
-    // توليد افتراضي
-    renderWivesUploads();
-    renderChildrenNamesAndIDs();
+    renderWivesAll();
+    renderChildrenAll();
   }
 });
-
-childrenCount.addEventListener("input", ()=>{
-  renderChildrenNamesAndIDs();
-});
 wivesCount.addEventListener("input", ()=>{
-  renderWivesUploads();
+  if(maritalStatus.value === "married") renderWivesAll();
+});
+childrenCount.addEventListener("input", ()=>{
+  if(maritalStatus.value === "married") renderChildrenAll();
 });
 
-/* =======================
-   3) Toggle sections
-======================= */
-hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
-hasBadge.onchange     = ()=> badgeSection.classList.toggle("d-none", !hasBadge.checked);
-hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
-
-/* =======================
-   4) Dynamic blocks: wives/children IDs (ذكية)
-======================= */
+/* ===== Dynamic: wives names + employed + IDs (ذكي) ===== */
 function makeSmartIDBlock(prefix, i){
   const faceId = `${prefix}Face_${i}`;
   const backId = `${prefix}Back_${i}`;
@@ -501,7 +502,6 @@ function makeSmartIDBlock(prefix, i){
     </div>
   `;
 }
-
 function bindDynamicPreviews(prefix, n){
   for(let i=1;i<=n;i++){
     bindPreview(`${prefix}Face_${i}`);
@@ -509,11 +509,34 @@ function bindDynamicPreviews(prefix, n){
   }
 }
 
-function renderWivesUploads(){
-  const married = maritalStatus.value === "married";
-  if(!married) return;
-
+function renderWivesAll(){
   const n = Math.max(1, Number(wivesCount.value || 1));
+
+  wivesInfo.innerHTML = `<div class="tip mb-2">بيانات الزوجات</div>`;
+  let html = "";
+  for(let i=1;i<=n;i++){
+    html += `
+      <div class="mb-3 p-3 rounded border bg-white">
+        <strong class="d-block mb-2">الزوجة ${i}</strong>
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label class="fw-bold">اسم الزوجة الثلاثي</label>
+            <input type="text" class="form-control wifeName" id="wifeName_${i}" placeholder="مثال: زهراء علي حسن">
+          </div>
+          <div class="col-md-6">
+            <label class="fw-bold">هل هي موظفة؟</label>
+            <select class="form-control wifeEmp" id="wifeEmp_${i}">
+              <option value="">اختر</option>
+              <option value="yes">نعم</option>
+              <option value="no">لا</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  wivesInfo.innerHTML += html;
+
   wivesUploads.innerHTML = `<div class="tip mb-2">رفع هويات الزوجات (ذكي مثل الوطنية)</div>`;
   for(let i=1;i<=n;i++){
     wivesUploads.innerHTML += makeSmartIDBlock("wife", i);
@@ -521,13 +544,9 @@ function renderWivesUploads(){
   bindDynamicPreviews("wife", n);
 }
 
-function renderChildrenNamesAndIDs(){
-  const married = maritalStatus.value === "married";
-  if(!married) return;
-
+function renderChildrenAll(){
   const n = Math.max(0, Number(childrenCount.value || 0));
 
-  // أسماء
   childrenNamesWrap.innerHTML = "";
   if(n > 0){
     const box = document.createElement("div");
@@ -538,14 +557,13 @@ function renderChildrenNamesAndIDs(){
       div.className = "mb-2";
       div.innerHTML = `
         <label class="fw-bold">اسم الابن ${i}</label>
-        <input type="text" class="form-control childName" placeholder="اسم ثلاثي/رباعي حسب المتوفر">
+        <input type="text" class="form-control childName" id="childName_${i}">
       `;
       box.appendChild(div);
     }
     childrenNamesWrap.appendChild(box);
   }
 
-  // هويات
   childrenUploads.innerHTML = "";
   if(n > 0){
     childrenUploads.innerHTML = `<div class="tip mb-2">رفع هويات الأطفال (ذكي مثل الوطنية)</div>`;
@@ -557,9 +575,7 @@ function renderChildrenNamesAndIDs(){
 }
 
 /* =========================
-   5) CAMERA controller:
-   - ID mode (ذكي): وطني/سكن/باج/زوجات/أطفال
-   - FULL mode: شهادة فقط
+   CAMERA (ID ذكي / FULL كامل)
 ========================= */
 function isSmartIDInput(inputId){
   if(["empFace","empBack","resFace","resBack","badgeFace","badgeBack"].includes(inputId)) return true;
@@ -604,14 +620,12 @@ async function openCameraFor(inputId){
     const frameEl = document.getElementById("idFrame");
     const titleEl = document.getElementById("camTitle");
     const hint = document.getElementById("camHint");
-    const capBtn = document.getElementById("captureBtn");
 
     if(captureMode === "ID"){
       frameEl.style.display = "block";
       frameEl.style.borderColor = "red";
       titleEl.textContent = "كاميرا (قص ذكي داخل الإطار)";
       hint.textContent = "ضع البطاقة داخل الإطار — يصير أخضر ثم يلتقط تلقائياً";
-      capBtn.disabled = false;
 
       bestShotLock = false; greenSince = null; lastAuto = 0;
       if(validateTimer) clearInterval(validateTimer);
@@ -620,7 +634,6 @@ async function openCameraFor(inputId){
       frameEl.style.display = "none";
       titleEl.textContent = "كاميرا (بدون قص)";
       hint.textContent = "التقاط صورة كاملة";
-      capBtn.disabled = false;
 
       if(validateTimer) { clearInterval(validateTimer); validateTimer=null; }
       bestShotLock = false; greenSince = null; lastAuto = 0;
@@ -650,7 +663,6 @@ function captureNow(){
   else captureFullNow();
 }
 
-/* ===== ID-mode validation + auto ===== */
 function analyzeLightSharpFastFromVideoROI(){
   const v = document.getElementById("camVideo");
   const roi = getCropRectInVideoPixels();
@@ -770,14 +782,9 @@ function getCropRectInVideoPixels(){
   return { x, y, w, h };
 }
 
-/* ===== ID-mode: Best Shot + CROP ===== */
 async function bestShotCapture(){
   if(bestShotLock) return;
   bestShotLock = true;
-
-  const hint = document.getElementById("camHint");
-  hint.textContent = "⏳ جاري الالتقاط...";
-
   try{
     const shots = [];
     for(let i=0;i<3;i++){
@@ -794,7 +801,6 @@ async function bestShotCapture(){
 
     camModal.hide();
     closeCamera();
-
   }catch(e){
     console.error(e);
     alert("صار خطأ بالالتقاط. جرّب مرة ثانية.");
@@ -827,7 +833,6 @@ function grabCroppedFrameWithScore(){
   return { dataUrl, score: st.blurScore };
 }
 
-/* ===== FULL-mode: capture full frame ===== */
 async function captureFullNow(){
   const v = document.getElementById("camVideo");
   if(!v.videoWidth) return;
@@ -862,7 +867,7 @@ async function saveDataUrlToInput(dataUrl){
 }
 
 /* =========================
-   6) PDF: 8.7×5.3 سم (وطنية/سكن/باج/زوجات/أطفال) + الشهادة صفحة كاملة
+   PDF: 8.7×5.3 سم + Margins آمنة
 ========================= */
 const { jsPDF } = window.jspdf;
 const CM = 28.35;
@@ -945,70 +950,128 @@ async function addSingleImagePage(pdf, file){
   drawContainPDF(pdf, data.dataUrl, data.format, x, y, w, h);
 }
 
-function getChildNames(){
-  return Array.from(document.querySelectorAll(".childName")).map(i=>i.value.trim()).filter(Boolean);
+/* =========================
+   Google Sheet إرسال (بدون CORS)
+========================= */
+function collectWivesInfo(){
+  const married = maritalStatus.value === "married";
+  if(!married) return [];
+  const n = Math.max(1, Number(wivesCount.value || 1));
+  const arr = [];
+  for(let i=1;i<=n;i++){
+    const name = (document.getElementById(`wifeName_${i}`)?.value || "").trim();
+    const empV = (document.getElementById(`wifeEmp_${i}`)?.value || "");
+    arr.push({
+      index: i,
+      name,
+      isEmployee: empV === "yes" ? true : (empV === "no" ? false : null)
+    });
+  }
+  return arr;
 }
 
+function collectChildrenNames(){
+  const married = maritalStatus.value === "married";
+  if(!married) return [];
+  const n = Math.max(0, Number(childrenCount.value || 0));
+  const arr = [];
+  for(let i=1;i<=n;i++){
+    const nm = (document.getElementById(`childName_${i}`)?.value || "").trim();
+    arr.push(nm);
+  }
+  return arr;
+}
+
+function sendToGoogleSheet(){
+  if(!SCRIPT_URL || SCRIPT_URL.includes("PASTE_YOUR_WEB_APP_EXEC_URL_HERE")){
+    alert("لازم تحط رابط Google Apps Script WebApp (/exec) داخل SCRIPT_URL");
+    return false;
+  }
+
+  const form = document.getElementById("gsForm");
+  form.action = SCRIPT_URL;
+
+  form.elements.employeeName.value = employeeName.value.trim();
+  form.elements.birthPlace.value = birthPlace.value.trim();
+  form.elements.birthDate.value = birthDate.value || "";
+  form.elements.phone.value = phone.value.trim();
+  form.elements.badgeNumber.value = badgeNumber.value.trim();
+  form.elements.education.value = education.value || "";
+  form.elements.specialty.value = specialty.value.trim();
+  form.elements.address.value = address.value.trim();
+  form.elements.maritalStatus.value = maritalStatus.value || "";
+
+  const married = maritalStatus.value === "married";
+  form.elements.wivesCount.value = married ? (String(wivesCount.value || "1")) : "";
+  form.elements.wivesInfo.value = JSON.stringify(collectWivesInfo());
+  form.elements.childrenMother.value = married ? childrenMother.value.trim() : "";
+  form.elements.childrenCount.value = married ? (String(childrenCount.value || "0")) : "";
+  form.elements.childrenNames.value = JSON.stringify(collectChildrenNames());
+
+  form.elements.hasResidence.value = hasResidence.checked ? "1" : "0";
+  form.elements.hasBadge.value = hasBadge.checked ? "1" : "0";
+  form.elements.hasCertificate.value = hasCertificate.checked ? "1" : "0";
+
+  form.submit();
+  return true;
+}
+
+/* =========================
+   Validation + PDF
+========================= */
 async function generatePDF(){
   const name = employeeName.value.trim();
-  if(!name){ alert("يرجى إدخال الاسم"); return; }
-  if(!isQuadName(name)){ alert("الاسم يجب أن يكون رباعي (4 كلمات)"); return; }
+  if(!name){ alert("يرجى إدخال الاسم"); return false; }
+  if(!isQuadName(name)){ alert("الاسم يجب أن يكون رباعي (4 كلمات)"); return false; }
 
   if(!empFace.files[0] || !empBack.files[0]){
     alert("يرجى رفع وجه وظهر البطاقة الوطنية");
-    return;
+    return false;
   }
 
   if(hasResidence.checked){
     if(!resFace.files[0] || !resBack.files[0]){
       alert("رفّع وجه وظهر بطاقة السكن");
-      return;
+      return false;
     }
   }
 
   if(hasBadge.checked){
     if(!badgeFace.files[0] || !badgeBack.files[0]){
       alert("رفّع وجه وظهر باج العتبة");
-      return;
+      return false;
     }
   }
 
   const married = maritalStatus.value === "married";
   if(married){
-    if(!wifeName.value.trim()){
-      alert("يرجى إدخال اسم الزوجة الثلاثي");
-      return;
-    }
-
     const wCount = Math.max(1, Number(wivesCount.value || 1));
-    // تحقق رفع هويات الزوجات
     for(let i=1;i<=wCount;i++){
+      const nm = (document.getElementById(`wifeName_${i}`)?.value || "").trim();
+      const emp = (document.getElementById(`wifeEmp_${i}`)?.value || "");
+      if(!nm){ alert(`يرجى إدخال اسم الزوجة رقم ${i}`); return false; }
+      if(!emp){ alert(`يرجى تحديد هل الزوجة رقم ${i} موظفة؟`); return false; }
+
       const wf = document.getElementById(`wifeFace_${i}`);
       const wb = document.getElementById(`wifeBack_${i}`);
-      if(!wf || !wb || !wf.files[0] || !wb.files[0]){
+      if(!wf?.files[0] || !wb?.files[0]){
         alert(`يرجى رفع وجه وظهر هوية الزوجة رقم ${i}`);
-        return;
+        return false;
       }
     }
 
-    const n = Math.max(0, Number(childrenCount.value || 0));
-    if(n > 0){
-      if(!childrenMother.value.trim()){
-        alert("يرجى إدخال اسم أم الأبناء");
-        return;
-      }
-      const names = getChildNames();
-      if(names.length < n){
-        alert("يرجى إدخال أسماء الأبناء كاملة حسب العدد");
-        return;
-      }
+    const cCount = Math.max(0, Number(childrenCount.value || 0));
+    if(cCount>0){
+      if(!childrenMother.value.trim()){ alert("يرجى إدخال اسم أم الأبناء"); return false; }
+      const names = collectChildrenNames().filter(Boolean);
+      if(names.length < cCount){ alert("يرجى إدخال أسماء الأبناء كاملة حسب العدد"); return false; }
 
-      for(let i=1;i<=n;i++){
+      for(let i=1;i<=cCount;i++){
         const cf = document.getElementById(`childFace_${i}`);
         const cb = document.getElementById(`childBack_${i}`);
-        if(!cf || !cb || !cf.files[0] || !cb.files[0]){
+        if(!cf?.files[0] || !cb?.files[0]){
           alert(`يرجى رفع وجه وظهر هوية الطفل رقم ${i}`);
-          return;
+          return false;
         }
       }
     }
@@ -1026,7 +1089,6 @@ async function generatePDF(){
     await addIDPage(pdf, badgeFace.files[0], badgeBack.files[0]);
   }
 
-  // الزوجات
   if(married){
     const wCount = Math.max(1, Number(wivesCount.value || 1));
     for(let i=1;i<=wCount;i++){
@@ -1035,9 +1097,8 @@ async function generatePDF(){
       await addIDPage(pdf, wf, wb);
     }
 
-    // الأطفال
-    const n = Math.max(0, Number(childrenCount.value || 0));
-    for(let i=1;i<=n;i++){
+    const cCount = Math.max(0, Number(childrenCount.value || 0));
+    for(let i=1;i<=cCount;i++){
       const cf = document.getElementById(`childFace_${i}`).files[0];
       const cb = document.getElementById(`childBack_${i}`).files[0];
       await addIDPage(pdf, cf, cb);
@@ -1045,16 +1106,25 @@ async function generatePDF(){
   }
 
   if(hasCertificate.checked){
-    if(!certificateFile.files[0]){
-      alert("يرجى رفع شهادة التخرج");
-      return;
-    }
+    if(!certificateFile.files[0]){ alert("يرجى رفع شهادة التخرج"); return false; }
     await addSingleImagePage(pdf, certificateFile.files[0]);
   }
 
   if(pdf.getNumberOfPages() > 1) pdf.deletePage(1);
 
   pdf.save(name.replace(/\s+/g,"_") + "_documents.pdf");
+  return true;
+}
+
+/* زر الإرسال: Google Sheet + PDF */
+async function submitAll(){
+  // 1) Validate PDF first (حتى ما نرسل بيانات ناقصة)
+  const okPdf = await generatePDF();
+  if(!okPdf) return;
+
+  // 2) بعد نجاح الـ PDF نرسل للشيت
+  const okSheet = sendToGoogleSheet();
+  if(okSheet) alert("تم إنشاء PDF وإرسال البيانات إلى Google Sheet ✅");
 }
 </script>
 
