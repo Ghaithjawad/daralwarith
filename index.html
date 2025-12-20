@@ -107,6 +107,14 @@ button.main-btn:hover{ background:var(--dark); }
 .req-hint{ font-size:.85rem; color:#b42318; display:none; }
 .req-hint.show{ display:block; }
 
+.tip{
+  background:#f2fffe;
+  border:1px solid #cfeeee;
+  border-radius:12px;
+  padding:10px 12px;
+  color:#0f3f3f;
+  font-size:.92rem;
+}
 </style>
 </head>
 
@@ -135,7 +143,7 @@ button.main-btn:hover{ background:var(--dark); }
     <div class="row g-3">
       <div class="col-md-6">
         <label class="fw-bold">محل الولادة</label>
-        <input type="text" id="birthPlace" class="form-control" placeholder="مثال: كربلاء">
+        <input type="text" id="birthPlace" class="form-control">
       </div>
       <div class="col-md-6">
         <label class="fw-bold">المواليد (تاريخ الولادة)</label>
@@ -164,16 +172,16 @@ button.main-btn:hover{ background:var(--dark); }
       </div>
       <div class="col-md-6">
         <label class="fw-bold">التخصص الدقيق</label>
-        <input type="text" id="specialty" class="form-control" placeholder="مثال: شبكات / محاسبة / تمريض...">
+        <input type="text" id="specialty" class="form-control">
       </div>
       <div class="col-12">
         <label class="fw-bold">عنوان السكن الحالي</label>
-        <textarea id="address" class="form-control" rows="2" placeholder="المحافظة - القضاء - الناحية - المحلة - الزقاق - الدار"></textarea>
+        <textarea id="address" class="form-control" rows="2"></textarea>
       </div>
     </div>
   </div>
 
-  <!-- ====== الحالة الاجتماعية (بدل checkbox) ====== -->
+  <!-- ====== الحالة الاجتماعية ====== -->
   <div class="card p-4">
     <label class="fw-bold mb-2 d-block">الحالة الاجتماعية</label>
     <select id="maritalStatus" class="form-control">
@@ -183,10 +191,11 @@ button.main-btn:hover{ background:var(--dark); }
     </select>
 
     <div id="socialSection" class="section d-none">
+
       <div class="row g-3">
         <div class="col-md-6">
-          <label class="fw-bold">اسم الزوجة الثلاثي</label>
-          <input type="text" id="wifeName" class="form-control" placeholder="مثال: زهراء علي حسن">
+          <label class="fw-bold">اسم الزوجة الثلاثي (للزوجة الأولى)</label>
+          <input type="text" id="wifeName" class="form-control">
         </div>
         <div class="col-md-6">
           <label class="fw-bold">هل الزوجة موظفة؟</label>
@@ -198,25 +207,40 @@ button.main-btn:hover{ background:var(--dark); }
         </div>
 
         <div class="col-md-6">
+          <label class="fw-bold">عدد الزوجات</label>
+          <input type="number" id="wivesCount" min="1" value="1" class="form-control">
+        </div>
+
+        <div class="col-12">
+          <div id="wivesUploads"></div>
+        </div>
+
+        <div class="col-md-6">
           <label class="fw-bold">اسم أم الأبناء</label>
-          <input type="text" id="childrenMother" class="form-control" placeholder="عادةً نفس الزوجة (حسب الحاجة)">
+          <input type="text" id="childrenMother" class="form-control">
         </div>
 
         <div class="col-md-6">
           <label class="fw-bold">عدد الأبناء</label>
-          <input type="number" id="childrenCount" min="0" class="form-control" value="0">
+          <input type="number" id="childrenCount" min="0" value="0" class="form-control">
         </div>
 
         <div class="col-12">
           <div id="childrenNamesWrap"></div>
+          <div id="childrenUploads"></div>
         </div>
+
       </div>
+
     </div>
   </div>
 
-  <!-- ====== البطاقة الوطنية (قص + فحص) ====== -->
+  <!-- ====== البطاقة الوطنية (تعليم + قص ذكي) ====== -->
   <div class="card p-4">
-    <h5 class="mb-3">البطاقة الوطنية للموظف (قصّ ذكي داخل الإطار)</h5>
+    <h5 class="mb-2">البطاقة الوطنية للموظف <span class="text-muted">(قص ذكي داخل قوسين)</span></h5>
+    <div class="tip mb-3">
+      التعليمات: وجّه الهوية داخل الإطار، لا تحرك اليد، خلي الإضاءة قوية. يصير الإطار أخضر وبعدها يلتقط تلقائياً.
+    </div>
 
     <div class="mb-3">
       <label class="fw-bold mb-2 d-block">وجه الهوية</label>
@@ -239,7 +263,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== بطاقة السكن (قص + فحص) ====== -->
+  <!-- ====== بطاقة السكن (وجه/ظهر ذكي) ====== -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد بطاقة سكن؟</label>
@@ -269,21 +293,35 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== باج العتبة (بدل التموينية) - تصوير/رفع كامل بدون قص ====== -->
+  <!-- ====== باج العتبة (وجه/ظهر ذكي + نفس القياس) ====== -->
   <div class="card p-4">
     <div class="check-box form-check">
-      <label class="form-check-label">هل توجد صورة/باج العتبة الحسينية؟</label>
+      <label class="form-check-label">هل يوجد باج العتبة؟</label>
       <input class="form-check-input" type="checkbox" id="hasBadge">
     </div>
 
     <div id="badgeSection" class="section d-none">
-      <label class="fw-bold mb-2 d-block">رفع/تصوير باج العتبة (بدون قص)</label>
-      <div class="d-flex gap-2">
-        <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('badgeFile')">كاميرا</button>
-        <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('badgeFile')">استوديو</button>
+      <div class="tip mb-3">ضع الباج داخل الإطار تماماً، يتحول أخضر ثم يلتقط تلقائياً.</div>
+
+      <div class="mb-3">
+        <label class="fw-bold mb-2 d-block">وجه باج العتبة</label>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('badgeFace')">كاميرا</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('badgeFace')">استوديو</button>
+        </div>
+        <input type="file" id="badgeFace" class="form-control d-none" accept="image/*">
+        <img id="badgeFacePreview" class="preview-img mt-2 d-none" alt="preview">
       </div>
-      <input type="file" id="badgeFile" class="form-control d-none" accept="image/*">
-      <img id="badgeFilePreview" class="preview-img mt-2 d-none" alt="preview">
+
+      <div>
+        <label class="fw-bold mb-2 d-block">ظهر باج العتبة</label>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('badgeBack')">كاميرا</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('badgeBack')">استوديو</button>
+        </div>
+        <input type="file" id="badgeBack" class="form-control d-none" accept="image/*">
+        <img id="badgeBackPreview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
     </div>
   </div>
 
@@ -308,8 +346,8 @@ button.main-btn:hover{ background:var(--dark); }
   <button class="w-100 main-btn" onclick="generatePDF()">إرسال وإنشاء ملف PDF</button>
 
   <div class="mt-3 small-note">
-    الوطني + السكن: قص داخل الإطار + فحص إضاءة/وضوح + Best Shot. <br>
-    الباج + الشهادة: التقاط/رفع كامل بدون قص.
+    الوطني + السكن + باج العتبة + زوجات/أطفال: قص داخل الإطار + فحص إضاءة/وضوح + Best Shot. <br>
+    الشهادة: تصوير/رفع كامل بدون قص.
   </div>
 
 </div>
@@ -351,8 +389,6 @@ button.main-btn:hover{ background:var(--dark); }
 /* =======================
    0) Helpers
 ======================= */
-const ID_INPUTS = new Set(["empFace","empBack","resFace","resBack"]); // فقط الوطني + السكن
-
 function isCameraAllowedContext(){
   const isLocalhost = ["localhost","127.0.0.1"].includes(location.hostname);
   return window.isSecureContext || isLocalhost;
@@ -365,6 +401,7 @@ function openStudio(inputId){
   const el = document.getElementById(inputId);
   if(el) el.click();
 }
+
 function bindPreview(inputId){
   const input = document.getElementById(inputId);
   if(!input) return;
@@ -377,7 +414,9 @@ function bindPreview(inputId){
     }
   });
 }
-["empFace","empBack","resFace","resBack","badgeFile","certificateFile"].forEach(bindPreview);
+
+// ثابتة
+["empFace","empBack","resFace","resBack","badgeFace","badgeBack","certificateFile"].forEach(bindPreview);
 
 /* =======================
    1) Validation: الاسم الرباعي
@@ -399,35 +438,26 @@ maritalStatus.addEventListener("change", ()=>{
   socialSection.classList.toggle("d-none", !married);
 
   if(!married){
-    // تنظيف حقول الزوجة/الأطفال
     wifeName.value = "";
     wifeIsEmployee.value = "";
     childrenMother.value = "";
     childrenCount.value = 0;
     childrenNamesWrap.innerHTML = "";
+    childrenUploads.innerHTML = "";
+    wivesCount.value = 1;
+    wivesUploads.innerHTML = "";
+  }else{
+    // توليد افتراضي
+    renderWivesUploads();
+    renderChildrenNamesAndIDs();
   }
 });
 
 childrenCount.addEventListener("input", ()=>{
-  const n = Math.max(0, Number(childrenCount.value || 0));
-  childrenNamesWrap.innerHTML = "";
-
-  if(n === 0) return;
-
-  // أسماء الأبناء
-  const box = document.createElement("div");
-  box.className = "section";
-  box.innerHTML = `<div class="fw-bold mb-2">أسماء الأبناء</div>`;
-  for(let i=1;i<=n;i++){
-    const div = document.createElement("div");
-    div.className = "mb-2";
-    div.innerHTML = `
-      <label class="fw-bold">اسم الابن ${i}</label>
-      <input type="text" class="form-control childName" placeholder="اسم ثلاثي/رباعي حسب المتوفر">
-    `;
-    box.appendChild(div);
-  }
-  childrenNamesWrap.appendChild(box);
+  renderChildrenNamesAndIDs();
+});
+wivesCount.addEventListener("input", ()=>{
+  renderWivesUploads();
 });
 
 /* =======================
@@ -438,22 +468,118 @@ hasBadge.onchange     = ()=> badgeSection.classList.toggle("d-none", !hasBadge.c
 hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
 
 /* =======================
-   4) CAMERA controller:
-   - الوطني+السكن: قص داخل الإطار + فحص + Auto + BestShot
-   - الباج+الشهادة: تصوير كامل بدون قص/بدون فحص
+   4) Dynamic blocks: wives/children IDs (ذكية)
 ======================= */
+function makeSmartIDBlock(prefix, i){
+  const faceId = `${prefix}Face_${i}`;
+  const backId = `${prefix}Back_${i}`;
+  const title = (prefix==="wife") ? `هوية الزوجة ${i}` : `هوية الطفل ${i}`;
+
+  return `
+    <div class="mb-3 p-3 rounded border bg-white">
+      <strong class="d-block mb-2">${title}</strong>
+
+      <div class="mb-2">
+        <label class="fw-bold mb-1 d-block">وجه</label>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${faceId}')">كاميرا</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${faceId}')">استوديو</button>
+        </div>
+        <input type="file" id="${faceId}" class="form-control d-none ${prefix}-face" accept="image/*">
+        <img id="${faceId}Preview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
+
+      <div>
+        <label class="fw-bold mb-1 d-block">ظهر</label>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${backId}')">كاميرا</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${backId}')">استوديو</button>
+        </div>
+        <input type="file" id="${backId}" class="form-control d-none ${prefix}-back" accept="image/*">
+        <img id="${backId}Preview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
+    </div>
+  `;
+}
+
+function bindDynamicPreviews(prefix, n){
+  for(let i=1;i<=n;i++){
+    bindPreview(`${prefix}Face_${i}`);
+    bindPreview(`${prefix}Back_${i}`);
+  }
+}
+
+function renderWivesUploads(){
+  const married = maritalStatus.value === "married";
+  if(!married) return;
+
+  const n = Math.max(1, Number(wivesCount.value || 1));
+  wivesUploads.innerHTML = `<div class="tip mb-2">رفع هويات الزوجات (ذكي مثل الوطنية)</div>`;
+  for(let i=1;i<=n;i++){
+    wivesUploads.innerHTML += makeSmartIDBlock("wife", i);
+  }
+  bindDynamicPreviews("wife", n);
+}
+
+function renderChildrenNamesAndIDs(){
+  const married = maritalStatus.value === "married";
+  if(!married) return;
+
+  const n = Math.max(0, Number(childrenCount.value || 0));
+
+  // أسماء
+  childrenNamesWrap.innerHTML = "";
+  if(n > 0){
+    const box = document.createElement("div");
+    box.className = "section";
+    box.innerHTML = `<div class="fw-bold mb-2">أسماء الأبناء</div>`;
+    for(let i=1;i<=n;i++){
+      const div = document.createElement("div");
+      div.className = "mb-2";
+      div.innerHTML = `
+        <label class="fw-bold">اسم الابن ${i}</label>
+        <input type="text" class="form-control childName" placeholder="اسم ثلاثي/رباعي حسب المتوفر">
+      `;
+      box.appendChild(div);
+    }
+    childrenNamesWrap.appendChild(box);
+  }
+
+  // هويات
+  childrenUploads.innerHTML = "";
+  if(n > 0){
+    childrenUploads.innerHTML = `<div class="tip mb-2">رفع هويات الأطفال (ذكي مثل الوطنية)</div>`;
+    for(let i=1;i<=n;i++){
+      childrenUploads.innerHTML += makeSmartIDBlock("child", i);
+    }
+    bindDynamicPreviews("child", n);
+  }
+}
+
+/* =========================
+   5) CAMERA controller:
+   - ID mode (ذكي): وطني/سكن/باج/زوجات/أطفال
+   - FULL mode: شهادة فقط
+========================= */
+function isSmartIDInput(inputId){
+  if(["empFace","empBack","resFace","resBack","badgeFace","badgeBack"].includes(inputId)) return true;
+  if(/^wifeFace_\d+$/.test(inputId)) return true;
+  if(/^wifeBack_\d+$/.test(inputId)) return true;
+  if(/^childFace_\d+$/.test(inputId)) return true;
+  if(/^childBack_\d+$/.test(inputId)) return true;
+  return false;
+}
+
 let camStream = null;
 let targetInputId = null;
 let camModal = null;
 let validateTimer = null;
 
-// ID-mode vars
 let greenSince = null;
 let lastAuto = 0;
 let bestShotLock = false;
 
-// mode: "ID" or "FULL"
-let captureMode = "ID";
+let captureMode = "ID"; // "ID" or "FULL"
 
 async function openCameraFor(inputId){
   if(!isCameraAllowedContext()){
@@ -462,7 +588,7 @@ async function openCameraFor(inputId){
   }
 
   targetInputId = inputId;
-  captureMode = ID_INPUTS.has(inputId) ? "ID" : "FULL";
+  captureMode = isSmartIDInput(inputId) ? "ID" : "FULL";
 
   if(!camModal) camModal = new bootstrap.Modal(document.getElementById("camModal"));
 
@@ -475,7 +601,6 @@ async function openCameraFor(inputId){
     const v = document.getElementById("camVideo");
     v.srcObject = camStream;
 
-    // UI per mode
     const frameEl = document.getElementById("idFrame");
     const titleEl = document.getElementById("camTitle");
     const hint = document.getElementById("camHint");
@@ -484,11 +609,10 @@ async function openCameraFor(inputId){
     if(captureMode === "ID"){
       frameEl.style.display = "block";
       frameEl.style.borderColor = "red";
-      titleEl.textContent = "كاميرا الهوية (قص ذكي)";
-      hint.textContent = "وجّه الهوية داخل الإطار — يتحول أخضر عند وضوح وإضاءة مناسبة";
-      capBtn.textContent = "التقاط";
-      capBtn.disabled = false; // متاح، لكن الأفضل الأخضر
-      // start validator
+      titleEl.textContent = "كاميرا (قص ذكي داخل الإطار)";
+      hint.textContent = "ضع البطاقة داخل الإطار — يصير أخضر ثم يلتقط تلقائياً";
+      capBtn.disabled = false;
+
       bestShotLock = false; greenSince = null; lastAuto = 0;
       if(validateTimer) clearInterval(validateTimer);
       validateTimer = setInterval(()=>validateFrameFast(), 110);
@@ -496,9 +620,8 @@ async function openCameraFor(inputId){
       frameEl.style.display = "none";
       titleEl.textContent = "كاميرا (بدون قص)";
       hint.textContent = "التقاط صورة كاملة";
-      capBtn.textContent = "التقاط";
       capBtn.disabled = false;
-      // stop validator
+
       if(validateTimer) { clearInterval(validateTimer); validateTimer=null; }
       bestShotLock = false; greenSince = null; lastAuto = 0;
     }
@@ -518,7 +641,6 @@ function closeCamera(){
     camStream = null;
   }
   document.getElementById("idFrame").style.borderColor = "red";
-  document.getElementById("camHint").textContent = "—";
   greenSince = null;
   bestShotLock = false;
 }
@@ -556,10 +678,8 @@ function validateFrameFast(){
   const stats = analyzeLightSharpFastFromVideoROI();
   if(!stats) return;
 
-  // شروط دقيقة أكثر (إضاءة جيدة + وضوح)
   const okLight = stats.mean > 60 && stats.mean < 205;
   const okSharp = stats.blurScore > 20;
-
   const ok = okLight && okSharp;
 
   frameEl.style.borderColor = ok ? "lime" : "red";
@@ -571,7 +691,7 @@ function validateFrameFast(){
   }else{
     greenSince = null;
     if(!okLight) hint.textContent = "⚠️ الإضاءة غير مناسبة — قرّب للضوء أو ابتعد شوي";
-    else hint.textContent = "⚠️ مو واضح — ثبّت يدك/قرّب الهوية";
+    else hint.textContent = "⚠️ مو واضح — ثبّت يدك/قرّب البطاقة";
   }
 }
 
@@ -725,7 +845,6 @@ async function captureFullNow(){
   closeCamera();
 }
 
-/* ===== Save to input + preview ===== */
 async function saveDataUrlToInput(dataUrl){
   const blob = await (await fetch(dataUrl)).blob();
   const file = new File([blob], "camera.jpg", {type:"image/jpeg"});
@@ -743,7 +862,7 @@ async function saveDataUrlToInput(dataUrl){
 }
 
 /* =========================
-   5) PDF: 8.7×5.3 سم للوطني/السكن + صفحات كاملة للباج/الشهادة
+   6) PDF: 8.7×5.3 سم (وطنية/سكن/باج/زوجات/أطفال) + الشهادة صفحة كاملة
 ========================= */
 const { jsPDF } = window.jspdf;
 const CM = 28.35;
@@ -831,24 +950,15 @@ function getChildNames(){
 }
 
 async function generatePDF(){
-  // 1) validate name (quad)
   const name = employeeName.value.trim();
-  if(!name){
-    alert("يرجى إدخال الاسم");
-    return;
-  }
-  if(!isQuadName(name)){
-    alert("الاسم يجب أن يكون رباعي (4 كلمات)");
-    return;
-  }
+  if(!name){ alert("يرجى إدخال الاسم"); return; }
+  if(!isQuadName(name)){ alert("الاسم يجب أن يكون رباعي (4 كلمات)"); return; }
 
-  // 2) validate national card
   if(!empFace.files[0] || !empBack.files[0]){
     alert("يرجى رفع وجه وظهر البطاقة الوطنية");
     return;
   }
 
-  // 3) validate residence if checked
   if(hasResidence.checked){
     if(!resFace.files[0] || !resBack.files[0]){
       alert("رفّع وجه وظهر بطاقة السكن");
@@ -856,47 +966,84 @@ async function generatePDF(){
     }
   }
 
-  // 4) validate social only if married
+  if(hasBadge.checked){
+    if(!badgeFace.files[0] || !badgeBack.files[0]){
+      alert("رفّع وجه وظهر باج العتبة");
+      return;
+    }
+  }
+
   const married = maritalStatus.value === "married";
   if(married){
     if(!wifeName.value.trim()){
       alert("يرجى إدخال اسم الزوجة الثلاثي");
       return;
     }
-    const n = Number(childrenCount.value || 0);
+
+    const wCount = Math.max(1, Number(wivesCount.value || 1));
+    // تحقق رفع هويات الزوجات
+    for(let i=1;i<=wCount;i++){
+      const wf = document.getElementById(`wifeFace_${i}`);
+      const wb = document.getElementById(`wifeBack_${i}`);
+      if(!wf || !wb || !wf.files[0] || !wb.files[0]){
+        alert(`يرجى رفع وجه وظهر هوية الزوجة رقم ${i}`);
+        return;
+      }
+    }
+
+    const n = Math.max(0, Number(childrenCount.value || 0));
     if(n > 0){
+      if(!childrenMother.value.trim()){
+        alert("يرجى إدخال اسم أم الأبناء");
+        return;
+      }
       const names = getChildNames();
       if(names.length < n){
         alert("يرجى إدخال أسماء الأبناء كاملة حسب العدد");
         return;
       }
-      if(!childrenMother.value.trim()){
-        alert("يرجى إدخال اسم أم الأبناء");
-        return;
+
+      for(let i=1;i<=n;i++){
+        const cf = document.getElementById(`childFace_${i}`);
+        const cb = document.getElementById(`childBack_${i}`);
+        if(!cf || !cb || !cf.files[0] || !cb.files[0]){
+          alert(`يرجى رفع وجه وظهر هوية الطفل رقم ${i}`);
+          return;
+        }
       }
     }
   }
 
   const pdf = new jsPDF({unit:"px", format:"a4"});
 
-  // الوطني
   await addIDPage(pdf, empFace.files[0], empBack.files[0]);
 
-  // السكن
   if(hasResidence.checked){
     await addIDPage(pdf, resFace.files[0], resBack.files[0]);
   }
 
-  // باج العتبة (صفحة كاملة)
   if(hasBadge.checked){
-    if(!badgeFile.files[0]){
-      alert("يرجى رفع صورة باج العتبة");
-      return;
-    }
-    await addSingleImagePage(pdf, badgeFile.files[0]);
+    await addIDPage(pdf, badgeFace.files[0], badgeBack.files[0]);
   }
 
-  // الشهادة (صفحة كاملة)
+  // الزوجات
+  if(married){
+    const wCount = Math.max(1, Number(wivesCount.value || 1));
+    for(let i=1;i<=wCount;i++){
+      const wf = document.getElementById(`wifeFace_${i}`).files[0];
+      const wb = document.getElementById(`wifeBack_${i}`).files[0];
+      await addIDPage(pdf, wf, wb);
+    }
+
+    // الأطفال
+    const n = Math.max(0, Number(childrenCount.value || 0));
+    for(let i=1;i<=n;i++){
+      const cf = document.getElementById(`childFace_${i}`).files[0];
+      const cb = document.getElementById(`childBack_${i}`).files[0];
+      await addIDPage(pdf, cf, cb);
+    }
+  }
+
   if(hasCertificate.checked){
     if(!certificateFile.files[0]){
       alert("يرجى رفع شهادة التخرج");
