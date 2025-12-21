@@ -1118,13 +1118,17 @@ async function generatePDF(){
 
 /* زر الإرسال: Google Sheet + PDF */
 async function submitAll(){
-  // 1) Validate PDF first (حتى ما نرسل بيانات ناقصة)
+  // 1) ارسال للشيت أولاً (بدون async حتى ما ينحجب)
+  const okSheet = sendToGoogleSheet();
+  if(!okSheet) return;
+
+  // 2) بعدها نسوي PDF
   const okPdf = await generatePDF();
   if(!okPdf) return;
 
-  // 2) بعد نجاح الـ PDF نرسل للشيت
-  const okSheet = sendToGoogleSheet();
-  if(okSheet) alert("تم إنشاء PDF وإرسال البيانات إلى Google Sheet ✅");
+  alert("تم إرسال البيانات إلى Google Sheet + إنشاء PDF ✅");
+}
+
 }
 </script>
 
