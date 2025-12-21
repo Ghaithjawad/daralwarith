@@ -9,12 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-:root{
-  --main:#1aa6a6;
-  --dark:#148c8c;
-  --border:#d9eeee;
-  --text:#0f3f3f;
-}
+:root{--main:#1aa6a6;--dark:#148c8c;--border:#d9eeee;--text:#0f3f3f;}
 body{
   font-family:"Segoe UI",Tahoma,sans-serif;
   color:var(--text);
@@ -24,97 +19,44 @@ body{
   background-attachment:fixed;
 }
 .container{
-  background:#ffffff;
-  border-radius:22px;
-  padding:30px;
-  margin:30px auto 25px;
+  background:#ffffff;border-radius:22px;padding:30px;margin:30px auto 25px;
   box-shadow:0 18px 40px rgba(0,0,0,.18);
 }
 .header{
   background:linear-gradient(135deg,var(--main),var(--dark));
-  color:#fff;
-  padding:30px;
-  border-radius:18px;
-  text-align:center;
-  margin-bottom:30px;
+  color:#fff;padding:30px;border-radius:18px;text-align:center;margin-bottom:30px;
 }
-.logo{ max-width:150px; display:block; margin:auto; }
-.card{
-  border:1px solid var(--border);
-  border-radius:16px;
-  margin-bottom:22px;
-}
+.logo{max-width:150px;display:block;margin:auto;}
+.card{border:1px solid var(--border);border-radius:16px;margin-bottom:22px;}
 .section{
-  border:2px dashed var(--main);
-  border-radius:14px;
-  padding:16px;
-  margin-top:14px;
-  background:#f9fefe;
+  border:2px dashed var(--main);border-radius:14px;padding:16px;margin-top:14px;background:#f9fefe;
 }
-.check-box{
-  border:1.8px solid var(--main);
-  border-radius:12px;
-  padding:12px 16px;
-  background:#f6fdfd;
-}
-.form-check-input{ width:18px; height:18px; margin-left:10px; }
-.form-check-input:checked{ background-color:var(--main); border-color:var(--main); }
+.check-box{border:1.8px solid var(--main);border-radius:12px;padding:12px 16px;background:#f6fdfd;}
+.form-check-input{width:18px;height:18px;margin-left:10px;}
+.form-check-input:checked{background-color:var(--main);border-color:var(--main);}
 
 button.main-btn{
-  background:var(--main);
-  border:none;
-  padding:16px;
-  font-size:18px;
-  border-radius:14px;
-  color:#fff;
+  background:var(--main);border:none;padding:16px;font-size:18px;border-radius:14px;color:#fff;
 }
-button.main-btn:hover{ background:var(--dark); }
+button.main-btn:hover{background:var(--dark);}
 
 .preview-img{
-  max-height:180px;
-  width:100%;
-  object-fit:contain;
-  border-radius:12px;
-  border:1px solid #e8e8e8;
-  background:#fff;
+  max-height:180px;width:100%;object-fit:contain;border-radius:12px;border:1px solid #e8e8e8;background:#fff;
 }
 
-/* ===== كاميرا ===== */
-.cam-wrap{ position:relative; width:100%; }
-#camVideo{ width:100%; border-radius:12px; background:#000; }
-.cam-overlay{
-  position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  pointer-events:none;
-}
+.cam-wrap{position:relative;width:100%;}
+#camVideo{width:100%;border-radius:12px;background:#000;}
+.cam-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
 .id-frame{
-  width:72%;
-  aspect-ratio: 8.7 / 5.3;
-  border:4px solid red;
-  border-radius:14px;
+  width:72%;aspect-ratio:8.7/5.3;border:4px solid red;border-radius:14px;
   box-shadow:0 0 0 2000px rgba(0,0,0,.45);
 }
 
-.footer-note{
-  text-align:center;
-  margin:14px auto 25px;
-  color:#0f3f3f;
-  opacity:.85;
-  font-weight:600;
-}
-.small-note{ font-size:.9rem; color:#666; }
-
-.req-hint{ font-size:.85rem; color:#b42318; display:none; }
-.req-hint.show{ display:block; }
-
-.tip{
-  background:#f2fffe;
-  border:1px solid #cfeeee;
-  border-radius:12px;
-  padding:10px 12px;
-  color:#0f3f3f;
-  font-size:.92rem;
-}
+.footer-note{text-align:center;margin:14px auto 25px;color:#0f3f3f;opacity:.85;font-weight:600;}
+.small-note{font-size:.9rem;color:#666;}
+.req-hint{font-size:.85rem;color:#b42318;display:none;}
+.req-hint.show{display:block;}
+.tip{background:#f2fffe;border:1px solid #cfeeee;border-radius:12px;padding:10px 12px;color:#0f3f3f;font-size:.92rem;}
 </style>
 </head>
 
@@ -132,7 +74,9 @@ button.main-btn:hover{ background:var(--dark); }
     الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>. على GitHub Pages راح تشتغل (HTTPS).
   </div>
 
-  <!-- ====== بيانات الموظف ====== -->
+  <div id="sheetStatus" class="alert d-none"></div>
+
+  <!-- بيانات -->
   <div class="card p-4">
     <label class="fw-bold">الاسم الرباعي (إجباري)</label>
     <input type="text" id="employeeName" class="form-control" placeholder="مثال: محمد علي حسن عباس">
@@ -161,13 +105,8 @@ button.main-btn:hover{ background:var(--dark); }
         <label class="fw-bold">التحصيل الدراسي</label>
         <select id="education" class="form-control">
           <option value="">اختر</option>
-          <option>ابتدائية</option>
-          <option>متوسطة</option>
-          <option>إعدادية</option>
-          <option>دبلوم</option>
-          <option>بكالوريوس</option>
-          <option>ماجستير</option>
-          <option>دكتوراه</option>
+          <option>ابتدائية</option><option>متوسطة</option><option>إعدادية</option>
+          <option>دبلوم</option><option>بكالوريوس</option><option>ماجستير</option><option>دكتوراه</option>
         </select>
       </div>
       <div class="col-md-6">
@@ -181,7 +120,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== الحالة الاجتماعية ====== -->
+  <!-- الحالة الاجتماعية -->
   <div class="card p-4">
     <label class="fw-bold mb-2 d-block">الحالة الاجتماعية</label>
     <select id="maritalStatus" class="form-control">
@@ -193,7 +132,6 @@ button.main-btn:hover{ background:var(--dark); }
     <div id="socialSection" class="section d-none">
       <div class="row g-3">
 
-        <!-- ✅ عدد الزوجات قبل الأسماء -->
         <div class="col-md-6">
           <label class="fw-bold">عدد الزوجات</label>
           <input type="number" id="wivesCount" min="1" value="1" class="form-control">
@@ -223,12 +161,10 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== البطاقة الوطنية ====== -->
+  <!-- الوطنية -->
   <div class="card p-4">
-    <h5 class="mb-2">البطاقة الوطنية للموظف <span class="text-muted">(قص ذكي داخل قوسين)</span></h5>
-    <div class="tip mb-3">
-      التعليمات: وجّه الهوية داخل الإطار، لا تحرك اليد، خلي الإضاءة قوية. يصير الإطار أخضر وبعدها يلتقط تلقائياً.
-    </div>
+    <h5 class="mb-2">البطاقة الوطنية للموظف <span class="text-muted">(قص ذكي داخل الإطار)</span></h5>
+    <div class="tip mb-3">ضع الهوية داخل الإطار، يصير أخضر ثم يلتقط تلقائياً.</div>
 
     <div class="mb-3">
       <label class="fw-bold mb-2 d-block">وجه الهوية</label>
@@ -251,7 +187,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== بطاقة السكن ====== -->
+  <!-- السكن -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد بطاقة سكن؟</label>
@@ -281,7 +217,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== باج العتبة ====== -->
+  <!-- الباج -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل يوجد باج العتبة؟</label>
@@ -289,10 +225,10 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
 
     <div id="badgeSection" class="section d-none">
-      <div class="tip mb-3">ضع الباج داخل الإطار تماماً، يتحول أخضر ثم يلتقط تلقائياً.</div>
+      <div class="tip mb-3">ضع الباج داخل الإطار، يصير أخضر ثم يلتقط تلقائياً.</div>
 
       <div class="mb-3">
-        <label class="fw-bold mb-2 d-block">وجه باج العتبة</label>
+        <label class="fw-bold mb-2 d-block">وجه الباج</label>
         <div class="d-flex gap-2">
           <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('badgeFace')">كاميرا</button>
           <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('badgeFace')">استوديو</button>
@@ -302,7 +238,7 @@ button.main-btn:hover{ background:var(--dark); }
       </div>
 
       <div>
-        <label class="fw-bold mb-2 d-block">ظهر باج العتبة</label>
+        <label class="fw-bold mb-2 d-block">ظهر الباج</label>
         <div class="d-flex gap-2">
           <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('badgeBack')">كاميرا</button>
           <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('badgeBack')">استوديو</button>
@@ -313,7 +249,7 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <!-- ====== شهادة التخرج (بدون قص) ====== -->
+  <!-- الشهادة -->
   <div class="card p-4">
     <div class="check-box form-check">
       <label class="form-check-label">هل توجد شهادة تخرج؟</label>
@@ -331,18 +267,20 @@ button.main-btn:hover{ background:var(--dark); }
     </div>
   </div>
 
-  <button class="w-100 main-btn" onclick="submitAll()">إرسال (Google Sheet + PDF)</button>
+  <div class="d-flex gap-2">
+    <button class="w-50 main-btn" onclick="testSendTab()">اختبار إرسال للشيت</button>
+    <button class="w-50 main-btn" onclick="submitAll()">إرسال نهائي (Sheet + PDF)</button>
+  </div>
 
   <div class="mt-3 small-note">
-    الوطني + السكن + باج + زوجات/أطفال: قص داخل الإطار + فحص إضاءة/وضوح + Best Shot. <br>
-    الشهادة: تصوير/رفع كامل بدون قص.
+    نصيحة: إذا ما نزلت بيانات، اضغط "اختبار إرسال للشيت" وشوف هل يفتح تبويب ويكتب OK.
   </div>
 
 </div>
 
 <div class="footer-note">تطوير شعبة تقنية المعلومات لدار الوارث</div>
 
-<!-- ارسال إلى Google Sheet بدون CORS: iframe + form -->
+<!-- iframe + form للإرسال -->
 <iframe id="gsFrame" name="gsFrame" style="display:none;"></iframe>
 <form id="gsForm" target="gsFrame" method="POST" style="display:none;">
   <input name="employeeName">
@@ -387,7 +325,7 @@ button.main-btn:hover{ background:var(--dark); }
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeCamera()">إغلاق</button>
-        <button type="button" class="btn btn-success" id="captureBtn" onclick="captureNow()">التقاط</button>
+        <button type="button" class="btn btn-success" onclick="captureNow()">التقاط</button>
       </div>
     </div>
   </div>
@@ -396,13 +334,10 @@ button.main-btn:hover{ background:var(--dark); }
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* =======================
-   ضع رابط Apps Script WebApp (/exec) هنا
-   مثال: https://script.google.com/macros/s/XXXXXXX/exec
-======================= */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXGzl3ma1GEX-IsN92_D1chNlhWOphiFjMWyH7-MIUTsLdITumUMDbb0w3F7FPtcYzAg/exec";
+/* ✅ رابطك جاهز هنا */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwKe0EQWMpedA80rD4HetxujvgI_JIaEFD0l3qeH75k1F0MFjtClUIjXIdOioifS1EGQ/exec";
 
-/* ===== HTTPS/localhost check ===== */
+/* ===== helpers ===== */
 function isCameraAllowedContext(){
   const isLocalhost = ["localhost","127.0.0.1"].includes(location.hostname);
   return window.isSecureContext || isLocalhost;
@@ -411,17 +346,13 @@ function isCameraAllowedContext(){
   document.getElementById("secureWarn").classList.toggle("d-none", isCameraAllowedContext());
 })();
 
-/* ===== Studio + preview ===== */
-function openStudio(inputId){
-  const el = document.getElementById(inputId);
-  if(el) el.click();
-}
-function bindPreview(inputId){
-  const input = document.getElementById(inputId);
-  if(!input) return;
-  input.addEventListener("change", ()=>{
+function openStudio(id){ document.getElementById(id)?.click(); }
+
+function bindPreview(id){
+  const input = document.getElementById(id);
+  input?.addEventListener("change", ()=>{
     const file = input.files && input.files[0];
-    const prev = document.getElementById(inputId+"Preview");
+    const prev = document.getElementById(id+"Preview");
     if(file && prev){
       prev.src = URL.createObjectURL(file);
       prev.classList.remove("d-none");
@@ -430,705 +361,540 @@ function bindPreview(inputId){
 }
 ["empFace","empBack","resFace","resBack","badgeFace","badgeBack","certificateFile"].forEach(bindPreview);
 
-/* ===== الاسم الرباعي ===== */
 function isQuadName(name){
-  const words = name.trim().split(/\s+/).filter(Boolean);
-  return words.length === 4;
+  const w = name.trim().split(/\s+/).filter(Boolean);
+  return w.length === 4;
 }
 employeeName.addEventListener("input", ()=>{
-  const ok = isQuadName(employeeName.value);
-  document.getElementById("nameError").classList.toggle("show", !ok && employeeName.value.trim().length>0);
+  document.getElementById("nameError").classList.toggle("show", !isQuadName(employeeName.value) && employeeName.value.trim().length>0);
 });
 
-/* ===== Sections ===== */
+/* toggles */
 hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
-hasBadge.onchange     = ()=> badgeSection.classList.toggle("d-none", !hasBadge.checked);
+hasBadge.onchange = ()=> badgeSection.classList.toggle("d-none", !hasBadge.checked);
 hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
 
-/* ===== الحالة الاجتماعية ===== */
+/* social */
 maritalStatus.addEventListener("change", ()=>{
-  const married = maritalStatus.value === "married";
+  const married = maritalStatus.value==="married";
   socialSection.classList.toggle("d-none", !married);
-
   if(!married){
-    wivesCount.value = 1;
-    wivesInfo.innerHTML = "";
-    wivesUploads.innerHTML = "";
-    childrenMother.value = "";
-    childrenCount.value = 0;
-    childrenNamesWrap.innerHTML = "";
-    childrenUploads.innerHTML = "";
+    wivesCount.value=1; wivesInfo.innerHTML=""; wivesUploads.innerHTML="";
+    childrenMother.value=""; childrenCount.value=0; childrenNamesWrap.innerHTML=""; childrenUploads.innerHTML="";
   }else{
-    renderWivesAll();
-    renderChildrenAll();
+    renderWivesAll(); renderChildrenAll();
   }
 });
-wivesCount.addEventListener("input", ()=>{
-  if(maritalStatus.value === "married") renderWivesAll();
-});
-childrenCount.addEventListener("input", ()=>{
-  if(maritalStatus.value === "married") renderChildrenAll();
-});
+wivesCount.addEventListener("input", ()=> maritalStatus.value==="married" && renderWivesAll());
+childrenCount.addEventListener("input", ()=> maritalStatus.value==="married" && renderChildrenAll());
 
-/* ===== Dynamic: wives names + employed + IDs (ذكي) ===== */
-function makeSmartIDBlock(prefix, i){
-  const faceId = `${prefix}Face_${i}`;
-  const backId = `${prefix}Back_${i}`;
-  const title = (prefix==="wife") ? `هوية الزوجة ${i}` : `هوية الطفل ${i}`;
-
+function makeSmartIDBlock(prefix,i){
+  const faceId=`${prefix}Face_${i}`, backId=`${prefix}Back_${i}`;
+  const title = prefix==="wife" ? `هوية الزوجة ${i}` : `هوية الطفل ${i}`;
   return `
     <div class="mb-3 p-3 rounded border bg-white">
       <strong class="d-block mb-2">${title}</strong>
-
       <div class="mb-2">
         <label class="fw-bold mb-1 d-block">وجه</label>
         <div class="d-flex gap-2">
           <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${faceId}')">كاميرا</button>
           <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${faceId}')">استوديو</button>
         </div>
-        <input type="file" id="${faceId}" class="form-control d-none ${prefix}-face" accept="image/*">
+        <input type="file" id="${faceId}" class="form-control d-none" accept="image/*">
         <img id="${faceId}Preview" class="preview-img mt-2 d-none" alt="preview">
       </div>
-
       <div>
         <label class="fw-bold mb-1 d-block">ظهر</label>
         <div class="d-flex gap-2">
           <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${backId}')">كاميرا</button>
           <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('${backId}')">استوديو</button>
         </div>
-        <input type="file" id="${backId}" class="form-control d-none ${prefix}-back" accept="image/*">
+        <input type="file" id="${backId}" class="form-control d-none" accept="image/*">
         <img id="${backId}Preview" class="preview-img mt-2 d-none" alt="preview">
       </div>
-    </div>
-  `;
+    </div>`;
 }
-function bindDynamicPreviews(prefix, n){
+function bindDynamic(prefix,n){
   for(let i=1;i<=n;i++){
     bindPreview(`${prefix}Face_${i}`);
     bindPreview(`${prefix}Back_${i}`);
   }
 }
-
 function renderWivesAll(){
-  const n = Math.max(1, Number(wivesCount.value || 1));
-
-  wivesInfo.innerHTML = `<div class="tip mb-2">بيانات الزوجات</div>`;
-  let html = "";
+  const n=Math.max(1,Number(wivesCount.value||1));
+  wivesInfo.innerHTML=`<div class="tip mb-2">بيانات الزوجات</div>`;
+  let html="";
   for(let i=1;i<=n;i++){
-    html += `
+    html+=`
       <div class="mb-3 p-3 rounded border bg-white">
         <strong class="d-block mb-2">الزوجة ${i}</strong>
         <div class="row g-2">
           <div class="col-md-6">
             <label class="fw-bold">اسم الزوجة الثلاثي</label>
-            <input type="text" class="form-control wifeName" id="wifeName_${i}" placeholder="مثال: زهراء علي حسن">
+            <input type="text" class="form-control" id="wifeName_${i}">
           </div>
           <div class="col-md-6">
             <label class="fw-bold">هل هي موظفة؟</label>
-            <select class="form-control wifeEmp" id="wifeEmp_${i}">
-              <option value="">اختر</option>
-              <option value="yes">نعم</option>
-              <option value="no">لا</option>
+            <select class="form-control" id="wifeEmp_${i}">
+              <option value="">اختر</option><option value="yes">نعم</option><option value="no">لا</option>
             </select>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }
-  wivesInfo.innerHTML += html;
+  wivesInfo.innerHTML+=html;
 
-  wivesUploads.innerHTML = `<div class="tip mb-2">رفع هويات الزوجات (ذكي مثل الوطنية)</div>`;
-  for(let i=1;i<=n;i++){
-    wivesUploads.innerHTML += makeSmartIDBlock("wife", i);
-  }
-  bindDynamicPreviews("wife", n);
+  wivesUploads.innerHTML=`<div class="tip mb-2">رفع هويات الزوجات (ذكي)</div>`;
+  for(let i=1;i<=n;i++) wivesUploads.innerHTML+=makeSmartIDBlock("wife",i);
+  bindDynamic("wife",n);
 }
-
 function renderChildrenAll(){
-  const n = Math.max(0, Number(childrenCount.value || 0));
-
-  childrenNamesWrap.innerHTML = "";
-  if(n > 0){
-    const box = document.createElement("div");
-    box.className = "section";
-    box.innerHTML = `<div class="fw-bold mb-2">أسماء الأبناء</div>`;
+  const n=Math.max(0,Number(childrenCount.value||0));
+  childrenNamesWrap.innerHTML="";
+  childrenUploads.innerHTML="";
+  if(n>0){
+    const box=document.createElement("div");
+    box.className="section";
+    box.innerHTML=`<div class="fw-bold mb-2">أسماء الأبناء</div>`;
     for(let i=1;i<=n;i++){
-      const div = document.createElement("div");
-      div.className = "mb-2";
-      div.innerHTML = `
-        <label class="fw-bold">اسم الابن ${i}</label>
-        <input type="text" class="form-control childName" id="childName_${i}">
-      `;
-      box.appendChild(div);
+      const d=document.createElement("div");
+      d.className="mb-2";
+      d.innerHTML=`<label class="fw-bold">اسم الابن ${i}</label><input type="text" class="form-control" id="childName_${i}">`;
+      box.appendChild(d);
     }
     childrenNamesWrap.appendChild(box);
-  }
 
-  childrenUploads.innerHTML = "";
-  if(n > 0){
-    childrenUploads.innerHTML = `<div class="tip mb-2">رفع هويات الأطفال (ذكي مثل الوطنية)</div>`;
-    for(let i=1;i<=n;i++){
-      childrenUploads.innerHTML += makeSmartIDBlock("child", i);
-    }
-    bindDynamicPreviews("child", n);
+    childrenUploads.innerHTML=`<div class="tip mb-2">رفع هويات الأطفال (ذكي)</div>`;
+    for(let i=1;i<=n;i++) childrenUploads.innerHTML+=makeSmartIDBlock("child",i);
+    bindDynamic("child",n);
   }
 }
 
-/* =========================
-   CAMERA (ID ذكي / FULL كامل)
-========================= */
-function isSmartIDInput(inputId){
-  if(["empFace","empBack","resFace","resBack","badgeFace","badgeBack"].includes(inputId)) return true;
-  if(/^wifeFace_\d+$/.test(inputId)) return true;
-  if(/^wifeBack_\d+$/.test(inputId)) return true;
-  if(/^childFace_\d+$/.test(inputId)) return true;
-  if(/^childBack_\d+$/.test(inputId)) return true;
+/* ===== Camera smart/full ===== */
+function isSmartIDInput(id){
+  if(["empFace","empBack","resFace","resBack","badgeFace","badgeBack"].includes(id)) return true;
+  if(/^wife(Face|Back)_\d+$/.test(id)) return true;
+  if(/^child(Face|Back)_\d+$/.test(id)) return true;
   return false;
 }
 
-let camStream = null;
-let targetInputId = null;
-let camModal = null;
-let validateTimer = null;
+let camStream=null, targetInputId=null, camModal=null, validateTimer=null;
+let greenSince=null, lastAuto=0, bestShotLock=false;
+let captureMode="ID";
 
-let greenSince = null;
-let lastAuto = 0;
-let bestShotLock = false;
-
-let captureMode = "ID"; // "ID" or "FULL"
-
-async function openCameraFor(inputId){
+async function openCameraFor(id){
   if(!isCameraAllowedContext()){
-    alert("الكاميرا ما تشتغل إلا على HTTPS أو localhost.\nعلى GitHub Pages راح تشتغل تلقائياً.");
+    alert("الكاميرا تشتغل فقط HTTPS أو localhost.");
     return;
   }
-
-  targetInputId = inputId;
-  captureMode = isSmartIDInput(inputId) ? "ID" : "FULL";
-
-  if(!camModal) camModal = new bootstrap.Modal(document.getElementById("camModal"));
+  targetInputId=id;
+  captureMode = isSmartIDInput(id) ? "ID" : "FULL";
+  if(!camModal) camModal=new bootstrap.Modal(document.getElementById("camModal"));
 
   try{
-    camStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode:"environment" },
-      audio:false
-    });
+    camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});
+    const v=document.getElementById("camVideo");
+    v.srcObject=camStream;
 
-    const v = document.getElementById("camVideo");
-    v.srcObject = camStream;
+    const frame=document.getElementById("idFrame");
+    const title=document.getElementById("camTitle");
+    const hint=document.getElementById("camHint");
 
-    const frameEl = document.getElementById("idFrame");
-    const titleEl = document.getElementById("camTitle");
-    const hint = document.getElementById("camHint");
-
-    if(captureMode === "ID"){
-      frameEl.style.display = "block";
-      frameEl.style.borderColor = "red";
-      titleEl.textContent = "كاميرا (قص ذكي داخل الإطار)";
-      hint.textContent = "ضع البطاقة داخل الإطار — يصير أخضر ثم يلتقط تلقائياً";
-
-      bestShotLock = false; greenSince = null; lastAuto = 0;
+    if(captureMode==="ID"){
+      frame.style.display="block";
+      frame.style.borderColor="red";
+      title.textContent="كاميرا (قص ذكي داخل الإطار)";
+      hint.textContent="ضع المستند داخل الإطار — يصير أخضر ثم يلتقط تلقائياً";
+      bestShotLock=false; greenSince=null; lastAuto=0;
       if(validateTimer) clearInterval(validateTimer);
-      validateTimer = setInterval(()=>validateFrameFast(), 110);
+      validateTimer=setInterval(()=>validateFrameFast(),110);
     }else{
-      frameEl.style.display = "none";
-      titleEl.textContent = "كاميرا (بدون قص)";
-      hint.textContent = "التقاط صورة كاملة";
-
-      if(validateTimer) { clearInterval(validateTimer); validateTimer=null; }
-      bestShotLock = false; greenSince = null; lastAuto = 0;
+      frame.style.display="none";
+      title.textContent="كاميرا (بدون قص)";
+      hint.textContent="التقاط صورة كاملة";
+      if(validateTimer){ clearInterval(validateTimer); validateTimer=null; }
     }
 
     camModal.show();
-
   }catch(e){
-    alert("تعذر تشغيل الكاميرا. تأكد من إعطاء الصلاحية.");
+    alert("تعذر تشغيل الكاميرا. تأكد من الصلاحية.");
     console.error(e);
   }
 }
-
 function closeCamera(){
   if(validateTimer){ clearInterval(validateTimer); validateTimer=null; }
-  if(camStream){
-    camStream.getTracks().forEach(t=>t.stop());
-    camStream = null;
-  }
-  document.getElementById("idFrame").style.borderColor = "red";
-  greenSince = null;
-  bestShotLock = false;
+  if(camStream){ camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
+  document.getElementById("idFrame").style.borderColor="red";
+  greenSince=null; bestShotLock=false;
 }
-
-function captureNow(){
-  if(captureMode === "ID") bestShotCapture();
-  else captureFullNow();
-}
-
-function analyzeLightSharpFastFromVideoROI(){
-  const v = document.getElementById("camVideo");
-  const roi = getCropRectInVideoPixels();
-  if(!roi) return null;
-
-  const testW = 220;
-  const testH = Math.max(1, Math.round(testW * (roi.h / roi.w)));
-
-  const c = document.createElement("canvas");
-  c.width = testW;
-  c.height = testH;
-  const ctx = c.getContext("2d", { willReadFrequently:true });
-  ctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0, 0, testW, testH);
-
-  const img = ctx.getImageData(0,0,testW,testH);
-  return analyzeROI_lightSharp(img.data, testW, testH, 0, 0, testW, testH);
-}
-
-function validateFrameFast(){
-  if(captureMode !== "ID") return;
-
-  const frameEl = document.getElementById("idFrame");
-  const hint = document.getElementById("camHint");
-
-  const stats = analyzeLightSharpFastFromVideoROI();
-  if(!stats) return;
-
-  const okLight = stats.mean > 60 && stats.mean < 205;
-  const okSharp = stats.blurScore > 20;
-  const ok = okLight && okSharp;
-
-  frameEl.style.borderColor = ok ? "lime" : "red";
-
-  if(ok){
-    hint.textContent = "✅ ممتاز — سيتم الالتقاط تلقائياً";
-    if(greenSince === null) greenSince = performance.now();
-    autoCaptureTick();
-  }else{
-    greenSince = null;
-    if(!okLight) hint.textContent = "⚠️ الإضاءة غير مناسبة — قرّب للضوء أو ابتعد شوي";
-    else hint.textContent = "⚠️ مو واضح — ثبّت يدك/قرّب البطاقة";
-  }
-}
-
-function autoCaptureTick(){
-  if(bestShotLock) return;
-  const now = performance.now();
-  const needGreenMs = 260;
-  const cooldownMs  = 900;
-
-  if(greenSince === null) return;
-  if(now - greenSince < needGreenMs) return;
-  if(now - lastAuto < cooldownMs) return;
-
-  lastAuto = now;
-  bestShotCapture();
-}
-
-function analyzeROI_lightSharp(data, w, h, x0, y0, rw, rh){
-  let sum=0, count=0;
-  const gray = new Uint8ClampedArray(rw*rh);
-  let k=0;
-
-  for(let y=y0; y<y0+rh; y++){
-    for(let x=x0; x<x0+rw; x++){
-      const i=(y*w+x)*4;
-      const g = (data[i]*0.299 + data[i+1]*0.587 + data[i+2]*0.114) | 0;
-      gray[k++] = g;
-      sum += g; count++;
-    }
-  }
-  const mean = sum / count;
-
-  let lapSum=0;
-  for(let y=1; y<rh-1; y++){
-    for(let x=1; x<rw-1; x++){
-      const c = gray[y*rw+x];
-      const lap = Math.abs(
-        (gray[(y-1)*rw+x] + gray[(y+1)*rw+x] + gray[y*rw+(x-1)] + gray[y*rw+(x+1)]) - 4*c
-      );
-      lapSum += lap;
-    }
-  }
-  const blurScore = lapSum / ((rw-2)*(rh-2));
-  return { mean, blurScore };
-}
-
-function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
+function captureNow(){ captureMode==="ID" ? bestShotCapture() : captureFullNow(); }
 
 function getCropRectInVideoPixels(){
-  const v = document.getElementById("camVideo");
-  const frame = document.getElementById("idFrame");
+  const v=document.getElementById("camVideo");
+  const frame=document.getElementById("idFrame");
   if(!v.videoWidth || !v.videoHeight) return null;
 
-  const vr = v.getBoundingClientRect();
-  const fr = frame.getBoundingClientRect();
+  const vr=v.getBoundingClientRect();
+  const fr=frame.getBoundingClientRect();
+  const left=Math.max(fr.left,vr.left);
+  const top=Math.max(fr.top,vr.top);
+  const right=Math.min(fr.right,vr.right);
+  const bottom=Math.min(fr.bottom,vr.bottom);
+  const wCss=Math.max(0,right-left);
+  const hCss=Math.max(0,bottom-top);
+  if(wCss<10||hCss<10) return null;
 
-  const left   = Math.max(fr.left, vr.left);
-  const top    = Math.max(fr.top, vr.top);
-  const right  = Math.min(fr.right, vr.right);
-  const bottom = Math.min(fr.bottom, vr.bottom);
+  const sx=(left-vr.left)*(v.videoWidth/vr.width);
+  const sy=(top-vr.top)*(v.videoHeight/vr.height);
+  const sw=wCss*(v.videoWidth/vr.width);
+  const sh=hCss*(v.videoHeight/vr.height);
 
-  const wCss = Math.max(0, right - left);
-  const hCss = Math.max(0, bottom - top);
-  if(wCss < 10 || hCss < 10) return null;
-
-  const sx = (left - vr.left) * (v.videoWidth  / vr.width);
-  const sy = (top  - vr.top ) * (v.videoHeight / vr.height);
-  const sw = wCss * (v.videoWidth  / vr.width);
-  const sh = hCss * (v.videoHeight / vr.height);
-
-  const x = Math.max(0, Math.min(v.videoWidth - 1, sx));
-  const y = Math.max(0, Math.min(v.videoHeight - 1, sy));
-  const w = Math.max(1, Math.min(v.videoWidth  - x, sw));
-  const h = Math.max(1, Math.min(v.videoHeight - y, sh));
-
-  return { x, y, w, h };
+  const x=Math.max(0,Math.min(v.videoWidth-1,sx));
+  const y=Math.max(0,Math.min(v.videoHeight-1,sy));
+  const w=Math.max(1,Math.min(v.videoWidth-x,sw));
+  const h=Math.max(1,Math.min(v.videoHeight-y,sh));
+  return {x,y,w,h};
 }
+function analyzeROI_lightSharp(data,w,h){
+  let sum=0,count=0;
+  const gray=new Uint8ClampedArray(w*h);
+  for(let i=0,j=0;i<data.length;i+=4,j++){
+    const g=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114)|0;
+    gray[j]=g; sum+=g; count++;
+  }
+  const mean=sum/count;
+  let lapSum=0;
+  for(let y=1;y<h-1;y++){
+    for(let x=1;x<w-1;x++){
+      const c=gray[y*w+x];
+      const lap=Math.abs((gray[(y-1)*w+x]+gray[(y+1)*w+x]+gray[y*w+(x-1)]+gray[y*w+(x+1)])-4*c);
+      lapSum+=lap;
+    }
+  }
+  const blurScore = lapSum/((w-2)*(h-2));
+  return {mean, blurScore};
+}
+function analyzeLightSharpFastFromVideoROI(){
+  const v=document.getElementById("camVideo");
+  const roi=getCropRectInVideoPixels();
+  if(!roi) return null;
+  const testW=220;
+  const testH=Math.max(1,Math.round(testW*(roi.h/roi.w)));
+  const c=document.createElement("canvas");
+  c.width=testW; c.height=testH;
+  const ctx=c.getContext("2d",{willReadFrequently:true});
+  ctx.drawImage(v,roi.x,roi.y,roi.w,roi.h,0,0,testW,testH);
+  const img=ctx.getImageData(0,0,testW,testH);
+  return analyzeROI_lightSharp(img.data,testW,testH);
+}
+function validateFrameFast(){
+  if(captureMode!=="ID") return;
+  const frame=document.getElementById("idFrame");
+  const hint=document.getElementById("camHint");
+  const st=analyzeLightSharpFastFromVideoROI();
+  if(!st) return;
+  const okLight=st.mean>60 && st.mean<205;
+  const okSharp=st.blurScore>20;
+  const ok=okLight && okSharp;
+  frame.style.borderColor= ok ? "lime" : "red";
+  if(ok){
+    hint.textContent="✅ ممتاز — سيتم الالتقاط تلقائياً";
+    if(greenSince===null) greenSince=performance.now();
+    autoCaptureTick();
+  }else{
+    greenSince=null;
+    hint.textContent = !okLight ? "⚠️ الإضاءة غير مناسبة" : "⚠️ مو واضح — ثبّت يدك";
+  }
+}
+function autoCaptureTick(){
+  if(bestShotLock) return;
+  const now=performance.now();
+  const needGreenMs=260, cooldownMs=900;
+  if(greenSince===null) return;
+  if(now-greenSince<needGreenMs) return;
+  if(now-lastAuto<cooldownMs) return;
+  lastAuto=now;
+  bestShotCapture();
+}
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
+function grabCroppedFrameWithScore(){
+  const v=document.getElementById("camVideo");
+  const roi=getCropRectInVideoPixels();
+  if(!roi) return null;
+  const canvas=document.createElement("canvas");
+  canvas.width=Math.max(1,Math.round(roi.w));
+  canvas.height=Math.max(1,Math.round(roi.h));
+  const ctx=canvas.getContext("2d",{willReadFrequently:true});
+  ctx.drawImage(v,roi.x,roi.y,roi.w,roi.h,0,0,canvas.width,canvas.height);
+
+  const testW=240;
+  const testH=Math.max(1,Math.round(testW*(canvas.height/canvas.width)));
+  const c2=document.createElement("canvas");
+  c2.width=testW; c2.height=testH;
+  const x2=c2.getContext("2d",{willReadFrequently:true});
+  x2.drawImage(canvas,0,0,testW,testH);
+  const img=x2.getImageData(0,0,testW,testH);
+  const st=analyzeROI_lightSharp(img.data,testW,testH);
+
+  const dataUrl=canvas.toDataURL("image/jpeg",0.92);
+  return {dataUrl, score: st.blurScore};
+}
 async function bestShotCapture(){
   if(bestShotLock) return;
-  bestShotLock = true;
+  bestShotLock=true;
   try{
-    const shots = [];
+    const shots=[];
     for(let i=0;i<3;i++){
-      const shot = grabCroppedFrameWithScore();
-      if(shot) shots.push(shot);
+      const s=grabCroppedFrameWithScore();
+      if(s) shots.push(s);
       await sleep(110);
     }
-    if(!shots.length) throw new Error("No shots");
-
-    shots.sort((a,b)=>b.score - a.score);
-    const best = shots[0];
-
-    await saveDataUrlToInput(best.dataUrl);
-
+    if(!shots.length) throw new Error("no shots");
+    shots.sort((a,b)=>b.score-a.score);
+    await saveDataUrlToInput(shots[0].dataUrl);
     camModal.hide();
     closeCamera();
   }catch(e){
     console.error(e);
     alert("صار خطأ بالالتقاط. جرّب مرة ثانية.");
-    bestShotLock = false;
+    bestShotLock=false;
   }
 }
-
-function grabCroppedFrameWithScore(){
-  const v = document.getElementById("camVideo");
-  const roi = getCropRectInVideoPixels();
-  if(!roi) return null;
-
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1, Math.round(roi.w));
-  canvas.height = Math.max(1, Math.round(roi.h));
-  const ctx = canvas.getContext("2d", { willReadFrequently:true });
-  ctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0, 0, canvas.width, canvas.height);
-
-  const testW = 240;
-  const testH = Math.max(1, Math.round(testW * (canvas.height / canvas.width)));
-  const c2 = document.createElement("canvas");
-  c2.width = testW;
-  c2.height = testH;
-  const x2 = c2.getContext("2d", { willReadFrequently:true });
-  x2.drawImage(canvas,0,0,testW,testH);
-  const img = x2.getImageData(0,0,testW,testH);
-  const st = analyzeROI_lightSharp(img.data, testW, testH, 0, 0, testW, testH);
-
-  const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
-  return { dataUrl, score: st.blurScore };
-}
-
 async function captureFullNow(){
-  const v = document.getElementById("camVideo");
+  const v=document.getElementById("camVideo");
   if(!v.videoWidth) return;
-
-  const canvas = document.createElement("canvas");
-  canvas.width = v.videoWidth;
-  canvas.height = v.videoHeight;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(v,0,0,canvas.width,canvas.height);
-
-  const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
-  await saveDataUrlToInput(dataUrl);
-
+  const c=document.createElement("canvas");
+  c.width=v.videoWidth; c.height=v.videoHeight;
+  c.getContext("2d").drawImage(v,0,0,c.width,c.height);
+  await saveDataUrlToInput(c.toDataURL("image/jpeg",0.9));
   camModal.hide();
   closeCamera();
 }
-
 async function saveDataUrlToInput(dataUrl){
-  const blob = await (await fetch(dataUrl)).blob();
-  const file = new File([blob], "camera.jpg", {type:"image/jpeg"});
-  const dt = new DataTransfer();
+  const blob=await (await fetch(dataUrl)).blob();
+  const file=new File([blob],"camera.jpg",{type:"image/jpeg"});
+  const dt=new DataTransfer();
   dt.items.add(file);
-
-  const input = document.getElementById(targetInputId);
-  input.files = dt.files;
-
-  const prev = document.getElementById(targetInputId+"Preview");
-  if(prev){
-    prev.src = URL.createObjectURL(file);
-    prev.classList.remove("d-none");
-  }
+  const input=document.getElementById(targetInputId);
+  input.files=dt.files;
+  const prev=document.getElementById(targetInputId+"Preview");
+  if(prev){ prev.src=URL.createObjectURL(file); prev.classList.remove("d-none"); }
 }
 
-/* =========================
-   PDF: 8.7×5.3 سم + Margins آمنة
-========================= */
+/* ===== PDF (8.7x5.3 cm) ===== */
 const { jsPDF } = window.jspdf;
-const CM = 28.35;
-const SAFE_MARGIN = 2 * CM;
-const ID_W = 8.7 * CM;
-const ID_H = 5.3 * CM;
-const GAP_DEFAULT = 20;
-const TOP_OFFSET = 3.8 * CM;
+const CM=28.35;
+const SAFE_MARGIN=2*CM;
+const ID_W=8.7*CM;
+const ID_H=5.3*CM;
+const GAP_DEFAULT=20;
+const TOP_OFFSET=3.8*CM;
 
 async function loadImageDataForPDF(file){
-  const dataUrl = await new Promise((resolve,reject)=>{
+  const dataUrl = await new Promise((res,rej)=>{
     const r=new FileReader();
-    r.onload=e=>resolve(e.target.result);
-    r.onerror=reject;
+    r.onload=e=>res(e.target.result);
+    r.onerror=rej;
     r.readAsDataURL(file);
   });
-
-  const img = await new Promise((resolve,reject)=>{
+  const img = await new Promise((res,rej)=>{
     const i=new Image();
-    i.onload=()=>resolve(i);
-    i.onerror=reject;
+    i.onload=()=>res(i);
+    i.onerror=rej;
     i.src=dataUrl;
   });
-
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  const maxW = 2000;
-  const scale = Math.min(1, maxW / img.width);
-
-  canvas.width = Math.round(img.width * scale);
-  canvas.height = Math.round(img.height * scale);
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-  return { dataUrl: canvas.toDataURL("image/jpeg", 0.9), format: "JPEG" };
+  const c=document.createElement("canvas");
+  const ctx=c.getContext("2d");
+  const maxW=2000;
+  const scale=Math.min(1,maxW/img.width);
+  c.width=Math.round(img.width*scale);
+  c.height=Math.round(img.height*scale);
+  ctx.drawImage(img,0,0,c.width,c.height);
+  return {dataUrl:c.toDataURL("image/jpeg",0.9), format:"JPEG"};
 }
-
-function drawContainPDF(pdf, dataUrl, format, x, y, w, h){
-  const p = pdf.getImageProperties(dataUrl);
-  const s = Math.min(w/p.width, h/p.height);
-  const nw = p.width*s, nh = p.height*s;
-  const nx = x + (w-nw)/2;
-  const ny = y + (h-nh)/2;
-  pdf.addImage(dataUrl, format, nx, ny, nw, nh);
+function drawContainPDF(pdf, dataUrl, format, x,y,w,h){
+  const p=pdf.getImageProperties(dataUrl);
+  const s=Math.min(w/p.width,h/p.height);
+  const nw=p.width*s, nh=p.height*s;
+  pdf.addImage(dataUrl,format,x+(w-nw)/2,y+(h-nh)/2,nw,nh);
 }
-
 async function addIDPage(pdf, faceFile, backFile){
-  const face = await loadImageDataForPDF(faceFile);
-  const back = await loadImageDataForPDF(backFile);
-
+  const face=await loadImageDataForPDF(faceFile);
+  const back=await loadImageDataForPDF(backFile);
   pdf.addPage("a4","p");
-
-  const pageW = pdf.internal.pageSize.getWidth();
-  const safeW = pageW - (SAFE_MARGIN * 2);
-
-  let gap = GAP_DEFAULT;
-  if((ID_W*2 + gap) > safeW){
-    gap = Math.max(8, safeW - (ID_W*2));
-  }
-
-  const neededW = (ID_W*2) + gap;
-  const startX = SAFE_MARGIN + (safeW - neededW)/2;
-  const startY = TOP_OFFSET;
-
-  drawContainPDF(pdf, face.dataUrl, face.format, startX, startY, ID_W, ID_H);
-  drawContainPDF(pdf, back.dataUrl, back.format, startX + ID_W + gap, startY, ID_W, ID_H);
+  const pageW=pdf.internal.pageSize.getWidth();
+  const safeW=pageW-(SAFE_MARGIN*2);
+  let gap=GAP_DEFAULT;
+  if((ID_W*2+gap)>safeW) gap=Math.max(8,safeW-(ID_W*2));
+  const needW=ID_W*2+gap;
+  const startX=SAFE_MARGIN+(safeW-needW)/2;
+  const startY=TOP_OFFSET;
+  drawContainPDF(pdf,face.dataUrl,face.format,startX,startY,ID_W,ID_H);
+  drawContainPDF(pdf,back.dataUrl,back.format,startX+ID_W+gap,startY,ID_W,ID_H);
+}
+async function addSingleImagePage(pdf,file){
+  const d=await loadImageDataForPDF(file);
+  pdf.addPage("a4","p");
+  const pageW=pdf.internal.pageSize.getWidth();
+  const pageH=pdf.internal.pageSize.getHeight();
+  drawContainPDF(pdf,d.dataUrl,d.format,SAFE_MARGIN,SAFE_MARGIN,pageW-2*SAFE_MARGIN,pageH-2*SAFE_MARGIN);
 }
 
-async function addSingleImagePage(pdf, file){
-  const data = await loadImageDataForPDF(file);
-  pdf.addPage("a4","p");
-
-  const pageW = pdf.internal.pageSize.getWidth();
-  const pageH = pdf.internal.pageSize.getHeight();
-
-  const x = SAFE_MARGIN;
-  const y = SAFE_MARGIN;
-  const w = pageW - (SAFE_MARGIN * 2);
-  const h = pageH - (SAFE_MARGIN * 2);
-
-  drawContainPDF(pdf, data.dataUrl, data.format, x, y, w, h);
-}
-
-/* =========================
-   Google Sheet إرسال (بدون CORS)
-========================= */
 function collectWivesInfo(){
-  const married = maritalStatus.value === "married";
-  if(!married) return [];
-  const n = Math.max(1, Number(wivesCount.value || 1));
-  const arr = [];
+  if(maritalStatus.value!=="married") return [];
+  const n=Math.max(1,Number(wivesCount.value||1));
+  const arr=[];
   for(let i=1;i<=n;i++){
-    const name = (document.getElementById(`wifeName_${i}`)?.value || "").trim();
-    const empV = (document.getElementById(`wifeEmp_${i}`)?.value || "");
     arr.push({
-      index: i,
-      name,
-      isEmployee: empV === "yes" ? true : (empV === "no" ? false : null)
+      index:i,
+      name:(document.getElementById(`wifeName_${i}`)?.value||"").trim(),
+      isEmployee:(document.getElementById(`wifeEmp_${i}`)?.value||"")
     });
   }
   return arr;
 }
-
 function collectChildrenNames(){
-  const married = maritalStatus.value === "married";
-  if(!married) return [];
-  const n = Math.max(0, Number(childrenCount.value || 0));
-  const arr = [];
-  for(let i=1;i<=n;i++){
-    const nm = (document.getElementById(`childName_${i}`)?.value || "").trim();
-    arr.push(nm);
-  }
+  if(maritalStatus.value!=="married") return [];
+  const n=Math.max(0,Number(childrenCount.value||0));
+  const arr=[];
+  for(let i=1;i<=n;i++) arr.push((document.getElementById(`childName_${i}`)?.value||"").trim());
   return arr;
 }
 
-function sendToGoogleSheet(){
-  if(!SCRIPT_URL || SCRIPT_URL.includes("PASTE_YOUR_WEB_APP_EXEC_URL_HERE")){
-    alert("لازم تحط رابط Google Apps Script WebApp (/exec) داخل SCRIPT_URL");
+/* ✅ إرسال للشيت (يثبت الوصول) */
+function sendToGoogleSheet(target="_hidden"){
+  const st=document.getElementById("sheetStatus");
+  st.classList.remove("d-none","alert-success","alert-danger","alert-info");
+  st.classList.add("alert","alert-info");
+  st.textContent="جاري الإرسال إلى Google Sheet...";
+
+  if(!SCRIPT_URL || !SCRIPT_URL.includes("/exec")){
+    st.classList.remove("alert-info"); st.classList.add("alert-danger");
+    st.textContent="SCRIPT_URL غير صحيح (لازم ينتهي /exec)";
     return false;
   }
 
-  const form = document.getElementById("gsForm");
-  form.action = SCRIPT_URL;
+  const form=document.getElementById("gsForm");
+  form.action=SCRIPT_URL;
 
-  form.elements.employeeName.value = employeeName.value.trim();
-  form.elements.birthPlace.value = birthPlace.value.trim();
-  form.elements.birthDate.value = birthDate.value || "";
-  form.elements.phone.value = phone.value.trim();
-  form.elements.badgeNumber.value = badgeNumber.value.trim();
-  form.elements.education.value = education.value || "";
-  form.elements.specialty.value = specialty.value.trim();
-  form.elements.address.value = address.value.trim();
-  form.elements.maritalStatus.value = maritalStatus.value || "";
+  form.elements.employeeName.value=employeeName.value.trim();
+  form.elements.birthPlace.value=birthPlace.value.trim();
+  form.elements.birthDate.value=birthDate.value||"";
+  form.elements.phone.value=phone.value.trim();
+  form.elements.badgeNumber.value=badgeNumber.value.trim();
+  form.elements.education.value=education.value||"";
+  form.elements.specialty.value=specialty.value.trim();
+  form.elements.address.value=address.value.trim();
+  form.elements.maritalStatus.value=maritalStatus.value||"";
 
-  const married = maritalStatus.value === "married";
-  form.elements.wivesCount.value = married ? (String(wivesCount.value || "1")) : "";
-  form.elements.wivesInfo.value = JSON.stringify(collectWivesInfo());
-  form.elements.childrenMother.value = married ? childrenMother.value.trim() : "";
-  form.elements.childrenCount.value = married ? (String(childrenCount.value || "0")) : "";
-  form.elements.childrenNames.value = JSON.stringify(collectChildrenNames());
+  const married=maritalStatus.value==="married";
+  form.elements.wivesCount.value=married?String(wivesCount.value||"1"):"";
+  form.elements.wivesInfo.value=JSON.stringify(collectWivesInfo());
+  form.elements.childrenMother.value=married?childrenMother.value.trim():"";
+  form.elements.childrenCount.value=married?String(childrenCount.value||"0"):"";
+  form.elements.childrenNames.value=JSON.stringify(collectChildrenNames());
 
-  form.elements.hasResidence.value = hasResidence.checked ? "1" : "0";
-  form.elements.hasBadge.value = hasBadge.checked ? "1" : "0";
-  form.elements.hasCertificate.value = hasCertificate.checked ? "1" : "0";
+  form.elements.hasResidence.value=hasResidence.checked?"1":"0";
+  form.elements.hasBadge.value=hasBadge.checked?"1":"0";
+  form.elements.hasCertificate.value=hasCertificate.checked?"1":"0";
 
+  const frame=document.getElementById("gsFrame");
+  frame.onload=()=>{
+    st.classList.remove("alert-info"); st.classList.add("alert-success");
+    st.textContent="تم الإرسال إلى Google Sheet ✅";
+  };
+
+  form.target = (target==="_blank") ? "_blank" : "gsFrame";
   form.submit();
+
   return true;
 }
 
-/* =========================
-   Validation + PDF
-========================= */
-async function generatePDF(){
-  const name = employeeName.value.trim();
+/* اختبار: يفتح تبويب ويطلع OK/ERR */
+function testSendTab(){
+  if(!validateFormBasics()) return;
+  sendToGoogleSheet("_blank");
+}
+
+/* تحقق أساسي */
+function validateFormBasics(){
+  const name=employeeName.value.trim();
   if(!name){ alert("يرجى إدخال الاسم"); return false; }
   if(!isQuadName(name)){ alert("الاسم يجب أن يكون رباعي (4 كلمات)"); return false; }
+  return true;
+}
 
-  if(!empFace.files[0] || !empBack.files[0]){
-    alert("يرجى رفع وجه وظهر البطاقة الوطنية");
-    return false;
-  }
+/* PDF validate + generate */
+async function generatePDF(){
+  const name=employeeName.value.trim();
+  if(!validateFormBasics()) return false;
 
-  if(hasResidence.checked){
-    if(!resFace.files[0] || !resBack.files[0]){
-      alert("رفّع وجه وظهر بطاقة السكن");
-      return false;
-    }
-  }
+  if(!empFace.files[0] || !empBack.files[0]){ alert("ارفع وجه/ظهر الوطنية"); return false; }
+  if(hasResidence.checked && (!resFace.files[0] || !resBack.files[0])){ alert("ارفع وجه/ظهر السكن"); return false; }
+  if(hasBadge.checked && (!badgeFace.files[0] || !badgeBack.files[0])){ alert("ارفع وجه/ظهر الباج"); return false; }
 
-  if(hasBadge.checked){
-    if(!badgeFace.files[0] || !badgeBack.files[0]){
-      alert("رفّع وجه وظهر باج العتبة");
-      return false;
-    }
-  }
-
-  const married = maritalStatus.value === "married";
-  if(married){
-    const wCount = Math.max(1, Number(wivesCount.value || 1));
+  if(maritalStatus.value==="married"){
+    const wCount=Math.max(1,Number(wivesCount.value||1));
     for(let i=1;i<=wCount;i++){
-      const nm = (document.getElementById(`wifeName_${i}`)?.value || "").trim();
-      const emp = (document.getElementById(`wifeEmp_${i}`)?.value || "");
-      if(!nm){ alert(`يرجى إدخال اسم الزوجة رقم ${i}`); return false; }
-      if(!emp){ alert(`يرجى تحديد هل الزوجة رقم ${i} موظفة؟`); return false; }
-
-      const wf = document.getElementById(`wifeFace_${i}`);
-      const wb = document.getElementById(`wifeBack_${i}`);
-      if(!wf?.files[0] || !wb?.files[0]){
-        alert(`يرجى رفع وجه وظهر هوية الزوجة رقم ${i}`);
-        return false;
+      const wn=(document.getElementById(`wifeName_${i}`)?.value||"").trim();
+      const we=(document.getElementById(`wifeEmp_${i}`)?.value||"");
+      if(!wn){ alert(`ادخل اسم الزوجة ${i}`); return false; }
+      if(!we){ alert(`حدد موظفة للزوجة ${i}`); return false; }
+      if(!document.getElementById(`wifeFace_${i}`)?.files[0] || !document.getElementById(`wifeBack_${i}`)?.files[0]){
+        alert(`ارفع وجه/ظهر هوية الزوجة ${i}`); return false;
       }
     }
 
-    const cCount = Math.max(0, Number(childrenCount.value || 0));
+    const cCount=Math.max(0,Number(childrenCount.value||0));
     if(cCount>0){
-      if(!childrenMother.value.trim()){ alert("يرجى إدخال اسم أم الأبناء"); return false; }
-      const names = collectChildrenNames().filter(Boolean);
-      if(names.length < cCount){ alert("يرجى إدخال أسماء الأبناء كاملة حسب العدد"); return false; }
-
+      if(!childrenMother.value.trim()){ alert("ادخل اسم أم الأبناء"); return false; }
+      const names=collectChildrenNames().filter(Boolean);
+      if(names.length<cCount){ alert("ادخل أسماء الأبناء حسب العدد"); return false; }
       for(let i=1;i<=cCount;i++){
-        const cf = document.getElementById(`childFace_${i}`);
-        const cb = document.getElementById(`childBack_${i}`);
-        if(!cf?.files[0] || !cb?.files[0]){
-          alert(`يرجى رفع وجه وظهر هوية الطفل رقم ${i}`);
-          return false;
+        if(!document.getElementById(`childFace_${i}`)?.files[0] || !document.getElementById(`childBack_${i}`)?.files[0]){
+          alert(`ارفع وجه/ظهر هوية الطفل ${i}`); return false;
         }
       }
     }
   }
 
-  const pdf = new jsPDF({unit:"px", format:"a4"});
-
+  const pdf=new jsPDF({unit:"px", format:"a4"});
   await addIDPage(pdf, empFace.files[0], empBack.files[0]);
+  if(hasResidence.checked) await addIDPage(pdf, resFace.files[0], resBack.files[0]);
+  if(hasBadge.checked) await addIDPage(pdf, badgeFace.files[0], badgeBack.files[0]);
 
-  if(hasResidence.checked){
-    await addIDPage(pdf, resFace.files[0], resBack.files[0]);
-  }
-
-  if(hasBadge.checked){
-    await addIDPage(pdf, badgeFace.files[0], badgeBack.files[0]);
-  }
-
-  if(married){
-    const wCount = Math.max(1, Number(wivesCount.value || 1));
+  if(maritalStatus.value==="married"){
+    const wCount=Math.max(1,Number(wivesCount.value||1));
     for(let i=1;i<=wCount;i++){
-      const wf = document.getElementById(`wifeFace_${i}`).files[0];
-      const wb = document.getElementById(`wifeBack_${i}`).files[0];
-      await addIDPage(pdf, wf, wb);
+      await addIDPage(pdf, document.getElementById(`wifeFace_${i}`).files[0], document.getElementById(`wifeBack_${i}`).files[0]);
     }
-
-    const cCount = Math.max(0, Number(childrenCount.value || 0));
+    const cCount=Math.max(0,Number(childrenCount.value||0));
     for(let i=1;i<=cCount;i++){
-      const cf = document.getElementById(`childFace_${i}`).files[0];
-      const cb = document.getElementById(`childBack_${i}`).files[0];
-      await addIDPage(pdf, cf, cb);
+      await addIDPage(pdf, document.getElementById(`childFace_${i}`).files[0], document.getElementById(`childBack_${i}`).files[0]);
     }
   }
 
   if(hasCertificate.checked){
-    if(!certificateFile.files[0]){ alert("يرجى رفع شهادة التخرج"); return false; }
+    if(!certificateFile.files[0]){ alert("ارفع الشهادة"); return false; }
     await addSingleImagePage(pdf, certificateFile.files[0]);
   }
 
-  if(pdf.getNumberOfPages() > 1) pdf.deletePage(1);
-
+  if(pdf.getNumberOfPages()>1) pdf.deletePage(1);
   pdf.save(name.replace(/\s+/g,"_") + "_documents.pdf");
   return true;
 }
 
-/* زر الإرسال: Google Sheet + PDF */
+/* ✅ إرسال نهائي: Sheet أولاً (فوري) ثم PDF */
 async function submitAll(){
-  // 1) ارسال للشيت أولاً (بدون async حتى ما ينحجب)
-  const okSheet = sendToGoogleSheet();
+  if(!validateFormBasics()) return;
+
+  // 1) أرسل للشيت فوراً (حتى ما ينحجب)
+  const okSheet = sendToGoogleSheet("_hidden");
   if(!okSheet) return;
 
-  // 2) بعدها نسوي PDF
-  const okPdf = await generatePDF();
-  if(!okPdf) return;
-
-  alert("تم إرسال البيانات إلى Google Sheet + إنشاء PDF ✅");
-}
-
+  // 2) بعدها PDF
+  await generatePDF();
 }
 </script>
 
