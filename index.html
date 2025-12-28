@@ -2,14 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8" />
-<title>استمارة تحديث بيانات موظفي دار الوارث</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>دار الوارث | تسجيل دخول + استمارة</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-:root{ --main:#1aa6a6; --dark:#148c8c; --border:#d9eeee; --text:#0f3f3f; }
+:root{
+  --main:#1aa6a6;
+  --dark:#148c8c;
+  --border:#d9eeee;
+  --text:#0f3f3f;
+
+  --loginA:#2a3b8f;
+  --loginB:#0d1a5a;
+}
 body{
   font-family:"Segoe UI",Tahoma,sans-serif;
   color:var(--text);
@@ -18,28 +26,99 @@ body{
   background-size:420px 420px;
   background-attachment:fixed;
 }
-.container{
-  background:#ffffff;border-radius:22px;padding:30px;margin:30px auto 25px;
-  box-shadow:0 18px 40px rgba(0,0,0,.18); max-width:980px;
+.wrap{max-width:1050px;margin:26px auto 20px;padding:0 12px;}
+.cardx{
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
+  overflow:hidden;
 }
 .header{
-  background:linear-gradient(135deg,var(--main),var(--dark));
-  color:#fff;padding:26px;border-radius:18px;text-align:center;margin-bottom:22px;
+  padding:22px;
+  text-align:center;
+  color:#fff;
 }
-.logo{max-width:150px;display:block;margin:auto;}
-.card{border:1px solid var(--border);border-radius:16px;margin-bottom:18px;}
-.section{border:2px dashed var(--main);border-radius:14px;padding:16px;margin-top:14px;background:#f9fefe;}
-.check-box{border:1.8px solid var(--main);border-radius:12px;padding:12px 16px;background:#f6fdfd;}
+.header.login{background:linear-gradient(135deg,var(--loginA),var(--loginB));}
+.header.form{background:linear-gradient(135deg,var(--main),var(--dark));}
+.logo{max-width:140px;display:block;margin:0 auto 10px;}
+.body{padding:22px;}
+
+.block{
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:14px;
+  background:#fff;
+}
+.section{
+  border:2px dashed var(--main);
+  border-radius:14px;
+  padding:16px;
+  margin-top:14px;
+  background:#f9fefe;
+}
+.check-box{
+  border:1.8px solid var(--main);
+  border-radius:12px;
+  padding:12px 16px;
+  background:#f6fdfd;
+}
 .form-check-input{width:18px;height:18px;margin-left:10px;}
 .form-check-input:checked{background-color:var(--main);border-color:var(--main);}
-button.main-btn{background:var(--main);border:none;padding:14px 16px;font-size:18px;border-radius:14px;color:#fff;}
-button.main-btn:hover{background:var(--dark);}
-.preview-img{max-height:180px;width:100%;object-fit:contain;border-radius:12px;border:1px solid #e8e8e8;background:#fff;}
-.small-note{font-size:.9rem;color:#666;}
-.tip{background:#f2fffe;border:1px solid #cfeeee;border-radius:12px;padding:10px 12px;color:#0f3f3f;font-size:.92rem;}
-.req-hint{font-size:.85rem;color:#b42318;display:none;}
-.req-hint.show{display:block;}
 
+.preview-img{
+  max-height:180px;
+  width:100%;
+  object-fit:contain;
+  border-radius:12px;
+  border:1px solid #e8e8e8;
+  background:#fff;
+}
+
+.main-btn{
+  background:var(--main);
+  border:none;
+  padding:14px 16px;
+  font-size:18px;
+  border-radius:14px;
+  color:#fff;
+}
+.main-btn:hover{background:var(--dark);}
+.login-btn{
+  background:var(--loginA);
+  border:none;
+  padding:14px 16px;
+  font-size:18px;
+  border-radius:14px;
+  color:#fff;
+}
+.login-btn:hover{filter:brightness(.92);}
+
+.tip{
+  background:#f2fffe;
+  border:1px solid #cfeeee;
+  border-radius:12px;
+  padding:10px 12px;
+  color:#0f3f3f;
+  font-size:.92rem;
+}
+
+.req{color:#b42318;font-size:.86rem;display:none;margin-top:6px;}
+.req.show{display:block;}
+
+.footer-note{
+  text-align:center;
+  margin:18px auto 26px;
+  color:#0f3f3f;
+  opacity:.85;
+  font-weight:700;
+}
+
+.progress-wrap{display:none}
+.progress-wrap.show{display:block}
+.progress{height:12px;border-radius:999px}
+
+/* ===== كاميرا ===== */
 .cam-wrap{position:relative;width:100%;}
 #camVideo{width:100%;border-radius:12px;background:#000;}
 .cam-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
@@ -51,262 +130,299 @@ button.main-btn:hover{background:var(--dark);}
   box-shadow:0 0 0 2000px rgba(0,0,0,.45);
 }
 
-.footer-note{text-align:center;margin:14px auto 25px;color:#0f3f3f;opacity:.85;font-weight:600;}
+/* ===== تنبيه كروم ===== */
+.open-chrome{
+  background:#fff3cd;
+  border:1px solid #ffecb5;
+  border-radius:14px;
+  padding:12px;
+}
+
+/* ===== تمييز الموظف ===== */
+.badge-user{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#ffffff22;
+  border:1px solid #ffffff55;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:700;
+}
+.badge-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:#00ff88;
+  box-shadow:0 0 0 4px #00ff8822;
+}
+.small-note{font-size:.9rem;color:#666;}
 </style>
 </head>
 
 <body>
+<div class="wrap">
 
-<!-- ================= LOGIN PAGE ================= -->
-<div id="loginPage" class="container" style="max-width:720px;">
-  <div class="header">
-    <img src="https://i.suar.me/A3aKJ/m" class="logo mb-2" alt="دار الوارث">
-    <h4 class="mb-1">تسجيل الدخول</h4>
-    <p class="mb-0">ادخل الاسم + رقم الـ ID للدخول إلى الاستمارة</p>
+  <!-- ================= LOGIN PAGE ================= -->
+  <div id="loginPage" class="cardx">
+    <div class="header login">
+      <img src="https://i.suar.me/A3aKJ/m" class="logo" alt="دار الوارث">
+      <h4 class="mb-1">تسجيل الدخول</h4>
+      <p class="mb-0">ادخل الاسم + رقم الـ ID للدخول إلى الاستمارة</p>
+    </div>
+
+    <div class="body">
+
+      <div id="secureWarn" class="alert alert-warning d-none">
+        الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>. على GitHub Pages راح تشتغل (HTTPS).
+      </div>
+
+      <div id="openChromeBox" class="open-chrome d-none mb-3">
+        <div class="fw-bold mb-1">ملاحظة مهمة</div>
+        متصفح تيليگرام/بعض أجهزة شاومي قد يمنع الكاميرا. يفضل فتح الرابط بمتصفح Google Chrome.
+        <div class="mt-2 d-flex gap-2">
+          <button class="btn btn-sm btn-primary" type="button" onclick="openInChrome()">فتح في Chrome</button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" onclick="openChromeBox.classList.add('d-none')">إخفاء</button>
+        </div>
+      </div>
+
+      <div class="block">
+        <label class="fw-bold">الاسم (ثنائي/ثلاثي)</label>
+        <input id="loginName" class="form-control" placeholder="مثال: علي حسن / علي حسن عباس">
+      </div>
+
+      <div class="block">
+        <label class="fw-bold">رقم الـ ID</label>
+        <input id="loginId" class="form-control" placeholder="مثال: 1023">
+      </div>
+
+      <div id="loginError" class="alert alert-danger d-none"></div>
+      <div id="loginDone" class="alert alert-success d-none">
+        تم الرفع مسبقاً ✅ لا يمكن الإرسال مرة أخرى.
+      </div>
+
+      <button class="w-100 login-btn" type="button" onclick="doLogin()">دخول</button>
+    </div>
   </div>
 
-  <div id="secureWarn" class="alert alert-warning d-none">
-    الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>. على GitHub Pages راح تشتغل.
-  </div>
+  <!-- ================= FORM PAGE ================= -->
+  <div id="formPage" class="cardx d-none mt-4">
+    <div class="header form">
+      <img src="https://i.suar.me/A3aKJ/m" class="logo" alt="دار الوارث">
+      <h4 class="mb-2">استمارة تحديث بيانات موظفي دار الوارث</h4>
 
-  <div class="card p-4">
-    <label class="fw-bold">الاسم (ثنائي/ثلاثي)</label>
-    <input id="loginName" class="form-control" placeholder="مثال: علي حسن / علي حسن عباس">
-  </div>
+      <div class="d-flex justify-content-center">
+        <div class="badge-user">
+          <span class="badge-dot"></span>
+          <span id="whoUser">...</span>
+        </div>
+      </div>
 
-  <div class="card p-4">
-    <label class="fw-bold">رقم الـ ID</label>
-    <input id="loginId" class="form-control" placeholder="مثال: 1023">
-  </div>
-
-  <div id="loginError" class="alert alert-danger d-none">الاسم أو الـ ID غير صحيح</div>
-
-  <button class="w-100 main-btn" type="button" onclick="doLogin()">دخول</button>
-</div>
-
-<!-- ================= FORM PAGE ================= -->
-<div id="formPage" class="d-none">
-  <div class="container">
-    <div class="header">
-      <img src="https://i.suar.me/A3aKJ/m" class="logo mb-2" alt="دار الوارث">
-      <h4 class="mb-1">استمارة تحديث بيانات موظفي دار الوارث</h4>
-      <p class="mb-0">يرجى إدخال البيانات ورفع المستمسكات المطلوبة</p>
-      <div class="mt-3 d-flex justify-content-center gap-2">
+      <div class="mt-3">
         <button type="button" class="btn btn-light btn-sm" onclick="logout()">تسجيل خروج</button>
       </div>
     </div>
 
-    <div id="sheetStatus" class="alert d-none"></div>
+    <div class="body">
 
-    <!-- بيانات أساسية -->
-    <div class="card p-4">
-      <label class="fw-bold">الاسم الرباعي (إجباري)</label>
-      <input type="text" id="employeeName" class="form-control" placeholder="مثال: محمد علي حسن عباس">
-      <div id="nameError" class="req-hint">الاسم لازم يكون 4 كلمات بالضبط</div>
-      <div class="small-note mt-2">الاسم هنا لازم رباعي حتى لو تسجيل الدخول ثنائي/ثلاثي.</div>
-    </div>
+      <div id="sheetStatus" class="alert d-none"></div>
 
-    <div class="card p-4">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="fw-bold">محل الولادة</label>
-          <input type="text" id="birthPlace" class="form-control">
-        </div>
-        <div class="col-md-6">
-          <label class="fw-bold">المواليد (تاريخ الولادة)</label>
-          <input type="date" id="birthDate" class="form-control">
-        </div>
-        <div class="col-md-6">
-          <label class="fw-bold">رقم الهاتف</label>
-          <input type="tel" id="phone" class="form-control" placeholder="07xxxxxxxxx">
-        </div>
-        <div class="col-md-6">
-          <label class="fw-bold">رقم باج العتبة الحسينية المقدسة</label>
-          <input type="text" id="badgeNumber" class="form-control">
-        </div>
-        <div class="col-md-6">
-          <label class="fw-bold">التحصيل الدراسي</label>
-          <select id="education" class="form-control">
-            <option value="">اختر</option>
-            <option>ابتدائية</option><option>متوسطة</option><option>إعدادية</option>
-            <option>دبلوم</option><option>بكالوريوس</option><option>ماجستير</option><option>دكتوراه</option>
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label class="fw-bold">التخصص الدقيق</label>
-          <input type="text" id="specialty" class="form-control">
-        </div>
-        <div class="col-12">
-          <label class="fw-bold">عنوان السكن الحالي</label>
-          <textarea id="address" class="form-control" rows="2"></textarea>
+      <div class="progress-wrap" id="progressWrap">
+        <div class="small mb-2 text-muted" id="progressText">...</div>
+        <div class="progress">
+          <div class="progress-bar" id="progressBar" role="progressbar" style="width:0%"></div>
         </div>
       </div>
-    </div>
 
-    <!-- الحالة الاجتماعية -->
-    <div class="card p-4">
-      <label class="fw-bold mb-2 d-block">الحالة الاجتماعية</label>
-      <select id="maritalStatus" class="form-control">
-        <option value="">اختر</option>
-        <option value="single">أعزب</option>
-        <option value="married">متزوج</option>
-      </select>
+      <!-- ===== بيانات أساسية ===== -->
+      <div class="block">
+        <label class="fw-bold">الاسم الرباعي (إجباري)</label>
+        <input type="text" id="employeeName" class="form-control" placeholder="مثال: محمد علي حسن عباس">
+        <div id="nameError" class="req">الاسم لازم يكون 4 كلمات</div>
+      </div>
 
-      <div id="socialSection" class="section d-none">
+      <div class="block">
         <div class="row g-3">
+          <div class="col-md-6">
+            <label class="fw-bold">محل الولادة</label>
+            <input type="text" id="birthPlace" class="form-control">
+          </div>
 
           <div class="col-md-6">
-            <label class="fw-bold">عدد الزوجات (قبل الأسماء)</label>
-            <input type="number" id="wivesCount" min="1" value="1" class="form-control">
+            <label class="fw-bold">المواليد (اكتب يدوي)</label>
+            <input type="text" id="birthDate" class="form-control" placeholder="مثال: 2001-12-31 أو 31/12/2001">
+          </div>
+
+          <div class="col-md-6">
+            <label class="fw-bold">رقم الهاتف</label>
+            <input type="tel" id="phone" class="form-control" placeholder="07xxxxxxxxx">
+          </div>
+
+          <div class="col-md-6">
+            <label class="fw-bold">رقم باج العتبة الحسينية المقدسة</label>
+            <input type="text" id="badgeNumber" class="form-control">
+          </div>
+
+          <div class="col-md-6">
+            <label class="fw-bold">التحصيل الدراسي</label>
+            <select id="education" class="form-control">
+              <option value="">اختر</option>
+              <option>ابتدائية</option><option>متوسطة</option><option>إعدادية</option>
+              <option>دبلوم</option><option>بكالوريوس</option><option>ماجستير</option><option>دكتوراه</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="fw-bold">التخصص الدقيق</label>
+            <input type="text" id="specialty" class="form-control">
           </div>
 
           <div class="col-12">
-            <div class="tip mb-2">بيانات الزوجات + رفع هوياتهن (قص ذكي)</div>
-            <div id="wivesInfo"></div>
-            <div id="wivesUploads"></div>
+            <label class="fw-bold">عنوان السكن الحالي</label>
+            <textarea id="address" class="form-control" rows="2"></textarea>
           </div>
-
-          <div class="col-md-6">
-            <label class="fw-bold">اسم أم الأبناء</label>
-            <input type="text" id="childrenMother" class="form-control">
-          </div>
-
-          <div class="col-md-6">
-            <label class="fw-bold">عدد الأبناء</label>
-            <input type="number" id="childrenCount" min="0" value="0" class="form-control">
-          </div>
-
-          <div class="col-12">
-            <div class="tip mb-2">أسماء الأبناء + رفع هوياتهم (قص ذكي)</div>
-            <div id="childrenNamesWrap"></div>
-            <div id="childrenUploads"></div>
-          </div>
-
         </div>
       </div>
-    </div>
 
-    <!-- الوطنية -->
-    <div class="card p-4">
-      <h5 class="mb-2">البطاقة الوطنية للموظف <span class="text-muted">(قص ذكي داخل الإطار)</span></h5>
-      <div class="tip mb-3">ضع الهوية داخل الإطار، يصير أخضر ثم يلتقط تلقائياً.</div>
+      <!-- ===== البطاقة الوطنية (قبل الحالة الاجتماعية) ===== -->
+      <div class="block">
+        <h5 class="mb-2">البطاقة الوطنية للموظف</h5>
+        <div class="tip mb-3">ضع الهوية داخل الإطار حتى يصير أخضر ثم يلتقط تلقائياً.</div>
 
-      <div class="mb-3">
-        <label class="fw-bold mb-2 d-block">وجه الهوية</label>
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empFace')">كاميرا</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empFace')">استوديو</button>
-        </div>
-        <input type="file" id="empFace" class="form-control d-none" accept="image/*">
-        <img id="empFacePreview" class="preview-img mt-2 d-none" alt="preview">
-      </div>
-
-      <div>
-        <label class="fw-bold mb-2 d-block">ظهر الهوية</label>
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empBack')">كاميرا</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empBack')">استوديو</button>
-        </div>
-        <input type="file" id="empBack" class="form-control d-none" accept="image/*">
-        <img id="empBackPreview" class="preview-img mt-2 d-none" alt="preview">
-      </div>
-    </div>
-
-    <!-- السكن -->
-    <div class="card p-4">
-      <div class="check-box form-check">
-        <label class="form-check-label">هل توجد بطاقة سكن؟</label>
-        <input class="form-check-input" type="checkbox" id="hasResidence">
-      </div>
-
-      <div id="residenceSection" class="section d-none">
         <div class="mb-3">
-          <label class="fw-bold mb-2 d-block">وجه بطاقة السكن</label>
+          <label class="fw-bold mb-2 d-block">وجه الهوية</label>
           <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('resFace')">كاميرا</button>
-            <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('resFace')">استوديو</button>
+            <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empFace')">كاميرا</button>
+            <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empFace')">استوديو</button>
           </div>
-          <input type="file" id="resFace" class="form-control d-none" accept="image/*">
-          <img id="resFacePreview" class="preview-img mt-2 d-none" alt="preview">
+          <input type="file" id="empFace" class="form-control d-none" accept="image/*">
+          <img id="empFacePreview" class="preview-img mt-2 d-none" alt="preview">
         </div>
 
         <div>
-          <label class="fw-bold mb-2 d-block">ظهر بطاقة السكن</label>
+          <label class="fw-bold mb-2 d-block">ظهر الهوية</label>
           <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('resBack')">كاميرا</button>
-            <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('resBack')">استوديو</button>
+            <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empBack')">كاميرا</button>
+            <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empBack')">استوديو</button>
           </div>
-          <input type="file" id="resBack" class="form-control d-none" accept="image/*">
-          <img id="resBackPreview" class="preview-img mt-2 d-none" alt="preview">
+          <input type="file" id="empBack" class="form-control d-none" accept="image/*">
+          <img id="empBackPreview" class="preview-img mt-2 d-none" alt="preview">
         </div>
       </div>
-    </div>
 
-    <!-- باج العتبة -->
-    <div class="card p-4">
-      <div class="check-box form-check">
-        <label class="form-check-label">هل يوجد باج العتبة؟</label>
-        <input class="form-check-input" type="checkbox" id="hasBadge">
+      <!-- ===== بطاقة السكن ===== -->
+      <div class="block">
+        <div class="check-box form-check">
+          <label class="form-check-label">هل توجد بطاقة سكن؟</label>
+          <input class="form-check-input" type="checkbox" id="hasResidence">
+        </div>
+
+        <div id="residenceSection" class="section d-none">
+          <div class="tip mb-3">ضع البطاقة داخل الإطار حتى يصير أخضر ثم يلتقط تلقائياً.</div>
+
+          <div class="mb-3">
+            <label class="fw-bold mb-2 d-block">وجه بطاقة السكن</label>
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('resFace')">كاميرا</button>
+              <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('resFace')">استوديو</button>
+            </div>
+            <input type="file" id="resFace" class="form-control d-none" accept="image/*">
+            <img id="resFacePreview" class="preview-img mt-2 d-none" alt="preview">
+          </div>
+
+          <div>
+            <label class="fw-bold mb-2 d-block">ظهر بطاقة السكن</label>
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('resBack')">كاميرا</button>
+              <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('resBack')">استوديو</button>
+            </div>
+            <input type="file" id="resBack" class="form-control d-none" accept="image/*">
+            <img id="resBackPreview" class="preview-img mt-2 d-none" alt="preview">
+          </div>
+        </div>
       </div>
 
-      <div id="badgeSection" class="section d-none">
-        <div class="tip mb-3">ضع الباج داخل الإطار، يصير أخضر ثم يلتقط تلقائياً.</div>
+      <!-- ===== شهادة التخرج ===== -->
+      <div class="block">
+        <div class="check-box form-check">
+          <label class="form-check-label">هل توجد شهادة تخرج؟</label>
+          <input class="form-check-input" type="checkbox" id="hasCertificate">
+        </div>
 
-        <div class="mb-3">
-          <label class="fw-bold mb-2 d-block">وجه الباج</label>
+        <div id="certificateSection" class="section d-none">
+          <label class="fw-bold mb-2 d-block">صورة شهادة التخرج</label>
           <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('badgeFace')">كاميرا</button>
-            <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('badgeFace')">استوديو</button>
+            <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('certificateFile')">كاميرا</button>
+            <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('certificateFile')">استوديو</button>
           </div>
-          <input type="file" id="badgeFace" class="form-control d-none" accept="image/*">
-          <img id="badgeFacePreview" class="preview-img mt-2 d-none" alt="preview">
+          <input type="file" id="certificateFile" class="form-control d-none" accept="image/*">
+          <img id="certificateFilePreview" class="preview-img mt-2 d-none" alt="preview">
         </div>
+      </div>
 
-        <div>
-          <label class="fw-bold mb-2 d-block">ظهر الباج</label>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('badgeBack')">كاميرا</button>
-            <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('badgeBack')">استوديو</button>
+      <!-- ===== الحالة الاجتماعية ===== -->
+      <div class="block">
+        <label class="fw-bold mb-2 d-block">الحالة الاجتماعية</label>
+        <select id="maritalStatus" class="form-control">
+          <option value="">اختر</option>
+          <option value="single">أعزب</option>
+          <option value="married">متزوج</option>
+        </select>
+
+        <div id="socialSection" class="section d-none">
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label class="fw-bold">عدد الزوجات</label>
+              <input type="number" id="wivesCount" min="1" value="1" class="form-control">
+            </div>
+
+            <div class="col-12">
+              <div class="tip mb-2">بيانات الزوجات</div>
+              <div id="wivesInfo"></div>
+
+              <div class="tip mb-2">هويات الزوجات (وجه/ظهر) — إجباري</div>
+              <div id="wivesUploads"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="fw-bold">اسم أم الأبناء</label>
+              <input type="text" id="childrenMother" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+              <label class="fw-bold">عدد الأبناء</label>
+              <input type="number" id="childrenCount" min="0" value="0" class="form-control">
+            </div>
+
+            <div class="col-12">
+              <div class="tip mb-2">أسماء الأبناء</div>
+              <div id="childrenNamesWrap"></div>
+
+              <div class="tip mb-2">هويات الأبناء (وجه/ظهر) — إذا موجودين</div>
+              <div id="childrenUploads"></div>
+            </div>
+
           </div>
-          <input type="file" id="badgeBack" class="form-control d-none" accept="image/*">
-          <img id="badgeBackPreview" class="preview-img mt-2 d-none" alt="preview">
         </div>
       </div>
+
+      <button id="submitBtn" class="w-100 main-btn" type="button" onclick="submitAll()">إرسال وإنشاء PDF</button>
+      <div class="mt-3 small-note">بعد الإرسال الناجح، لن يسمح بالإرسال مرة أخرى.</div>
+
     </div>
-
-    <!-- شهادة -->
-    <div class="card p-4">
-      <div class="check-box form-check">
-        <label class="form-check-label">هل توجد شهادة تخرج؟</label>
-        <input class="form-check-input" type="checkbox" id="hasCertificate">
-      </div>
-
-      <div id="certificateSection" class="section d-none">
-        <label class="fw-bold mb-2 d-block">صورة شهادة التخرج (بدون قص)</label>
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('certificateFile')">كاميرا</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('certificateFile')">استوديو</button>
-        </div>
-        <input type="file" id="certificateFile" class="form-control d-none" accept="image/*">
-        <img id="certificateFilePreview" class="preview-img mt-2 d-none" alt="preview">
-      </div>
-    </div>
-
-    <button class="w-100 main-btn" onclick="submitAll()">إرسال (Google Sheet + PDF)</button>
-    <div class="mt-3 small-note">تأكد ترفع (وجه/ظهر) لكل هوية قبل الإرسال.</div>
   </div>
 
   <div class="footer-note">تطوير شعبة تقنية المعلومات لدار الوارث</div>
 </div>
 
-<!-- مودال الكاميرا -->
+<!-- ===== مودال الكاميرا ===== -->
 <div class="modal fade" id="camModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="camTitle">كاميرا</h5>
+        <h5 class="modal-title" id="camTitle">الكاميرا</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeCamera()"></button>
       </div>
+
       <div class="modal-body">
         <div class="cam-wrap">
           <video id="camVideo" autoplay playsinline></video>
@@ -318,6 +434,7 @@ button.main-btn:hover{background:var(--dark);}
           <small class="text-muted" id="camHint">وجّه المستند داخل الإطار</small>
         </div>
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeCamera()">إغلاق</button>
         <button type="button" class="btn btn-success" onclick="captureNow()">التقاط</button>
@@ -329,27 +446,66 @@ button.main-btn:hover{background:var(--dark);}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* ========================= CONFIG ========================= */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylqflcUmbVto3ttFoIbSqC2F80xPYzg5PVKhJG0U3ENj2qJXLLGLdzQHiDm0wytsvvxw/exec";
+/* ================== CONFIG ================== */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwA-FnFmzg9M7JikJpyiXluzZ3xOowLMOZhUfUTuKFRHKmMBSR9Cb2o5P592Ha6LZzyrA/exec";
 
-/* ========================= HTTPS check ========================= */
+/* ================= Helpers ================= */
 function isCameraAllowedContext(){
   const isLocalhost = ["localhost","127.0.0.1"].includes(location.hostname);
   return window.isSecureContext || isLocalhost;
 }
 document.getElementById("secureWarn").classList.toggle("d-none", isCameraAllowedContext());
 
-/* ========================= Login (NO auto-open) ========================= */
+function isTelegramInApp(){
+  const ua = (navigator.userAgent || "").toLowerCase();
+  return ua.includes("telegram") || ua.includes("tg");
+}
+function isXiaomiLikely(){
+  const ua = (navigator.userAgent || "").toLowerCase();
+  return ua.includes("miui") || ua.includes("xiaomi");
+}
+(function(){
+  if(isTelegramInApp() || isXiaomiLikely()){
+    document.getElementById("openChromeBox").classList.remove("d-none");
+  }
+})();
+
+function openInChrome(){
+  const url = location.href;
+  const intent = "intent://" + url.replace(/^https?:\/\//,"") + "#Intent;scheme=https;package=com.android.chrome;end";
+  window.location.href = intent;
+  setTimeout(()=>{ window.open(url, "_blank"); }, 700);
+}
+
+function openStudio(id){ document.getElementById(id)?.click(); }
+
+function bindPreview(id){
+  const input = document.getElementById(id);
+  if(!input) return;
+  input.addEventListener("change", ()=>{
+    const f = input.files && input.files[0];
+    const prev = document.getElementById(id+"Preview");
+    if(f && prev){
+      prev.src = URL.createObjectURL(f);
+      prev.classList.remove("d-none");
+    }
+  });
+}
+["empFace","empBack","resFace","resBack","certificateFile"].forEach(bindPreview);
+
+/* ================= Login ================= */
 function showLoginError(msg){
   const el = document.getElementById("loginError");
-  el.textContent = msg || "بيانات الدخول غير صحيحة";
+  el.textContent = msg || "خطأ";
   el.classList.remove("d-none");
 }
+
 async function doLogin(){
   document.getElementById("loginError").classList.add("d-none");
-  const name = (document.getElementById("loginName").value || "").trim();
-  const id   = (document.getElementById("loginId").value || "").trim();
+  document.getElementById("loginDone").classList.add("d-none");
 
+  const name = (document.getElementById("loginName").value || "").trim();
+  const id = (document.getElementById("loginId").value || "").trim();
   if(!name || !id){ showLoginError("يرجى إدخال الاسم والـ ID"); return; }
 
   const body = new URLSearchParams();
@@ -367,69 +523,69 @@ async function doLogin(){
     document.getElementById("loginPage").classList.add("d-none");
     document.getElementById("formPage").classList.remove("d-none");
 
-    employeeName.value = name; // المستخدم يعدله للرباعي
+    document.getElementById("whoUser").textContent = `${name} — ID: ${id}`;
+
+  }else if(txt === "DONE"){
+    document.getElementById("loginDone").classList.remove("d-none");
   }else{
     showLoginError("الاسم أو الـ ID غير صحيح");
   }
 }
+
 function logout(){
   localStorage.removeItem("dar_login_id");
   localStorage.removeItem("dar_login_name");
   location.reload();
 }
 
-/* ========================= Studio + preview ========================= */
-function openStudio(id){ document.getElementById(id)?.click(); }
-function bindPreview(id){
-  const input = document.getElementById(id);
-  if(!input) return;
-  input.addEventListener("change", ()=>{
-    const file = input.files && input.files[0];
-    const prev = document.getElementById(id+"Preview");
-    if(file && prev){
-      prev.src = URL.createObjectURL(file);
-      prev.classList.remove("d-none");
-    }
-  });
-}
-["empFace","empBack","resFace","resBack","badgeFace","badgeBack","certificateFile"].forEach(bindPreview);
-
-/* ========================= Name validation quad ========================= */
-function isQuadName(name){
-  const w = name.trim().split(/\s+/).filter(Boolean);
-  return w.length === 4;
-}
-employeeName.addEventListener("input", ()=>{
-  document.getElementById("nameError").classList.toggle("show",
-    employeeName.value.trim().length>0 && !isQuadName(employeeName.value)
-  );
-});
-
-/* ========================= Sections toggles ========================= */
+/* ================= Sections ================= */
+const hasResidence = document.getElementById("hasResidence");
+const residenceSection = document.getElementById("residenceSection");
 hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
-hasBadge.onchange     = ()=> badgeSection.classList.toggle("d-none", !hasBadge.checked);
+
+const hasCertificate = document.getElementById("hasCertificate");
+const certificateSection = document.getElementById("certificateSection");
 hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
 
+const maritalStatus = document.getElementById("maritalStatus");
+const socialSection = document.getElementById("socialSection");
+
 maritalStatus.addEventListener("change", ()=>{
-  const married = maritalStatus.value==="married";
+  const married = maritalStatus.value === "married";
   socialSection.classList.toggle("d-none", !married);
-  if(!married){
-    wivesCount.value=1; wivesInfo.innerHTML=""; wivesUploads.innerHTML="";
-    childrenMother.value=""; childrenCount.value=0; childrenNamesWrap.innerHTML=""; childrenUploads.innerHTML="";
-  }else{
-    renderWivesAll(); renderChildrenAll();
+  if(married){ renderWivesAll(); renderChildrenAll(); }
+  else{
+    document.getElementById("wivesCount").value = 1;
+    document.getElementById("wivesInfo").innerHTML = "";
+    document.getElementById("wivesUploads").innerHTML = "";
+    document.getElementById("childrenMother").value = "";
+    document.getElementById("childrenCount").value = 0;
+    document.getElementById("childrenNamesWrap").innerHTML = "";
+    document.getElementById("childrenUploads").innerHTML = "";
   }
 });
-wivesCount.addEventListener("input", ()=> maritalStatus.value==="married" && renderWivesAll());
-childrenCount.addEventListener("input", ()=> maritalStatus.value==="married" && renderChildrenAll());
 
-/* ========================= Dynamic wife/child blocks ========================= */
+document.getElementById("wivesCount").addEventListener("input", ()=> maritalStatus.value==="married" && renderWivesAll());
+document.getElementById("childrenCount").addEventListener("input", ()=> maritalStatus.value==="married" && renderChildrenAll());
+
+/* ================= Quad name validation ================= */
+function isQuadName(s){
+  const w = (s||"").trim().split(/\s+/).filter(Boolean);
+  return w.length === 4;
+}
+document.getElementById("employeeName").addEventListener("input", ()=>{
+  const v = document.getElementById("employeeName").value;
+  document.getElementById("nameError").classList.toggle("show", v.trim().length>0 && !isQuadName(v));
+});
+
+/* ================= Dynamic wife/child blocks ================= */
 function makeSmartIDBlock(prefix,i){
   const faceId=`${prefix}Face_${i}`, backId=`${prefix}Back_${i}`;
   const title = prefix==="wife" ? `هوية الزوجة ${i}` : `هوية الطفل ${i}`;
   return `
     <div class="mb-3 p-3 rounded border bg-white">
       <strong class="d-block mb-2">${title}</strong>
+
       <div class="mb-2">
         <label class="fw-bold mb-1 d-block">وجه</label>
         <div class="d-flex gap-2">
@@ -439,6 +595,7 @@ function makeSmartIDBlock(prefix,i){
         <input type="file" id="${faceId}" class="form-control d-none" accept="image/*">
         <img id="${faceId}Preview" class="preview-img mt-2 d-none" alt="preview">
       </div>
+
       <div>
         <label class="fw-bold mb-1 d-block">ظهر</label>
         <div class="d-flex gap-2">
@@ -448,7 +605,8 @@ function makeSmartIDBlock(prefix,i){
         <input type="file" id="${backId}" class="form-control d-none" accept="image/*">
         <img id="${backId}Preview" class="preview-img mt-2 d-none" alt="preview">
       </div>
-    </div>`;
+    </div>
+  `;
 }
 function bindDynamic(prefix,n){
   for(let i=1;i<=n;i++){
@@ -457,11 +615,13 @@ function bindDynamic(prefix,n){
   }
 }
 function renderWivesAll(){
-  const n=Math.max(1,Number(wivesCount.value||1));
-  wivesInfo.innerHTML=""; wivesUploads.innerHTML="";
+  const n = Math.max(1, Number(document.getElementById("wivesCount").value || 1));
+  const info = document.getElementById("wivesInfo");
+  const up = document.getElementById("wivesUploads");
+  info.innerHTML = ""; up.innerHTML = "";
 
   for(let i=1;i<=n;i++){
-    wivesInfo.innerHTML += `
+    info.innerHTML += `
       <div class="mb-3 p-3 rounded border bg-white">
         <strong class="d-block mb-2">الزوجة ${i}</strong>
         <div class="row g-2">
@@ -469,41 +629,58 @@ function renderWivesAll(){
             <label class="fw-bold">اسم الزوجة الثلاثي</label>
             <input type="text" class="form-control" id="wifeName_${i}">
           </div>
-          <div class="col-md-6">
+          <div class="col-md-3">
             <label class="fw-bold">هل هي موظفة؟</label>
-            <select class="form-control" id="wifeEmp_${i}">
-              <option value="">اختر</option><option value="yes">نعم</option><option value="no">لا</option>
+            <select class="form-control" id="wifeEmp_${i}" onchange="toggleWifeWork(${i})">
+              <option value="">اختر</option>
+              <option value="yes">نعم</option>
+              <option value="no">لا</option>
             </select>
           </div>
+          <div class="col-md-3" id="wifeWorkWrap_${i}" style="display:none">
+            <label class="fw-bold">مكان عملها</label>
+            <input type="text" class="form-control" id="wifeWork_${i}" placeholder="اكتب مكان العمل">
+          </div>
         </div>
-      </div>`;
+      </div>
+    `;
   }
-  for(let i=1;i<=n;i++) wivesUploads.innerHTML += makeSmartIDBlock("wife",i);
-  bindDynamic("wife",n);
+
+  for(let i=1;i<=n;i++) up.innerHTML += makeSmartIDBlock("wife", i);
+  bindDynamic("wife", n);
 }
+function toggleWifeWork(i){
+  const v = document.getElementById(`wifeEmp_${i}`).value;
+  const wrap = document.getElementById(`wifeWorkWrap_${i}`);
+  wrap.style.display = (v==="yes") ? "" : "none";
+  if(v!=="yes") document.getElementById(`wifeWork_${i}`).value = "";
+}
+
 function renderChildrenAll(){
-  const n=Math.max(0,Number(childrenCount.value||0));
-  childrenNamesWrap.innerHTML=""; childrenUploads.innerHTML="";
+  const n = Math.max(0, Number(document.getElementById("childrenCount").value || 0));
+  const namesWrap = document.getElementById("childrenNamesWrap");
+  const uploads = document.getElementById("childrenUploads");
+  namesWrap.innerHTML = ""; uploads.innerHTML = "";
   if(n<=0) return;
 
-  const box=document.createElement("div");
-  box.className="section";
-  box.innerHTML=`<div class="fw-bold mb-2">أسماء الأبناء</div>`;
+  const box = document.createElement("div");
+  box.className = "section";
+  box.innerHTML = `<div class="fw-bold mb-2">أسماء الأبناء</div>`;
   for(let i=1;i<=n;i++){
-    const d=document.createElement("div");
-    d.className="mb-2";
-    d.innerHTML=`<label class="fw-bold">اسم الابن ${i}</label><input type="text" class="form-control" id="childName_${i}">`;
+    const d = document.createElement("div");
+    d.className = "mb-2";
+    d.innerHTML = `<label class="fw-bold">اسم الابن ${i}</label><input type="text" class="form-control" id="childName_${i}">`;
     box.appendChild(d);
   }
-  childrenNamesWrap.appendChild(box);
+  namesWrap.appendChild(box);
 
-  for(let i=1;i<=n;i++) childrenUploads.innerHTML += makeSmartIDBlock("child",i);
-  bindDynamic("child",n);
+  for(let i=1;i<=n;i++) uploads.innerHTML += makeSmartIDBlock("child", i);
+  bindDynamic("child", n);
 }
 
-/* ========================= CAMERA smart crop ========================= */
+/* ================= CAMERA smart crop ================= */
 function isSmartIDInput(id){
-  if(["empFace","empBack","resFace","resBack","badgeFace","badgeBack"].includes(id)) return true;
+  if(["empFace","empBack","resFace","resBack"].includes(id)) return true;
   if(/^wife(Face|Back)_\d+$/.test(id)) return true;
   if(/^child(Face|Back)_\d+$/.test(id)) return true;
   return false;
@@ -518,67 +695,69 @@ async function openCameraFor(id){
     alert("الكاميرا تشتغل فقط HTTPS أو localhost.");
     return;
   }
-  targetInputId=id;
+  targetInputId = id;
   captureMode = isSmartIDInput(id) ? "ID" : "FULL";
-  if(!camModal) camModal=new bootstrap.Modal(document.getElementById("camModal"));
+  if(!camModal) camModal = new bootstrap.Modal(document.getElementById("camModal"));
 
   try{
     camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});
-    camVideo.srcObject=camStream;
+    document.getElementById("camVideo").srcObject = camStream;
 
+    const frame = document.getElementById("idFrame");
     if(captureMode==="ID"){
-      idFrame.style.display="block";
-      idFrame.style.borderColor="red";
-      camTitle.textContent="كاميرا (قص ذكي داخل الإطار)";
-      camHint.textContent="ضع المستند داخل الإطار — يصير أخضر ثم يلتقط تلقائياً";
+      frame.style.display="block";
+      frame.style.borderColor="red";
+      document.getElementById("camHint").textContent = "ضع المستند داخل الإطار — يصير أخضر ثم يلتقط تلقائياً";
       bestShotLock=false; greenSince=null; lastAuto=0;
       if(validateTimer) clearInterval(validateTimer);
-      validateTimer=setInterval(()=>validateFrameFast(),110);
+      validateTimer = setInterval(()=>validateFrameFast(), 110);
     }else{
-      idFrame.style.display="none";
-      camTitle.textContent="كاميرا (بدون قص)";
-      camHint.textContent="التقاط صورة كاملة";
+      frame.style.display="none";
+      document.getElementById("camHint").textContent = "التقاط صورة كاملة";
       if(validateTimer){ clearInterval(validateTimer); validateTimer=null; }
     }
 
     camModal.show();
   }catch(e){
-    alert("تعذر تشغيل الكاميرا. تأكد من الصلاحية.");
+    alert("تعذر تشغيل الكاميرا. إذا أنت داخل تيليگرام افتح بالـ Chrome.");
     console.error(e);
   }
 }
+
 function closeCamera(){
   if(validateTimer){ clearInterval(validateTimer); validateTimer=null; }
   if(camStream){ camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
-  idFrame.style.borderColor="red";
+  document.getElementById("idFrame").style.borderColor="red";
   greenSince=null; bestShotLock=false;
 }
 function captureNow(){ captureMode==="ID" ? bestShotCapture() : captureFullNow(); }
 
 function getCropRectInVideoPixels(){
-  const v=camVideo, frame=idFrame;
+  const v = document.getElementById("camVideo");
+  const frame = document.getElementById("idFrame");
   if(!v.videoWidth || !v.videoHeight) return null;
 
-  const vr=v.getBoundingClientRect();
-  const fr=frame.getBoundingClientRect();
-  const left=Math.max(fr.left,vr.left);
-  const top=Math.max(fr.top,vr.top);
-  const right=Math.min(fr.right,vr.right);
-  const bottom=Math.min(fr.bottom,vr.bottom);
+  const vr = v.getBoundingClientRect();
+  const fr = frame.getBoundingClientRect();
 
-  const wCss=Math.max(0,right-left);
-  const hCss=Math.max(0,bottom-top);
-  if(wCss<10||hCss<10) return null;
+  const left = Math.max(fr.left, vr.left);
+  const top = Math.max(fr.top, vr.top);
+  const right = Math.min(fr.right, vr.right);
+  const bottom = Math.min(fr.bottom, vr.bottom);
 
-  const sx=(left-vr.left)*(v.videoWidth/vr.width);
-  const sy=(top-vr.top)*(v.videoHeight/vr.height);
-  const sw=wCss*(v.videoWidth/vr.width);
-  const sh=hCss*(v.videoHeight/vr.height);
+  const wCss = Math.max(0, right-left);
+  const hCss = Math.max(0, bottom-top);
+  if(wCss<10 || hCss<10) return null;
 
-  const x=Math.max(0,Math.min(v.videoWidth-1,sx));
-  const y=Math.max(0,Math.min(v.videoHeight-1,sy));
-  const w=Math.max(1,Math.min(v.videoWidth-x,sw));
-  const h=Math.max(1,Math.min(v.videoHeight-y,sh));
+  const sx = (left - vr.left) * (v.videoWidth / vr.width);
+  const sy = (top - vr.top) * (v.videoHeight / vr.height);
+  const sw = wCss * (v.videoWidth / vr.width);
+  const sh = hCss * (v.videoHeight / vr.height);
+
+  const x = Math.max(0, Math.min(v.videoWidth-1, sx));
+  const y = Math.max(0, Math.min(v.videoHeight-1, sy));
+  const w = Math.max(1, Math.min(v.videoWidth-x, sw));
+  const h = Math.max(1, Math.min(v.videoHeight-y, sh));
   return {x,y,w,h};
 }
 
@@ -586,16 +765,17 @@ function analyzeROI_lightSharp(data,w,h){
   let sum=0,count=0;
   const gray=new Uint8ClampedArray(w*h);
   for(let i=0,j=0;i<data.length;i+=4,j++){
-    const g=(data[i]*0.299+data[i+1]*0.587+data[i+2]*0.114)|0;
+    const g=(data[i]*0.299 + data[i+1]*0.587 + data[i+2]*0.114)|0;
     gray[j]=g; sum+=g; count++;
   }
   const mean=sum/count;
+
   let lapSum=0;
   for(let y=1;y<h-1;y++){
     for(let x=1;x<w-1;x++){
       const c=gray[y*w+x];
-      const lap=Math.abs((gray[(y-1)*w+x]+gray[(y+1)*w+x]+gray[y*w+(x-1)]+gray[y*w+(x+1)])-4*c);
-      lapSum+=lap;
+      const lap=Math.abs((gray[(y-1)*w+x]+gray[(y+1)*w+x]+gray[y*w+(x-1)]+gray[y*w+(x+1)]) - 4*c);
+      lapSum += lap;
     }
   }
   const blurScore = lapSum/((w-2)*(h-2));
@@ -603,35 +783,40 @@ function analyzeROI_lightSharp(data,w,h){
 }
 
 function analyzeLightSharpFastFromVideoROI(){
-  const roi=getCropRectInVideoPixels();
+  const v = document.getElementById("camVideo");
+  const roi = getCropRectInVideoPixels();
   if(!roi) return null;
+
   const testW=220;
-  const testH=Math.max(1,Math.round(testW*(roi.h/roi.w)));
+  const testH=Math.max(1, Math.round(testW*(roi.h/roi.w)));
+
   const c=document.createElement("canvas");
   c.width=testW; c.height=testH;
   const ctx=c.getContext("2d",{willReadFrequently:true});
-  ctx.drawImage(camVideo,roi.x,roi.y,roi.w,roi.h,0,0,testW,testH);
+  ctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0,0,testW,testH);
   const img=ctx.getImageData(0,0,testW,testH);
   return analyzeROI_lightSharp(img.data,testW,testH);
 }
 
 function validateFrameFast(){
-  const st=analyzeLightSharpFastFromVideoROI();
+  const st = analyzeLightSharpFastFromVideoROI();
   if(!st) return;
 
-  const okLight=st.mean>60 && st.mean<205;
-  const okSharp=st.blurScore>20;
-  const ok=okLight && okSharp;
+  const okLight = st.mean > 60 && st.mean < 205;
+  const okSharp = st.blurScore > 20;
+  const ok = okLight && okSharp;
 
-  idFrame.style.borderColor= ok ? "lime" : "red";
+  const frame = document.getElementById("idFrame");
+  frame.style.borderColor = ok ? "lime" : "red";
 
+  const hint = document.getElementById("camHint");
   if(ok){
-    camHint.textContent="✅ ممتاز — سيتم الالتقاط تلقائياً";
+    hint.textContent = "✅ ممتاز — سيتم الالتقاط تلقائياً";
     if(greenSince===null) greenSince=performance.now();
     autoCaptureTick();
   }else{
     greenSince=null;
-    camHint.textContent = !okLight ? "⚠️ الإضاءة غير مناسبة" : "⚠️ مو واضح — ثبّت يدك";
+    hint.textContent = !okLight ? "⚠️ الإضاءة غير مناسبة" : "⚠️ مو واضح — ثبّت يدك";
   }
 }
 
@@ -646,20 +831,21 @@ function autoCaptureTick(){
   bestShotCapture();
 }
 
-function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
 function grabCroppedFrameWithScore(){
+  const v=document.getElementById("camVideo");
   const roi=getCropRectInVideoPixels();
   if(!roi) return null;
 
   const canvas=document.createElement("canvas");
-  canvas.width=Math.max(1,Math.round(roi.w));
-  canvas.height=Math.max(1,Math.round(roi.h));
+  canvas.width=Math.max(1, Math.round(roi.w));
+  canvas.height=Math.max(1, Math.round(roi.h));
   const ctx=canvas.getContext("2d",{willReadFrequently:true});
-  ctx.drawImage(camVideo,roi.x,roi.y,roi.w,roi.h,0,0,canvas.width,canvas.height);
+  ctx.drawImage(v, roi.x, roi.y, roi.w, roi.h, 0,0,canvas.width,canvas.height);
 
   const testW=240;
-  const testH=Math.max(1,Math.round(testW*(canvas.height/canvas.width)));
+  const testH=Math.max(1, Math.round(testW*(canvas.height/canvas.width)));
   const c2=document.createElement("canvas");
   c2.width=testW; c2.height=testH;
   const x2=c2.getContext("2d",{willReadFrequently:true});
@@ -667,7 +853,7 @@ function grabCroppedFrameWithScore(){
   const img=x2.getImageData(0,0,testW,testH);
   const st=analyzeROI_lightSharp(img.data,testW,testH);
 
-  const dataUrl=canvas.toDataURL("image/jpeg",0.92);
+  const dataUrl=canvas.toDataURL("image/jpeg",0.90);
   return {dataUrl, score: st.blurScore};
 }
 
@@ -694,11 +880,12 @@ async function bestShotCapture(){
 }
 
 async function captureFullNow(){
-  if(!camVideo.videoWidth) return;
+  const v=document.getElementById("camVideo");
+  if(!v.videoWidth) return;
   const c=document.createElement("canvas");
-  c.width=camVideo.videoWidth; c.height=camVideo.videoHeight;
-  c.getContext("2d").drawImage(camVideo,0,0,c.width,c.height);
-  await saveDataUrlToInput(c.toDataURL("image/jpeg",0.9));
+  c.width=v.videoWidth; c.height=v.videoHeight;
+  c.getContext("2d").drawImage(v,0,0,c.width,c.height);
+  await saveDataUrlToInput(c.toDataURL("image/jpeg",0.88));
   camModal.hide();
   closeCamera();
 }
@@ -713,10 +900,13 @@ async function saveDataUrlToInput(dataUrl){
   input.files=dt.files;
 
   const prev=document.getElementById(targetInputId+"Preview");
-  if(prev){ prev.src=URL.createObjectURL(file); prev.classList.remove("d-none"); }
+  if(prev){
+    prev.src=URL.createObjectURL(file);
+    prev.classList.remove("d-none");
+  }
 }
 
-/* ========================= PDF (8.7×5.3 + margin) ========================= */
+/* ================= PDF ================= */
 const { jsPDF } = window.jspdf;
 const CM=28.35;
 const SAFE_MARGIN=2*CM;
@@ -724,6 +914,36 @@ const ID_W=8.7*CM;
 const ID_H=5.3*CM;
 const GAP_DEFAULT=20;
 const TOP_OFFSET=3.8*CM;
+
+function addInfoPage(pdf){
+  pdf.addPage("a4","p");
+  const w=pdf.internal.pageSize.getWidth();
+  let y=SAFE_MARGIN;
+
+  pdf.setFontSize(16);
+  pdf.text("بيانات الموظف", w/2, y, {align:"center"});
+  y += 22;
+
+  pdf.setFontSize(12);
+  const lines = [
+    `الاسم الرباعي: ${document.getElementById("employeeName").value.trim()}`,
+    `محل الولادة: ${document.getElementById("birthPlace").value.trim()}`,
+    `المواليد: ${document.getElementById("birthDate").value.trim()}`,
+    `رقم الهاتف: ${document.getElementById("phone").value.trim()}`,
+    `رقم باج العتبة: ${document.getElementById("badgeNumber").value.trim()}`,
+    `التحصيل الدراسي: ${document.getElementById("education").value || ""}`,
+    `التخصص: ${document.getElementById("specialty").value.trim()}`,
+    `العنوان: ${document.getElementById("address").value.trim()}`,
+    `الحالة الاجتماعية: ${document.getElementById("maritalStatus").value==="married" ? "متزوج" : (document.getElementById("maritalStatus").value==="single" ? "أعزب" : "")}`
+  ];
+
+  const maxW = w - SAFE_MARGIN*2;
+  lines.forEach(t=>{
+    const chunks = pdf.splitTextToSize(t, maxW);
+    pdf.text(chunks, SAFE_MARGIN, y);
+    y += 18 * chunks.length;
+  });
+}
 
 async function loadImageDataForPDF(file){
   const dataUrl = await new Promise((res,rej)=>{
@@ -742,13 +962,13 @@ async function loadImageDataForPDF(file){
 
   const c=document.createElement("canvas");
   const ctx=c.getContext("2d");
-  const maxW=2000;
-  const scale=Math.min(1,maxW/img.width);
+  const maxW=1600;
+  const scale=Math.min(1, maxW/img.width);
   c.width=Math.round(img.width*scale);
   c.height=Math.round(img.height*scale);
   ctx.drawImage(img,0,0,c.width,c.height);
 
-  return {dataUrl:c.toDataURL("image/jpeg",0.9), format:"JPEG"};
+  return {dataUrl:c.toDataURL("image/jpeg",0.88), format:"JPEG"};
 }
 
 function drawContainPDF(pdf, dataUrl, format, x,y,w,h){
@@ -758,17 +978,19 @@ function drawContainPDF(pdf, dataUrl, format, x,y,w,h){
   pdf.addImage(dataUrl,format,x+(w-nw)/2,y+(h-nh)/2,nw,nh);
 }
 
-async function addIDPage(pdf, faceFile, backFile){
+async function addIDPage(pdf, faceFile, backFile, label){
   const face=await loadImageDataForPDF(faceFile);
   const back=await loadImageDataForPDF(backFile);
 
   pdf.addPage("a4","p");
-
   const pageW=pdf.internal.pageSize.getWidth();
   const safeW=pageW-(SAFE_MARGIN*2);
 
+  pdf.setFontSize(13);
+  pdf.text(label || "", pageW/2, SAFE_MARGIN+10, {align:"center"});
+
   let gap=GAP_DEFAULT;
-  if((ID_W*2+gap)>safeW) gap=Math.max(8,safeW-(ID_W*2));
+  if((ID_W*2+gap)>safeW) gap=Math.max(8, safeW-(ID_W*2));
 
   const needW=ID_W*2+gap;
   const startX=SAFE_MARGIN+(safeW-needW)/2;
@@ -778,167 +1000,256 @@ async function addIDPage(pdf, faceFile, backFile){
   drawContainPDF(pdf,back.dataUrl,back.format,startX+ID_W+gap,startY,ID_W,ID_H);
 }
 
-async function addSingleImagePage(pdf,file){
+async function addSingleImagePage(pdf,file,label){
   const d=await loadImageDataForPDF(file);
   pdf.addPage("a4","p");
   const pageW=pdf.internal.pageSize.getWidth();
   const pageH=pdf.internal.pageSize.getHeight();
-  drawContainPDF(pdf,d.dataUrl,d.format,SAFE_MARGIN,SAFE_MARGIN,pageW-2*SAFE_MARGIN,pageH-2*SAFE_MARGIN);
+
+  pdf.setFontSize(13);
+  pdf.text(label || "", pageW/2, SAFE_MARGIN+10, {align:"center"});
+
+  drawContainPDF(pdf,d.dataUrl,d.format,SAFE_MARGIN,SAFE_MARGIN+22,pageW-2*SAFE_MARGIN,pageH-2*SAFE_MARGIN-22);
 }
 
-/* ========================= Collect helpers ========================= */
 function collectWivesInfo(){
-  if(maritalStatus.value!=="married") return [];
-  const n=Math.max(1,Number(wivesCount.value||1));
+  if(document.getElementById("maritalStatus").value!=="married") return [];
+  const n=Math.max(1,Number(document.getElementById("wivesCount").value||1));
   const arr=[];
   for(let i=1;i<=n;i++){
     arr.push({
       index:i,
       name:(document.getElementById(`wifeName_${i}`)?.value||"").trim(),
-      isEmployee:(document.getElementById(`wifeEmp_${i}`)?.value||"")
+      isEmployee:(document.getElementById(`wifeEmp_${i}`)?.value||""),
+      workPlace:(document.getElementById(`wifeWork_${i}`)?.value||"").trim()
     });
   }
   return arr;
 }
 function collectChildrenNames(){
-  if(maritalStatus.value!=="married") return [];
-  const n=Math.max(0,Number(childrenCount.value||0));
+  if(document.getElementById("maritalStatus").value!=="married") return [];
+  const n=Math.max(0,Number(document.getElementById("childrenCount").value||0));
   const arr=[];
   for(let i=1;i<=n;i++) arr.push((document.getElementById(`childName_${i}`)?.value||"").trim());
   return arr;
 }
 
-/* ========================= Send to Sheet secure ========================= */
-function showSheetStatus(type,msg){
-  const el=document.getElementById("sheetStatus");
-  el.classList.remove("d-none","alert-success","alert-danger","alert-info");
-  el.classList.add("alert",type);
-  el.textContent=msg;
-}
+async function buildPDFBlob(){
+  const pdf=new jsPDF({unit:"px", format:"a4"});
 
-async function sendToGoogleSheetSecure(){
-  const loginId = localStorage.getItem("dar_login_id") || "";
-  const loginName = localStorage.getItem("dar_login_name") || "";
+  addInfoPage(pdf); // صفحة أولى بيانات
 
-  const body = new URLSearchParams();
-  body.set("action","submitForm");
-  body.set("loginId", loginId);
-  body.set("loginName", loginName);
+  await addIDPage(pdf,
+    document.getElementById("empFace").files[0],
+    document.getElementById("empBack").files[0],
+    "البطاقة الوطنية للموظف"
+  );
 
-  body.set("employeeName", employeeName.value.trim());
-  body.set("birthPlace", birthPlace.value.trim());
-  body.set("birthDate", birthDate.value || "");
-  body.set("phone", phone.value.trim());
-  body.set("badgeNumber", badgeNumber.value.trim());
-  body.set("education", education.value || "");
-  body.set("specialty", specialty.value.trim());
-  body.set("address", address.value.trim());
-  body.set("maritalStatus", maritalStatus.value || "");
+  if(document.getElementById("hasResidence").checked){
+    await addIDPage(pdf,
+      document.getElementById("resFace").files[0],
+      document.getElementById("resBack").files[0],
+      "بطاقة السكن"
+    );
+  }
 
-  const married = maritalStatus.value==="married";
-  body.set("wivesCount", married ? String(wivesCount.value||"1") : "");
-  body.set("wivesInfo", JSON.stringify(collectWivesInfo()));
-  body.set("childrenMother", married ? childrenMother.value.trim() : "");
-  body.set("childrenCount", married ? String(childrenCount.value||"0") : "");
-  body.set("childrenNames", JSON.stringify(collectChildrenNames()));
-
-  body.set("hasResidence", hasResidence.checked ? "1" : "0");
-  body.set("hasBadge", hasBadge.checked ? "1" : "0");
-  body.set("hasCertificate", hasCertificate.checked ? "1" : "0");
-
-  const res = await fetch(SCRIPT_URL, { method:"POST", body });
-  const txt = (await res.text()).trim();
-  return txt === "OK";
-}
-
-/* ========================= Validate + Submit ========================= */
-function validateBasics(){
-  const name = employeeName.value.trim();
-  if(!name){ alert("يرجى إدخال الاسم"); return false; }
-  if(!isQuadName(name)){ alert("الاسم يجب أن يكون رباعي (4 كلمات)"); return false; }
-
-  if(!empFace.files[0] || !empBack.files[0]){ alert("ارفع وجه/ظهر الوطنية"); return false; }
-  if(hasResidence.checked && (!resFace.files[0] || !resBack.files[0])){ alert("ارفع وجه/ظهر السكن"); return false; }
-  if(hasBadge.checked && (!badgeFace.files[0] || !badgeBack.files[0])){ alert("ارفع وجه/ظهر باج العتبة"); return false; }
-
-  if(maritalStatus.value==="married"){
-    const wCount=Math.max(1,Number(wivesCount.value||1));
+  if(document.getElementById("maritalStatus").value==="married"){
+    const wCount=Math.max(1,Number(document.getElementById("wivesCount").value||1));
     for(let i=1;i<=wCount;i++){
-      const wn=(document.getElementById(`wifeName_${i}`)?.value||"").trim();
-      const we=(document.getElementById(`wifeEmp_${i}`)?.value||"");
-      if(!wn){ alert(`ادخل اسم الزوجة ${i}`); return false; }
-      if(!we){ alert(`حدد موظفة للزوجة ${i}`); return false; }
-      if(!document.getElementById(`wifeFace_${i}`)?.files[0] || !document.getElementById(`wifeBack_${i}`)?.files[0]){
-        alert(`ارفع وجه/ظهر هوية الزوجة ${i}`); return false;
-      }
+      await addIDPage(pdf,
+        document.getElementById(`wifeFace_${i}`).files[0],
+        document.getElementById(`wifeBack_${i}`).files[0],
+        `هوية الزوجة ${i}`
+      );
     }
 
-    const cCount=Math.max(0,Number(childrenCount.value||0));
+    const cCount=Math.max(0,Number(document.getElementById("childrenCount").value||0));
+    for(let i=1;i<=cCount;i++){
+      await addIDPage(pdf,
+        document.getElementById(`childFace_${i}`).files[0],
+        document.getElementById(`childBack_${i}`).files[0],
+        `هوية الطفل ${i}`
+      );
+    }
+  }
+
+  if(document.getElementById("hasCertificate").checked){
+    await addSingleImagePage(pdf,
+      document.getElementById("certificateFile").files[0],
+      "شهادة التخرج"
+    );
+  }
+
+  if(pdf.getNumberOfPages() > 1) pdf.deletePage(1); // حذف صفحة jsPDF الفارغة
+  const arrayBuffer = pdf.output("arraybuffer");
+  return new Blob([arrayBuffer], {type:"application/pdf"});
+}
+
+async function blobToBase64(blob){
+  const ab = await blob.arrayBuffer();
+  let binary = "";
+  const bytes = new Uint8Array(ab);
+  const chunkSize = 0x8000;
+  for (let i=0;i<bytes.length;i+=chunkSize){
+    const chunk = bytes.subarray(i, i+chunkSize);
+    binary += String.fromCharCode.apply(null, chunk);
+  }
+  return btoa(binary);
+}
+
+/* ================= UI ================= */
+function setProgress(on, pct, msg){
+  const wrap = document.getElementById("progressWrap");
+  wrap.classList.toggle("show", !!on);
+  document.getElementById("progressText").textContent = msg || "";
+  document.getElementById("progressBar").style.width = (pct||0) + "%";
+}
+function showStatus(kind,msg){
+  const el = document.getElementById("sheetStatus");
+  el.classList.remove("d-none","alert-success","alert-danger","alert-info");
+  el.classList.add("alert", kind);
+  el.textContent = msg;
+}
+
+/* ================= Validation ================= */
+function validateBasics(){
+  const empName = document.getElementById("employeeName").value.trim();
+  if(!empName){ alert("يرجى إدخال الاسم الرباعي"); return false; }
+  if(!isQuadName(empName)){ alert("الاسم يجب أن يكون رباعي (4 كلمات)"); return false; }
+
+  const empFace = document.getElementById("empFace").files[0];
+  const empBack = document.getElementById("empBack").files[0];
+  if(!empFace || !empBack){ alert("ارفع وجه وظهر البطاقة الوطنية"); return false; }
+
+  if(document.getElementById("hasResidence").checked){
+    const rf = document.getElementById("resFace").files[0];
+    const rb = document.getElementById("resBack").files[0];
+    if(!rf || !rb){ alert("ارفع وجه وظهر بطاقة السكن"); return false; }
+  }
+
+  if(document.getElementById("maritalStatus").value==="married"){
+    const wCount = Math.max(1, Number(document.getElementById("wivesCount").value||1));
+    for(let i=1;i<=wCount;i++){
+      const wn = (document.getElementById(`wifeName_${i}`)?.value||"").trim();
+      const we = (document.getElementById(`wifeEmp_${i}`)?.value||"");
+      if(!wn){ alert(`ادخل اسم الزوجة ${i}`); return false; }
+      if(!we){ alert(`حدد هل الزوجة ${i} موظفة`); return false; }
+      if(we==="yes"){
+        const wp = (document.getElementById(`wifeWork_${i}`)?.value||"").trim();
+        if(!wp){ alert(`اكتب مكان عمل الزوجة ${i}`); return false; }
+      }
+      const wf = document.getElementById(`wifeFace_${i}`)?.files[0];
+      const wb = document.getElementById(`wifeBack_${i}`)?.files[0];
+      if(!wf || !wb){ alert(`ارفع وجه وظهر هوية الزوجة ${i}`); return false; }
+    }
+
+    const cCount = Math.max(0, Number(document.getElementById("childrenCount").value||0));
     if(cCount>0){
-      if(!childrenMother.value.trim()){ alert("ادخل اسم أم الأبناء"); return false; }
-      const names=collectChildrenNames().filter(Boolean);
-      if(names.length<cCount){ alert("ادخل أسماء الأبناء حسب العدد"); return false; }
+      if(!document.getElementById("childrenMother").value.trim()){
+        alert("ادخل اسم أم الأبناء"); return false;
+      }
+      const names = collectChildrenNames().filter(Boolean);
+      if(names.length < cCount){
+        alert("ادخل أسماء الأبناء حسب العدد"); return false;
+      }
       for(let i=1;i<=cCount;i++){
-        if(!document.getElementById(`childFace_${i}`)?.files[0] || !document.getElementById(`childBack_${i}`)?.files[0]){
-          alert(`ارفع وجه/ظهر هوية الطفل ${i}`); return false;
-        }
+        const cf = document.getElementById(`childFace_${i}`)?.files[0];
+        const cb = document.getElementById(`childBack_${i}`)?.files[0];
+        if(!cf || !cb){ alert(`ارفع وجه وظهر هوية الطفل ${i}`); return false; }
       }
     }
   }
 
-  if(hasCertificate.checked && !certificateFile.files[0]){
-    alert("ارفع شهادة التخرج"); return false;
+  if(document.getElementById("hasCertificate").checked){
+    if(!document.getElementById("certificateFile").files[0]){
+      alert("ارفع شهادة التخرج"); return false;
+    }
   }
 
   return true;
 }
 
-async function generatePDF(){
-  const name = employeeName.value.trim();
-  const pdf=new jsPDF({unit:"px", format:"a4"});
-
-  await addIDPage(pdf, empFace.files[0], empBack.files[0]);
-  if(hasResidence.checked) await addIDPage(pdf, resFace.files[0], resBack.files[0]);
-  if(hasBadge.checked) await addIDPage(pdf, badgeFace.files[0], badgeBack.files[0]);
-
-  if(maritalStatus.value==="married"){
-    const wCount=Math.max(1,Number(wivesCount.value||1));
-    for(let i=1;i<=wCount;i++){
-      await addIDPage(pdf, document.getElementById(`wifeFace_${i}`).files[0], document.getElementById(`wifeBack_${i}`).files[0]);
-    }
-    const cCount=Math.max(0,Number(childrenCount.value||0));
-    for(let i=1;i<=cCount;i++){
-      await addIDPage(pdf, document.getElementById(`childFace_${i}`).files[0], document.getElementById(`childBack_${i}`).files[0]);
-    }
-  }
-
-  if(hasCertificate.checked){
-    await addSingleImagePage(pdf, certificateFile.files[0]);
-  }
-
-  if(pdf.getNumberOfPages()>1) pdf.deletePage(1);
-  pdf.save(name.replace(/\s+/g,"_") + "_documents.pdf");
-}
-
+/* ================= Submit ================= */
 async function submitAll(){
+  const loginId = localStorage.getItem("dar_login_id") || "";
+  const loginName = localStorage.getItem("dar_login_name") || "";
+  if(!loginId || !loginName){
+    alert("يرجى تسجيل الدخول"); location.reload(); return;
+  }
+
   if(!validateBasics()) return;
 
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn.disabled = true;
+
   try{
-    showSheetStatus("alert-info","جاري إرسال البيانات إلى Google Sheet...");
-    const ok = await sendToGoogleSheetSecure();
-    if(!ok){
-      showSheetStatus("alert-danger","فشل الإرسال للشيت. تأكد من Apps Script ثم جرّب.");
-      return;
+    showStatus("alert-info","جاري تجهيز ملف PDF...");
+    setProgress(true, 10, "تجهيز PDF...");
+
+    const pdfBlob = await buildPDFBlob();
+    setProgress(true, 45, "تحويل PDF...");
+
+    const pdfBase64 = await blobToBase64(pdfBlob);
+    setProgress(true, 65, "إرسال البيانات للشيت ورفع PDF...");
+
+    const payload = {
+      action: "submitForm",
+      loginId, loginName,
+
+      employeeName: document.getElementById("employeeName").value.trim(),
+      birthPlace: document.getElementById("birthPlace").value.trim(),
+      birthDate: document.getElementById("birthDate").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      badgeNumber: document.getElementById("badgeNumber").value.trim(),
+      education: document.getElementById("education").value || "",
+      specialty: document.getElementById("specialty").value.trim(),
+      address: document.getElementById("address").value.trim(),
+      maritalStatus: document.getElementById("maritalStatus").value || "",
+
+      wivesCount: document.getElementById("maritalStatus").value==="married" ? String(document.getElementById("wivesCount").value||"1") : "",
+      wivesInfo: JSON.stringify(collectWivesInfo()),
+      childrenMother: document.getElementById("maritalStatus").value==="married" ? document.getElementById("childrenMother").value.trim() : "",
+      childrenCount: document.getElementById("maritalStatus").value==="married" ? String(document.getElementById("childrenCount").value||"0") : "",
+      childrenNames: JSON.stringify(collectChildrenNames()),
+
+      hasResidence: document.getElementById("hasResidence").checked,
+      hasBadge: false,
+      hasCertificate: document.getElementById("hasCertificate").checked,
+
+      pdfFileName: document.getElementById("employeeName").value.trim().replace(/\s+/g,"_") + "_documents.pdf",
+      pdfBase64
+    };
+
+    const res = await fetch(SCRIPT_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const txt = (await res.text()).trim();
+
+    if(txt === "OK"){
+      setProgress(true, 100, "تم الرفع ✅");
+      showStatus("alert-success","تم الرفع بنجاح ✅");
+      alert("تم الرفع بنجاح ✅ لن يُسمح بالإرسال مرة أخرى.");
+      submitBtn.disabled = true;
+    }else if(txt === "DONE"){
+      showStatus("alert-success","تم الرفع مسبقاً ✅ لا يمكن الإرسال مرة أخرى.");
+      alert("تم الرفع مسبقاً ✅");
+      submitBtn.disabled = true;
+    }else{
+      showStatus("alert-danger", txt);
+      submitBtn.disabled = false;
     }
-    showSheetStatus("alert-success","تم إرسال البيانات ✅ جاري إنشاء PDF...");
-    await generatePDF();
-    showSheetStatus("alert-success","تم إرسال البيانات وإنشاء PDF ✅");
+
   }catch(e){
     console.error(e);
-    showSheetStatus("alert-danger","صار خطأ غير متوقع.");
+    showStatus("alert-danger","صار خطأ بالإرسال. جرّب مرة ثانية ويفضل Chrome.");
+    submitBtn.disabled = false;
+  }finally{
+    setProgress(false, 0, "");
   }
 }
 </script>
-
 </body>
 </html>
