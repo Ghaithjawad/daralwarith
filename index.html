@@ -342,7 +342,9 @@ async function doLogin(){
     body.set("name", name);
     body.set("id", id);
     const res = await fetch(SCRIPT_URL, { method:"POST", body });
-    const txt = (await res.text()).trim();
+    const txt = (await res.text()).trconst txt = await res.text();
+console.log("LOGIN RESPONSE:", txt);
+im();
    if(txt === "OK"){
   localStorage.setItem("dar_login_id", id);
   localStorage.setItem("dar_login_name", name);
@@ -948,6 +950,7 @@ function hideLoader(){
 </div>
 </body>
 </html>
+
 
 
 
