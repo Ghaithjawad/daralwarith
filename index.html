@@ -832,7 +832,11 @@ function validateBasics(){
   if(!name){ alert("يرجى إدخال الاسم"); return false; }
   if(!isQuadName(name)){ alert("الاسم يجب أن يكون رباعي (4 كلمات)"); return false; }
   if(!empFace.files[0] || !empBack.files[0]){ alert("ارفع وجه/ظهر الوطنية"); return false; }
-  if(hasResidence.checked && (!resFace.files[0] || !resBack.files[0])){ alert("ارفع وجه/ظهر السكن"); return false; }
+  if(!resFace.files[0] || !resBack.files[0]){
+  alert("بطاقة السكن إجبارية (وجه وظهر)");
+  return false;
+}
+
   if(hasBadge.checked && (!badgeFace.files[0] || !badgeBack.files[0])){ alert("ارفع وجه/ظهر باج العتبة"); return false; }
   if(maritalStatus.value==="married"){
     const wCount=Math.max(1,Number(wivesCount.value||1));
@@ -924,7 +928,6 @@ function bindPreview(id){
       prev.classList.remove("d-none");
     }
   });
-}
   function showLoader(){
   document.getElementById("loaderPage").classList.remove("d-none");
 }
@@ -945,5 +948,6 @@ function hideLoader(){
 </div>
 </body>
 </html>
+
 
 
