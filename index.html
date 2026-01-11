@@ -1,135 +1,43 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>دار الوارث | تسجيل دخول + استمارة</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>دار الوارث | تسجيل دخول + استمارة</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<style>
-:root{
-  --main:#1aa6a6;
-  --dark:#148c8c;
-  --border:#d9eeee;
-  --text:#0f3f3f;
-  --loginA:#2a3b8f;
-  --loginB:#0d1a5a;
-}
-body{
-  font-family:"Segoe UI",Tahoma,sans-serif;
-  color:var(--text);
-  background-image:url("https://i.suar.me/0A8qj/m");
-  background-repeat:repeat;
-  background-size:420px 420px;
-  background-attachment:fixed;
-}
-.wrap{max-width:1050px;margin:26px auto 20px;padding:0 12px;}
-.cardx{
-  background:#fff;
-  border-radius:20px;
-  box-shadow:0 18px 40px rgba(0,0,0,.18);
-  overflow:hidden;
-}
-.header{padding:22px;text-align:center;color:#fff;}
-.header.login{background:linear-gradient(135deg,var(--loginA),var(--loginB));}
-.header.form{background:linear-gradient(135deg,var(--main),var(--dark));}
-.logo{max-width:140px;display:block;margin:0 auto 10px;}
-.body{padding:22px;}
-.block{
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:14px;
-  background:#fff;
-}
-.section{
-  border:2px dashed var(--main);
-  border-radius:14px;
-  padding:16px;
-  margin-top:14px;
-  background:#f9fefe;
-}
-.check-box{
-  border:1.8px solid var(--main);
-  border-radius:12px;
-  padding:12px 16px;
-  background:#f6fdfd;
-}
-.form-check-input{width:18px;height:18px;margin-left:10px;}
-.form-check-input:checked{background-color:var(--main);border-color:var(--main);}
-.preview-img{
-  max-height:180px;width:100%;object-fit:contain;
-  border-radius:12px;border:1px solid #e8e8e8;background:#fff;
-}
-.main-btn{
-  background:var(--main);border:none;padding:14px 16px;
-  font-size:18px;border-radius:14px;color:#fff;
-}
-.main-btn:hover{background:var(--dark);}
-.login-btn{
-  background:var(--loginA);border:none;padding:14px 16px;
-  font-size:18px;border-radius:14px;color:#fff;
-}
-.login-btn:hover{filter:brightness(.92);}
-.tip{
-  background:#f2fffe;border:1px solid #cfeeee;border-radius:12px;
-  padding:10px 12px;color:#0f3f3f;font-size:.92rem;
-}
-.req{color:#b42318;font-size:.86rem;display:none;margin-top:6px;}
-.req.show{display:block;}
-.footer-note{text-align:center;margin:18px auto 26px;color:#0f3f3f;opacity:.85;font-weight:700;}
-.progress-wrap{display:none}
-.progress-wrap.show{display:block}
-.progress{height:12px;border-radius:999px}
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 
-/* كاميرا */
-.cam-wrap{position:relative;width:100%;}
-#camVideo{width:100%;border-radius:12px;background:#000;}
-.cam-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
-.id-frame{
-  width:72%;aspect-ratio: 8.7 / 5.3;
-  border:4px solid red;border-radius:14px;
-  box-shadow:0 0 0 2000px rgba(0,0,0,.45);
-}
-
-/* تنبيه كروم */
-.open-chrome{
-  background:#fff3cd;border:1px solid #ffecb5;border-radius:14px;padding:12px;
-}
-.badge-user{
-  display:inline-flex;align-items:center;gap:8px;
-  background:#ffffff22;border:1px solid #ffffff55;padding:6px 10px;
-  border-radius:999px;font-weight:700;
-}
-.badge-dot{width:10px;height:10px;border-radius:50%;background:#00ff88;box-shadow:0 0 0 4px #00ff8822;}
-.small-note{font-size:.9rem;color:#666;}
-</style>
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
+
 <div class="wrap">
 
-  <!-- LOGIN -->
+  <!-- ================= LOGIN PAGE ================= -->
   <div id="loginPage" class="cardx">
     <div class="header login">
       <img src="https://i.suar.me/A3aKJ/m" class="logo" alt="دار الوارث">
       <h4 class="mb-1">تسجيل الدخول</h4>
       <p class="mb-0">ادخل الاسم + رقم الـ ID للدخول إلى الاستمارة</p>
     </div>
-    <div class="body">
 
+    <div class="body">
       <div id="secureWarn" class="alert alert-warning d-none">
-        الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>. على GitHub Pages راح تشتغل (HTTPS).
+        الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>.
       </div>
 
       <div id="openChromeBox" class="open-chrome d-none mb-3">
         <div class="fw-bold mb-1">ملاحظة مهمة</div>
-        متصفح تيليگرام/بعض أجهزة شاومي قد يمنع الكاميرا. يفضل فتح الرابط بمتصفح Google Chrome.
+        يفضل فتح الرابط بمتصفح Google Chrome.
         <div class="mt-2 d-flex gap-2">
-          <button class="btn btn-sm btn-primary" type="button" id="btnOpenChrome">فتح في Chrome</button>
-          <button class="btn btn-sm btn-outline-secondary" type="button" id="btnHideChrome">إخفاء</button>
+          <button class="btn btn-sm btn-primary" id="btnOpenChrome" type="button">فتح في Chrome</button>
+          <button class="btn btn-sm btn-outline-secondary" id="btnHideChrome" type="button">إخفاء</button>
         </div>
       </div>
 
@@ -145,24 +53,22 @@ body{
 
       <div id="loginError" class="alert alert-danger d-none"></div>
       <div id="loginDone" class="alert alert-success d-none">
-        تم الرفع مسبقاً ✅ لا يمكن الإرسال مرة أخرى.
+        تم الرفع مسبقاً ✅
       </div>
 
-      <button class="w-100 login-btn" type="button" id="btnLogin">دخول</button>
+      <button class="w-100 login-btn" id="btnLogin" type="button">دخول</button>
     </div>
   </div>
 
-  <!-- FORM -->
+  <!-- ================= FORM PAGE ================= -->
   <div id="formPage" class="cardx d-none mt-4">
     <div class="header form">
       <img src="https://i.suar.me/A3aKJ/m" class="logo" alt="دار الوارث">
       <h4 class="mb-2">استمارة تحديث بيانات موظفي دار الوارث</h4>
 
-      <div class="d-flex justify-content-center">
-        <div class="badge-user">
-          <span class="badge-dot"></span>
-          <span id="whoUser">...</span>
-        </div>
+      <div class="badge-user">
+        <span class="badge-dot"></span>
+        <span id="whoUser">...</span>
       </div>
 
       <div class="mt-3">
@@ -174,17 +80,17 @@ body{
 
       <div id="sheetStatus" class="alert d-none"></div>
 
-      <div class="progress-wrap" id="progressWrap">
-        <div class="small mb-2 text-muted" id="progressText">...</div>
+      <div id="progressWrap" class="progress-wrap">
+        <div class="small mb-2 text-muted" id="progressText"></div>
         <div class="progress">
-          <div class="progress-bar" id="progressBar" role="progressbar" style="width:0%"></div>
+          <div class="progress-bar" id="progressBar"></div>
         </div>
       </div>
 
-      <!-- بيانات -->
+      <!-- بيانات الموظف -->
       <div class="block">
         <label class="fw-bold">الاسم الرباعي (إجباري)</label>
-        <input type="text" id="employeeName" class="form-control" placeholder="مثال: محمد علي حسن عباس">
+        <input id="employeeName" class="form-control">
         <div id="nameError" class="req">الاسم لازم يكون 4 كلمات</div>
       </div>
 
@@ -192,19 +98,19 @@ body{
         <div class="row g-3">
           <div class="col-md-6">
             <label class="fw-bold">محل الولادة</label>
-            <input type="text" id="birthPlace" class="form-control">
+            <input id="birthPlace" class="form-control">
           </div>
           <div class="col-md-6">
-            <label class="fw-bold">المواليد (اكتب يدوي)</label>
-            <input type="text" id="birthDate" class="form-control" placeholder="مثال: 2001-12-31 أو 31/12/2001">
+            <label class="fw-bold">المواليد</label>
+            <input id="birthDate" class="form-control">
           </div>
           <div class="col-md-6">
             <label class="fw-bold">رقم الهاتف</label>
-            <input type="tel" id="phone" class="form-control" placeholder="07xxxxxxxxx">
+            <input id="phone" class="form-control">
           </div>
           <div class="col-md-6">
-            <label class="fw-bold">رقم باج العتبة الحسينية المقدسة</label>
-            <input type="text" id="badgeNumber" class="form-control">
+            <label class="fw-bold">رقم باج العتبة</label>
+            <input id="badgeNumber" class="form-control">
           </div>
           <div class="col-md-6">
             <label class="fw-bold">التحصيل الدراسي</label>
@@ -215,157 +121,62 @@ body{
             </select>
           </div>
           <div class="col-md-6">
-            <label class="fw-bold">التخصص الدقيق</label>
-            <input type="text" id="specialty" class="form-control">
+            <label class="fw-bold">التخصص</label>
+            <input id="specialty" class="form-control">
           </div>
           <div class="col-12">
-            <label class="fw-bold">عنوان السكن الحالي</label>
-            <textarea id="address" class="form-control" rows="2"></textarea>
+            <label class="fw-bold">عنوان السكن</label>
+            <textarea id="address" class="form-control"></textarea>
           </div>
         </div>
       </div>
 
-      <!-- البطاقة الوطنية قبل الحالة الاجتماعية -->
+      <!-- البطاقة الوطنية -->
       <div class="block">
-        <h5 class="mb-2">البطاقة الوطنية للموظف</h5>
-        <div class="tip mb-3">ضع الهوية داخل الإطار حتى يصير أخضر ثم يلتقط تلقائياً.</div>
+        <h5>البطاقة الوطنية</h5>
 
         <div class="mb-3">
-          <label class="fw-bold mb-2 d-block">وجه الهوية</label>
+          <label class="fw-bold">وجه الهوية</label>
           <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary w-50" id="btnCamEmpFace">كاميرا</button>
-            <button type="button" class="btn btn-outline-secondary w-50" id="btnStudioEmpFace">استوديو</button>
+            <button class="btn btn-outline-primary w-50" id="btnCamEmpFace">كاميرا</button>
+            <button class="btn btn-outline-secondary w-50" id="btnStudioEmpFace">استوديو</button>
           </div>
-          <input type="file" id="empFace" class="form-control d-none" accept="image/*">
-          <img id="empFacePreview" class="preview-img mt-2 d-none" alt="preview">
+          <input type="file" id="empFace" class="d-none">
+          <img id="empFacePreview" class="preview-img d-none">
         </div>
 
         <div>
-          <label class="fw-bold mb-2 d-block">ظهر الهوية</label>
+          <label class="fw-bold">ظهر الهوية</label>
           <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary w-50" id="btnCamEmpBack">كاميرا</button>
-            <button type="button" class="btn btn-outline-secondary w-50" id="btnStudioEmpBack">استوديو</button>
+            <button class="btn btn-outline-primary w-50" id="btnCamEmpBack">كاميرا</button>
+            <button class="btn btn-outline-secondary w-50" id="btnStudioEmpBack">استوديو</button>
           </div>
-          <input type="file" id="empBack" class="form-control d-none" accept="image/*">
-          <img id="empBackPreview" class="preview-img mt-2 d-none" alt="preview">
+          <input type="file" id="empBack" class="d-none">
+          <img id="empBackPreview" class="preview-img d-none">
         </div>
       </div>
 
-      <!-- السكن -->
-      <div class="block">
-        <div class="check-box form-check">
-          <label class="form-check-label">هل توجد بطاقة سكن؟</label>
-          <input class="form-check-input" type="checkbox" id="hasResidence">
-        </div>
+      <button id="submitBtn" class="w-100 main-btn" type="button">
+        إرسال وإنشاء PDF
+      </button>
 
-        <div id="residenceSection" class="section d-none">
-          <div class="tip mb-3">ضع البطاقة داخل الإطار حتى يصير أخضر ثم يلتقط تلقائياً.</div>
-
-          <div class="mb-3">
-            <label class="fw-bold mb-2 d-block">وجه بطاقة السكن</label>
-            <div class="d-flex gap-2">
-              <button type="button" class="btn btn-outline-primary w-50" id="btnCamResFace">كاميرا</button>
-              <button type="button" class="btn btn-outline-secondary w-50" id="btnStudioResFace">استوديو</button>
-            </div>
-            <input type="file" id="resFace" class="form-control d-none" accept="image/*">
-            <img id="resFacePreview" class="preview-img mt-2 d-none" alt="preview">
-          </div>
-
-          <div>
-            <label class="fw-bold mb-2 d-block">ظهر بطاقة السكن</label>
-            <div class="d-flex gap-2">
-              <button type="button" class="btn btn-outline-primary w-50" id="btnCamResBack">كاميرا</button>
-              <button type="button" class="btn btn-outline-secondary w-50" id="btnStudioResBack">استوديو</button>
-            </div>
-            <input type="file" id="resBack" class="form-control d-none" accept="image/*">
-            <img id="resBackPreview" class="preview-img mt-2 d-none" alt="preview">
-          </div>
-        </div>
+      <div class="mt-3 small-note">
+        بعد الإرسال لن يسمح بالإرسال مرة أخرى.
       </div>
-
-      <!-- شهادة -->
-      <div class="block">
-        <div class="check-box form-check">
-          <label class="form-check-label">هل توجد شهادة تخرج؟</label>
-          <input class="form-check-input" type="checkbox" id="hasCertificate">
-        </div>
-
-        <div id="certificateSection" class="section d-none">
-          <label class="fw-bold mb-2 d-block">صورة شهادة التخرج</label>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-primary w-50" id="btnCamCert">كاميرا</button>
-            <button type="button" class="btn btn-outline-secondary w-50" id="btnStudioCert">استوديو</button>
-          </div>
-          <input type="file" id="certificateFile" class="form-control d-none" accept="image/*">
-          <img id="certificateFilePreview" class="preview-img mt-2 d-none" alt="preview">
-        </div>
-      </div>
-
-      <!-- الحالة الاجتماعية -->
-      <div class="block">
-        <label class="fw-bold mb-2 d-block">الحالة الاجتماعية</label>
-        <select id="maritalStatus" class="form-control">
-          <option value="">اختر</option>
-          <option value="single">أعزب</option>
-          <option value="married">متزوج</option>
-        </select>
-
-        <div id="socialSection" class="section d-none">
-          <div class="row g-3">
-
-            <div class="col-md-6">
-              <label class="fw-bold">عدد الزوجات</label>
-              <input type="number" id="wivesCount" min="1" value="1" class="form-control">
-            </div>
-
-            <div class="col-12">
-              <div class="tip mb-2">بيانات الزوجات</div>
-              <div id="wivesInfo"></div>
-
-              <div class="tip mb-2">هويات الزوجات (وجه/ظهر) — إجباري</div>
-              <div id="wivesUploads"></div>
-            </div>
-
-            <div class="col-md-6">
-              <label class="fw-bold">اسم أم الأبناء</label>
-              <input type="text" id="childrenMother" class="form-control">
-            </div>
-
-            <div class="col-md-6">
-              <label class="fw-bold">عدد الأبناء</label>
-              <input type="number" id="childrenCount" min="0" value="0" class="form-control">
-            </div>
-
-            <div class="col-12">
-              <div class="tip mb-2">أسماء الأبناء</div>
-              <div id="childrenNamesWrap"></div>
-
-              <div class="tip mb-2">هويات الأبناء (وجه/ظهر) — إذا موجودين</div>
-              <div id="childrenUploads"></div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <button id="submitBtn" class="w-100 main-btn" type="button">إرسال وإنشاء PDF</button>
-      <div class="mt-3 small-note">بعد الإرسال الناجح، لن يسمح بالإرسال مرة أخرى.</div>
-
     </div>
   </div>
 
   <div class="footer-note">تطوير شعبة تقنية المعلومات لدار الوارث</div>
 </div>
 
-<!-- مودال الكاميرا -->
+<!-- Modal Camera -->
 <div class="modal fade" id="camModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="camTitle">الكاميرا</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" id="btnCamClose"></button>
+        <h5 class="modal-title">الكاميرا</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
       <div class="modal-body">
         <div class="cam-wrap">
           <video id="camVideo" autoplay playsinline></video>
@@ -373,849 +184,21 @@ body{
             <div id="idFrame" class="id-frame"></div>
           </div>
         </div>
-        <div class="mt-2">
-          <small class="text-muted" id="camHint">وجّه المستند داخل الإطار</small>
-        </div>
+        <small id="camHint" class="text-muted">وجّه الهوية داخل الإطار</small>
       </div>
-
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCamClose2">إغلاق</button>
-        <button type="button" class="btn btn-success" id="btnCapture">التقاط</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+        <button class="btn btn-success" id="btnCapture">التقاط</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-/* ============ CONFIG ============ */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCVXWdBAWok0kLO8elB01QW7vUmlwX62ICy3EJWe9Hg1f8spd-pBdKlTce-WBFEBkVzg/exec";
+<!-- Main JS -->
+<script src="script.js"></script>
 
-/* ============ DOM ============ */
-const loginPage = document.getElementById("loginPage");
-const formPage  = document.getElementById("formPage");
-
-const secureWarn = document.getElementById("secureWarn");
-const openChromeBox = document.getElementById("openChromeBox");
-const btnOpenChrome = document.getElementById("btnOpenChrome");
-const btnHideChrome = document.getElementById("btnHideChrome");
-
-const loginNameEl = document.getElementById("loginName");
-const loginIdEl   = document.getElementById("loginId");
-const loginError  = document.getElementById("loginError");
-const loginDone   = document.getElementById("loginDone");
-const btnLogin    = document.getElementById("btnLogin");
-const btnLogout   = document.getElementById("btnLogout");
-
-const whoUser = document.getElementById("whoUser");
-const sheetStatus = document.getElementById("sheetStatus");
-
-const progressWrap = document.getElementById("progressWrap");
-const progressText = document.getElementById("progressText");
-const progressBar  = document.getElementById("progressBar");
-
-const submitBtn = document.getElementById("submitBtn");
-
-const employeeName = document.getElementById("employeeName");
-const birthPlace   = document.getElementById("birthPlace");
-const birthDate    = document.getElementById("birthDate");
-const phone        = document.getElementById("phone");
-const badgeNumber  = document.getElementById("badgeNumber");
-const education    = document.getElementById("education");
-const specialty    = document.getElementById("specialty");
-const address      = document.getElementById("address");
-
-const nameError    = document.getElementById("nameError");
-
-const empFace      = document.getElementById("empFace");
-const empBack      = document.getElementById("empBack");
-const resFace      = document.getElementById("resFace");
-const resBack      = document.getElementById("resBack");
-const certificateFile = document.getElementById("certificateFile");
-
-const hasResidence = document.getElementById("hasResidence");
-const residenceSection = document.getElementById("residenceSection");
-const hasCertificate = document.getElementById("hasCertificate");
-const certificateSection = document.getElementById("certificateSection");
-
-const maritalStatus = document.getElementById("maritalStatus");
-const socialSection = document.getElementById("socialSection");
-const wivesCount = document.getElementById("wivesCount");
-const wivesInfo = document.getElementById("wivesInfo");
-const wivesUploads = document.getElementById("wivesUploads");
-const childrenMother = document.getElementById("childrenMother");
-const childrenCount = document.getElementById("childrenCount");
-const childrenNamesWrap = document.getElementById("childrenNamesWrap");
-const childrenUploads = document.getElementById("childrenUploads");
-
-/* ============ Camera modal ============ */
-const camVideo = document.getElementById("camVideo");
-const idFrame  = document.getElementById("idFrame");
-const camHint  = document.getElementById("camHint");
-const btnCapture = document.getElementById("btnCapture");
-const btnCamClose = document.getElementById("btnCamClose");
-const btnCamClose2 = document.getElementById("btnCamClose2");
-let camModal = null;
-
-/* ============ Helpers ============ */
-function isCameraAllowedContext(){
-  const isLocalhost = ["localhost","127.0.0.1"].includes(location.hostname);
-  return window.isSecureContext || isLocalhost;
-}
-secureWarn.classList.toggle("d-none", isCameraAllowedContext());
-
-function isTelegramInApp(){
-  const ua = (navigator.userAgent || "").toLowerCase();
-  return ua.includes("telegram") || ua.includes("tg");
-}
-function isXiaomiLikely(){
-  const ua = (navigator.userAgent || "").toLowerCase();
-  return ua.includes("miui") || ua.includes("xiaomi");
-}
-if(isTelegramInApp() || isXiaomiLikely()){
-  openChromeBox.classList.remove("d-none");
-}
-btnOpenChrome.onclick = ()=>{
-  const url = location.href;
-  const intent = "intent://" + url.replace(/^https?:\/\//,"") + "#Intent;scheme=https;package=com.android.chrome;end";
-  window.location.href = intent;
-  setTimeout(()=>{ window.open(url, "_blank"); }, 700);
-};
-btnHideChrome.onclick = ()=> openChromeBox.classList.add("d-none");
-
-function openStudio(inputEl){ inputEl?.click(); }
-
-function bindPreview(inputEl, previewEl){
-  if(!inputEl || !previewEl) return;
-  inputEl.addEventListener("change", ()=>{
-    const f = inputEl.files && inputEl.files[0];
-    if(f){
-      previewEl.src = URL.createObjectURL(f);
-      previewEl.classList.remove("d-none");
-    }
-  });
-}
-bindPreview(empFace, document.getElementById("empFacePreview"));
-bindPreview(empBack, document.getElementById("empBackPreview"));
-bindPreview(resFace, document.getElementById("resFacePreview"));
-bindPreview(resBack, document.getElementById("resBackPreview"));
-bindPreview(certificateFile, document.getElementById("certificateFilePreview"));
-
-function setProgress(on, pct, msg){
-  progressWrap.classList.toggle("show", !!on);
-  progressText.textContent = msg || "";
-  progressBar.style.width = (pct||0) + "%";
-}
-function showStatus(kind,msg){
-  sheetStatus.classList.remove("d-none","alert-success","alert-danger","alert-info");
-  sheetStatus.classList.add("alert", kind);
-  sheetStatus.textContent = msg;
-}
-
-function isQuadName(s){
-  const w = (s||"").trim().split(/\s+/).filter(Boolean);
-  return w.length === 4;
-}
-employeeName.addEventListener("input", ()=>{
-  const v = employeeName.value;
-  nameError.classList.toggle("show", v.trim().length>0 && !isQuadName(v));
-});
-
-/* ============ Sections ============ */
-hasResidence.onchange = ()=> residenceSection.classList.toggle("d-none", !hasResidence.checked);
-hasCertificate.onchange = ()=> certificateSection.classList.toggle("d-none", !hasCertificate.checked);
-
-maritalStatus.addEventListener("change", ()=>{
-  const married = maritalStatus.value === "married";
-  socialSection.classList.toggle("d-none", !married);
-  if(married){ renderWivesAll(); renderChildrenAll(); }
-  else{
-    wivesCount.value = 1;
-    wivesInfo.innerHTML = "";
-    wivesUploads.innerHTML = "";
-    childrenMother.value = "";
-    childrenCount.value = 0;
-    childrenNamesWrap.innerHTML = "";
-    childrenUploads.innerHTML = "";
-  }
-});
-wivesCount.addEventListener("input", ()=> maritalStatus.value==="married" && renderWivesAll());
-childrenCount.addEventListener("input", ()=> maritalStatus.value==="married" && renderChildrenAll());
-
-function makeSmartIDBlock(prefix,i){
-  const faceId=`${prefix}Face_${i}`, backId=`${prefix}Back_${i}`;
-  const title = prefix==="wife" ? `هوية الزوجة ${i}` : `هوية الطفل ${i}`;
-  return `
-    <div class="mb-3 p-3 rounded border bg-white">
-      <strong class="d-block mb-2">${title}</strong>
-      <div class="mb-2">
-        <label class="fw-bold mb-1 d-block">وجه</label>
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${faceId}')">كاميرا</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="document.getElementById('${faceId}').click()">استوديو</button>
-        </div>
-        <input type="file" id="${faceId}" class="form-control d-none" accept="image/*">
-        <img id="${faceId}Preview" class="preview-img mt-2 d-none" alt="preview">
-      </div>
-      <div>
-        <label class="fw-bold mb-1 d-block">ظهر</label>
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('${backId}')">كاميرا</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="document.getElementById('${backId}').click()">استوديو</button>
-        </div>
-        <input type="file" id="${backId}" class="form-control d-none" accept="image/*">
-        <img id="${backId}Preview" class="preview-img mt-2 d-none" alt="preview">
-      </div>
-    </div>
-  `;
-}
-function bindDynamicPreviews(prefix, n){
-  for(let i=1;i<=n;i++){
-    const f=document.getElementById(`${prefix}Face_${i}`);
-    const b=document.getElementById(`${prefix}Back_${i}`);
-    bindPreview(f, document.getElementById(`${prefix}Face_${i}Preview`));
-    bindPreview(b, document.getElementById(`${prefix}Back_${i}Preview`));
-  }
-}
-
-function renderWivesAll(){
-  const n = Math.max(1, Number(wivesCount.value || 1));
-  wivesInfo.innerHTML = "";
-  wivesUploads.innerHTML = "";
-
-  for(let i=1;i<=n;i++){
-    wivesInfo.innerHTML += `
-      <div class="mb-3 p-3 rounded border bg-white">
-        <strong class="d-block mb-2">الزوجة ${i}</strong>
-        <div class="row g-2">
-          <div class="col-md-6">
-            <label class="fw-bold">اسم الزوجة الثلاثي</label>
-            <input type="text" class="form-control" id="wifeName_${i}">
-          </div>
-          <div class="col-md-3">
-            <label class="fw-bold">هل هي موظفة؟</label>
-            <select class="form-control" id="wifeEmp_${i}">
-              <option value="">اختر</option>
-              <option value="yes">نعم</option>
-              <option value="no">لا</option>
-            </select>
-          </div>
-          <div class="col-md-3" id="wifeWorkWrap_${i}" style="display:none">
-            <label class="fw-bold">مكان عملها</label>
-            <input type="text" class="form-control" id="wifeWork_${i}">
-          </div>
-        </div>
-      </div>
-    `;
-  }
-  for(let i=1;i<=n;i++) wivesUploads.innerHTML += makeSmartIDBlock("wife", i);
-  bindDynamicPreviews("wife", n);
-
-  for(let i=1;i<=n;i++){
-    const sel = document.getElementById(`wifeEmp_${i}`);
-    sel.addEventListener("change", ()=>{
-      const wrap = document.getElementById(`wifeWorkWrap_${i}`);
-      wrap.style.display = (sel.value==="yes") ? "" : "none";
-      if(sel.value!=="yes") document.getElementById(`wifeWork_${i}`).value="";
-    });
-  }
-}
-
-function renderChildrenAll(){
-  const n = Math.max(0, Number(childrenCount.value || 0));
-  childrenNamesWrap.innerHTML = "";
-  childrenUploads.innerHTML = "";
-  if(n<=0) return;
-
-  const box = document.createElement("div");
-  box.className="section";
-  box.innerHTML = `<div class="fw-bold mb-2">أسماء الأبناء</div>`;
-  for(let i=1;i<=n;i++){
-    const d=document.createElement("div");
-    d.className="mb-2";
-    d.innerHTML = `<label class="fw-bold">اسم الابن ${i}</label><input type="text" class="form-control" id="childName_${i}">`;
-    box.appendChild(d);
-  }
-  childrenNamesWrap.appendChild(box);
-
-  for(let i=1;i<=n;i++) childrenUploads.innerHTML += makeSmartIDBlock("child", i);
-  bindDynamicPreviews("child", n);
-}
-
-/* ============ Camera (smart crop) ============ */
-function isSmartIDInput(id){
-  if(["empFace","empBack","resFace","resBack"].includes(id)) return true;
-  if(/^wife(Face|Back)_\d+$/.test(id)) return true;
-  if(/^child(Face|Back)_\d+$/.test(id)) return true;
-  return false;
-}
-
-let camStream=null, targetInputId=null, validateTimer=null;
-let greenSince=null, lastAuto=0, bestShotLock=false;
-let captureMode="ID";
-
-function getCropRectInVideoPixels(){
-  if(!camVideo.videoWidth || !camVideo.videoHeight) return null;
-
-  const vr = camVideo.getBoundingClientRect();
-  const fr = idFrame.getBoundingClientRect();
-
-  const left = Math.max(fr.left, vr.left);
-  const top = Math.max(fr.top, vr.top);
-  const right = Math.min(fr.right, vr.right);
-  const bottom = Math.min(fr.bottom, vr.bottom);
-
-  const wCss = Math.max(0, right-left);
-  const hCss = Math.max(0, bottom-top);
-  if(wCss<10 || hCss<10) return null;
-
-  const sx = (left - vr.left) * (camVideo.videoWidth / vr.width);
-  const sy = (top - vr.top) * (camVideo.videoHeight / vr.height);
-  const sw = wCss * (camVideo.videoWidth / vr.width);
-  const sh = hCss * (camVideo.videoHeight / vr.height);
-
-  const x = Math.max(0, Math.min(camVideo.videoWidth-1, sx));
-  const y = Math.max(0, Math.min(camVideo.videoHeight-1, sy));
-  const w = Math.max(1, Math.min(camVideo.videoWidth-x, sw));
-  const h = Math.max(1, Math.min(camVideo.videoHeight-y, sh));
-  return {x,y,w,h};
-}
-
-function analyzeROI_lightSharp(data,w,h){
-  let sum=0,count=0;
-  const gray=new Uint8ClampedArray(w*h);
-  for(let i=0,j=0;i<data.length;i+=4,j++){
-    const g=(data[i]*0.299 + data[i+1]*0.587 + data[i+2]*0.114)|0;
-    gray[j]=g; sum+=g; count++;
-  }
-  const mean=sum/count;
-  let lapSum=0;
-  for(let y=1;y<h-1;y++){
-    for(let x=1;x<w-1;x++){
-      const c=gray[y*w+x];
-      const lap=Math.abs((gray[(y-1)*w+x]+gray[(y+1)*w+x]+gray[y*w+(x-1)]+gray[y*w+(x+1)]) - 4*c);
-      lapSum += lap;
-    }
-  }
-  const blurScore = lapSum/((w-2)*(h-2));
-  return {mean, blurScore};
-}
-
-function analyzeLightSharpFastFromVideoROI(){
-  const roi = getCropRectInVideoPixels();
-  if(!roi) return null;
-
-  const testW=220;
-  const testH=Math.max(1, Math.round(testW*(roi.h/roi.w)));
-
-  const c=document.createElement("canvas");
-  c.width=testW; c.height=testH;
-  const ctx=c.getContext("2d",{willReadFrequently:true});
-  ctx.drawImage(camVideo, roi.x, roi.y, roi.w, roi.h, 0,0,testW,testH);
-  const img=ctx.getImageData(0,0,testW,testH);
-  return analyzeROI_lightSharp(img.data,testW,testH);
-}
-
-function validateFrameFast(){
-  const st = analyzeLightSharpFastFromVideoROI();
-  if(!st) return;
-  const okLight = st.mean > 60 && st.mean < 205;
-  const okSharp = st.blurScore > 20;
-  const ok = okLight && okSharp;
-
-  idFrame.style.borderColor = ok ? "lime" : "red";
-  if(ok){
-    camHint.textContent = "✅ ممتاز — سيتم الالتقاط تلقائياً";
-    if(greenSince===null) greenSince=performance.now();
-    autoCaptureTick();
-  }else{
-    greenSince=null;
-    camHint.textContent = !okLight ? "⚠️ الإضاءة غير مناسبة" : "⚠️ مو واضح — ثبّت يدك";
-  }
-}
-
-function autoCaptureTick(){
-  if(bestShotLock) return;
-  const now=performance.now();
-  const needGreenMs=260, cooldownMs=900;
-  if(greenSince===null) return;
-  if(now-greenSince<needGreenMs) return;
-  if(now-lastAuto<cooldownMs) return;
-  lastAuto=now;
-  bestShotCapture();
-}
-
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-
-function grabCroppedFrameWithScore(){
-  const roi=getCropRectInVideoPixels();
-  if(!roi) return null;
-
-  const canvas=document.createElement("canvas");
-  canvas.width=Math.max(1, Math.round(roi.w));
-  canvas.height=Math.max(1, Math.round(roi.h));
-  const ctx=canvas.getContext("2d",{willReadFrequently:true});
-  ctx.drawImage(camVideo, roi.x, roi.y, roi.w, roi.h, 0,0,canvas.width,canvas.height);
-
-  const testW=240;
-  const testH=Math.max(1, Math.round(testW*(canvas.height/canvas.width)));
-  const c2=document.createElement("canvas");
-  c2.width=testW; c2.height=testH;
-  const x2=c2.getContext("2d",{willReadFrequently:true});
-  x2.drawImage(canvas,0,0,testW,testH);
-  const img=x2.getImageData(0,0,testW,testH);
-  const st=analyzeROI_lightSharp(img.data,testW,testH);
-
-  const dataUrl=canvas.toDataURL("image/jpeg",0.90);
-  return {dataUrl, score: st.blurScore};
-}
-
-async function saveDataUrlToInput(dataUrl){
-  const blob=await (await fetch(dataUrl)).blob();
-  const file=new File([blob],"camera.jpg",{type:"image/jpeg"});
-  const dt=new DataTransfer();
-  dt.items.add(file);
-
-  const input=document.getElementById(targetInputId);
-  input.files=dt.files;
-
-  const prev=document.getElementById(targetInputId+"Preview");
-  if(prev){
-    prev.src=URL.createObjectURL(file);
-    prev.classList.remove("d-none");
-  }
-}
-
-async function bestShotCapture(){
-  if(bestShotLock) return;
-  bestShotLock=true;
-  try{
-    const shots=[];
-    for(let i=0;i<3;i++){
-      const s=grabCroppedFrameWithScore();
-      if(s) shots.push(s);
-      await sleep(110);
-    }
-    if(!shots.length) throw new Error("no shots");
-    shots.sort((a,b)=>b.score-a.score);
-    await saveDataUrlToInput(shots[0].dataUrl);
-    camModal.hide();
-    closeCamera();
-  }catch(e){
-    console.error(e);
-    alert("صار خطأ بالالتقاط. جرّب مرة ثانية.");
-    bestShotLock=false;
-  }
-}
-
-function closeCamera(){
-  if(validateTimer){ clearInterval(validateTimer); validateTimer=null; }
-  if(camStream){ camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
-  idFrame.style.borderColor="red";
-  greenSince=null; bestShotLock=false;
-}
-
-async function openCameraFor(id){
-  if(!isCameraAllowedContext()){
-    alert("الكاميرا تشتغل فقط HTTPS أو localhost.");
-    return;
-  }
-  if(!camModal) camModal = new bootstrap.Modal(document.getElementById("camModal"));
-
-  targetInputId = id;
-  captureMode = isSmartIDInput(id) ? "ID" : "FULL";
-
-  try{
-    camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});
-    camVideo.srcObject = camStream;
-
-    if(captureMode==="ID"){
-      idFrame.style.display="block";
-      idFrame.style.borderColor="red";
-      camHint.textContent = "ضع المستند داخل الإطار — يصير أخضر ثم يلتقط تلقائياً";
-      bestShotLock=false; greenSince=null; lastAuto=0;
-      if(validateTimer) clearInterval(validateTimer);
-      validateTimer = setInterval(validateFrameFast, 110);
-    }else{
-      idFrame.style.display="none";
-      camHint.textContent = "التقاط صورة كاملة";
-      if(validateTimer){ clearInterval(validateTimer); validateTimer=null; }
-    }
-
-    camModal.show();
-  }catch(e){
-    alert("تعذر تشغيل الكاميرا. إذا أنت داخل تيليگرام افتح بالـ Chrome.");
-    console.error(e);
-  }
-}
-
-btnCapture.onclick = ()=>{
-  if(captureMode==="ID") bestShotCapture();
-  else alert("هذا الحقل مو ذكي (صورة كاملة) — استعمل الاستوديو.");
-};
-btnCamClose.onclick = closeCamera;
-btnCamClose2.onclick = closeCamera;
-
-/* ربط أزرار الكاميرا/الاستوديو */
-document.getElementById("btnCamEmpFace").onclick = ()=>openCameraFor("empFace");
-document.getElementById("btnCamEmpBack").onclick = ()=>openCameraFor("empBack");
-document.getElementById("btnCamResFace").onclick = ()=>openCameraFor("resFace");
-document.getElementById("btnCamResBack").onclick = ()=>openCameraFor("resBack");
-document.getElementById("btnCamCert").onclick = ()=>openCameraFor("certificateFile"); // شهادة صورة كاملة غالباً
-
-document.getElementById("btnStudioEmpFace").onclick = ()=>openStudio(empFace);
-document.getElementById("btnStudioEmpBack").onclick = ()=>openStudio(empBack);
-document.getElementById("btnStudioResFace").onclick = ()=>openStudio(resFace);
-document.getElementById("btnStudioResBack").onclick = ()=>openStudio(resBack);
-document.getElementById("btnStudioCert").onclick = ()=>openStudio(certificateFile);
-
-/* ============ Login ============ */
-function showLoginError(msg){
-  loginError.textContent = msg || "خطأ";
-  loginError.classList.remove("d-none");
-}
-async function doLogin(){
-  loginError.classList.add("d-none");
-  loginDone.classList.add("d-none");
-
-  const name = (loginNameEl.value || "").trim();
-  const id = (loginIdEl.value || "").trim();
-  if(!name || !id){ showLoginError("يرجى إدخال الاسم والـ ID"); return; }
-
-  const body = new URLSearchParams();
-  body.set("action","login");
-  body.set("name", name);
-  body.set("id", id);
-
-  const res = await fetch(SCRIPT_URL, { method:"POST", body });
-  const txt = (await res.text()).trim();
-
-  if(txt === "OK"){
-    localStorage.setItem("dar_login_id", id);
-    localStorage.setItem("dar_login_name", name);
-
-    loginPage.classList.add("d-none");
-    formPage.classList.remove("d-none");
-    whoUser.textContent = `${name} — ID: ${id}`;
-  }else if(txt === "DONE"){
-    loginDone.classList.remove("d-none");
-  }else{
-    showLoginError("الاسم أو الـ ID غير صحيح");
-  }
-}
-btnLogin.onclick = doLogin;
-
-btnLogout.onclick = ()=>{
-  localStorage.removeItem("dar_login_id");
-  localStorage.removeItem("dar_login_name");
-  location.reload();
-};
-
-/* ============ PDF + Submit ============ */
-const { jsPDF } = window.jspdf;
-const CM=28.35, SAFE_MARGIN=2*CM, ID_W=8.7*CM, ID_H=5.3*CM, GAP_DEFAULT=20, TOP_OFFSET=3.8*CM;
-
-function addInfoPage(pdf){
-  pdf.addPage("a4","p");
-  const w=pdf.internal.pageSize.getWidth();
-  let y=SAFE_MARGIN;
-
-  pdf.setFontSize(16);
-  pdf.text("بيانات الموظف", w/2, y, {align:"center"});
-  y += 22;
-
-  pdf.setFontSize(12);
-  const lines = [
-    `الاسم الرباعي: ${employeeName.value.trim()}`,
-    `محل الولادة: ${birthPlace.value.trim()}`,
-    `المواليد: ${birthDate.value.trim()}`,
-    `رقم الهاتف: ${phone.value.trim()}`,
-    `رقم باج العتبة: ${badgeNumber.value.trim()}`,
-    `التحصيل الدراسي: ${education.value || ""}`,
-    `التخصص: ${specialty.value.trim()}`,
-    `العنوان: ${address.value.trim()}`,
-    `الحالة الاجتماعية: ${maritalStatus.value==="married" ? "متزوج" : (maritalStatus.value==="single" ? "أعزب" : "")}`
-  ];
-  const maxW = w - SAFE_MARGIN*2;
-  lines.forEach(t=>{
-    const chunks = pdf.splitTextToSize(t, maxW);
-    pdf.text(chunks, SAFE_MARGIN, y);
-    y += 18 * chunks.length;
-  });
-}
-
-async function loadImageDataForPDF(file){
-  const dataUrl = await new Promise((res,rej)=>{
-    const r=new FileReader();
-    r.onload=e=>res(e.target.result);
-    r.onerror=rej;
-    r.readAsDataURL(file);
-  });
-
-  const img = await new Promise((res,rej)=>{
-    const i=new Image();
-    i.onload=()=>res(i);
-    i.onerror=rej;
-    i.src=dataUrl;
-  });
-
-  const c=document.createElement("canvas");
-  const ctx=c.getContext("2d");
-  const maxW=1600;
-  const scale=Math.min(1, maxW/img.width);
-  c.width=Math.round(img.width*scale);
-  c.height=Math.round(img.height*scale);
-  ctx.drawImage(img,0,0,c.width,c.height);
-
-  return {dataUrl:c.toDataURL("image/jpeg",0.88), format:"JPEG"};
-}
-
-function drawContainPDF(pdf, dataUrl, format, x,y,w,h){
-  const p=pdf.getImageProperties(dataUrl);
-  const s=Math.min(w/p.width,h/p.height);
-  const nw=p.width*s, nh=p.height*s;
-  pdf.addImage(dataUrl,format,x+(w-nw)/2,y+(h-nh)/2,nw,nh);
-}
-
-async function addIDPage(pdf, faceFile, backFile, label){
-  const face=await loadImageDataForPDF(faceFile);
-  const back=await loadImageDataForPDF(backFile);
-
-  pdf.addPage("a4","p");
-  const pageW=pdf.internal.pageSize.getWidth();
-  const safeW=pageW-(SAFE_MARGIN*2);
-
-  pdf.setFontSize(13);
-  pdf.text(label || "", pageW/2, SAFE_MARGIN+10, {align:"center"});
-
-  let gap=GAP_DEFAULT;
-  if((ID_W*2+gap)>safeW) gap=Math.max(8, safeW-(ID_W*2));
-
-  const needW=ID_W*2+gap;
-  const startX=SAFE_MARGIN+(safeW-needW)/2;
-  const startY=TOP_OFFSET;
-
-  drawContainPDF(pdf,face.dataUrl,face.format,startX,startY,ID_W,ID_H);
-  drawContainPDF(pdf,back.dataUrl,back.format,startX+ID_W+gap,startY,ID_W,ID_H);
-}
-
-async function addSingleImagePage(pdf,file,label){
-  const d=await loadImageDataForPDF(file);
-  pdf.addPage("a4","p");
-  const pageW=pdf.internal.pageSize.getWidth();
-  const pageH=pdf.internal.pageSize.getHeight();
-
-  pdf.setFontSize(13);
-  pdf.text(label || "", pageW/2, SAFE_MARGIN+10, {align:"center"});
-
-  drawContainPDF(pdf,d.dataUrl,d.format,SAFE_MARGIN,SAFE_MARGIN+22,pageW-2*SAFE_MARGIN,pageH-2*SAFE_MARGIN-22);
-}
-
-function collectWivesInfo(){
-  if(maritalStatus.value!=="married") return [];
-  const n=Math.max(1,Number(wivesCount.value||1));
-  const arr=[];
-  for(let i=1;i<=n;i++){
-    arr.push({
-      index:i,
-      name:(document.getElementById(`wifeName_${i}`)?.value||"").trim(),
-      isEmployee:(document.getElementById(`wifeEmp_${i}`)?.value||""),
-      workPlace:(document.getElementById(`wifeWork_${i}`)?.value||"").trim()
-    });
-  }
-  return arr;
-}
-function collectChildrenNames(){
-  if(maritalStatus.value!=="married") return [];
-  const n=Math.max(0,Number(childrenCount.value||0));
-  const arr=[];
-  for(let i=1;i<=n;i++) arr.push((document.getElementById(`childName_${i}`)?.value||"").trim());
-  return arr;
-}
-
-async function buildPDFBlob(){
-  const pdf=new jsPDF({unit:"px", format:"a4"});
-  addInfoPage(pdf);
-
-  await addIDPage(pdf, empFace.files[0], empBack.files[0], "البطاقة الوطنية للموظف");
-
-  if(hasResidence.checked){
-    await addIDPage(pdf, resFace.files[0], resBack.files[0], "بطاقة السكن");
-  }
-
-  if(maritalStatus.value==="married"){
-    const wCount=Math.max(1,Number(wivesCount.value||1));
-    for(let i=1;i<=wCount;i++){
-      const wf=document.getElementById(`wifeFace_${i}`)?.files?.[0];
-      const wb=document.getElementById(`wifeBack_${i}`)?.files?.[0];
-      if(wf && wb) await addIDPage(pdf, wf, wb, `هوية الزوجة ${i}`);
-    }
-
-    const cCount=Math.max(0,Number(childrenCount.value||0));
-    for(let i=1;i<=cCount;i++){
-      const cf=document.getElementById(`childFace_${i}`)?.files?.[0];
-      const cb=document.getElementById(`childBack_${i}`)?.files?.[0];
-      if(cf && cb) await addIDPage(pdf, cf, cb, `هوية الطفل ${i}`);
-    }
-  }
-
-  if(hasCertificate.checked && certificateFile.files[0]){
-    await addSingleImagePage(pdf, certificateFile.files[0], "شهادة التخرج");
-  }
-
-  if(pdf.getNumberOfPages() > 1) pdf.deletePage(1);
-  const ab = pdf.output("arraybuffer");
-  return new Blob([ab], {type:"application/pdf"});
-}
-
-async function blobToBase64(blob){
-  const ab = await blob.arrayBuffer();
-  let binary = "";
-  const bytes = new Uint8Array(ab);
-  const chunkSize = 0x8000;
-  for (let i=0;i<bytes.length;i+=chunkSize){
-    const chunk = bytes.subarray(i, i+chunkSize);
-    binary += String.fromCharCode.apply(null, chunk);
-  }
-  return btoa(binary);
-}
-
-function validateBasics(){
-  const empName = employeeName.value.trim();
-  if(!empName){ alert("يرجى إدخال الاسم الرباعي"); return false; }
-  if(!isQuadName(empName)){ alert("الاسم يجب أن يكون رباعي (4 كلمات)"); return false; }
-
-  if(!empFace.files[0] || !empBack.files[0]){
-    alert("ارفع وجه وظهر البطاقة الوطنية"); return false;
-  }
-
-  if(hasResidence.checked){
-    if(!resFace.files[0] || !resBack.files[0]){
-      alert("ارفع وجه وظهر بطاقة السكن"); return false;
-    }
-  }
-
-  if(maritalStatus.value==="married"){
-    const wCount=Math.max(1,Number(wivesCount.value||1));
-    for(let i=1;i<=wCount;i++){
-      const wn=(document.getElementById(`wifeName_${i}`)?.value||"").trim();
-      const we=(document.getElementById(`wifeEmp_${i}`)?.value||"");
-      if(!wn){ alert(`ادخل اسم الزوجة ${i}`); return false; }
-      if(!we){ alert(`حدد هل الزوجة ${i} موظفة`); return false; }
-      if(we==="yes"){
-        const wp=(document.getElementById(`wifeWork_${i}`)?.value||"").trim();
-        if(!wp){ alert(`اكتب مكان عمل الزوجة ${i}`); return false; }
-      }
-      const wf=document.getElementById(`wifeFace_${i}`)?.files?.[0];
-      const wb=document.getElementById(`wifeBack_${i}`)?.files?.[0];
-      if(!wf || !wb){ alert(`ارفع وجه وظهر هوية الزوجة ${i}`); return false; }
-    }
-
-    const cCount=Math.max(0,Number(childrenCount.value||0));
-    if(cCount>0){
-      if(!childrenMother.value.trim()){ alert("ادخل اسم أم الأبناء"); return false; }
-      const names=collectChildrenNames().filter(Boolean);
-      if(names.length<cCount){ alert("ادخل أسماء الأبناء حسب العدد"); return false; }
-
-      for(let i=1;i<=cCount;i++){
-        const cf=document.getElementById(`childFace_${i}`)?.files?.[0];
-        const cb=document.getElementById(`childBack_${i}`)?.files?.[0];
-        if(!cf || !cb){ alert(`ارفع وجه وظهر هوية الطفل ${i}`); return false; }
-      }
-    }
-  }
-
-  if(hasCertificate.checked && !certificateFile.files[0]){
-    alert("ارفع شهادة التخرج"); return false;
-  }
-
-  return true;
-}
-
-async function submitAll(){
-  const loginId = localStorage.getItem("dar_login_id") || "";
-  const loginName = localStorage.getItem("dar_login_name") || "";
-  if(!loginId || !loginName){ alert("يرجى تسجيل الدخول"); location.reload(); return; }
-
-  if(!validateBasics()) return;
-
-  submitBtn.disabled = true;
-
-  try{
-    showStatus("alert-info","جاري تجهيز ملف PDF...");
-    setProgress(true, 10, "تجهيز PDF...");
-
-    const pdfBlob = await buildPDFBlob();
-    setProgress(true, 45, "تحويل PDF...");
-
-    const pdfBase64 = await blobToBase64(pdfBlob);
-    setProgress(true, 70, "إرسال البيانات للشيت ورفع PDF...");
-
-    const body = new URLSearchParams();
-    body.set("action","submitForm");
-    body.set("loginId", loginId);
-    body.set("employeeName", employeeName.value.trim());
-    body.set("birthPlace", birthPlace.value.trim());
-    body.set("birthDate", birthDate.value.trim());
-    body.set("phone", phone.value.trim());
-    body.set("badgeNumber", badgeNumber.value.trim());
-    body.set("education", education.value || "");
-    body.set("specialty", specialty.value.trim());
-    body.set("address", address.value.trim());
-    body.set("maritalStatus", maritalStatus.value || "");
-
-    body.set("wivesCount", maritalStatus.value==="married" ? String(wivesCount.value||"1") : "");
-    body.set("wivesInfo", JSON.stringify(collectWivesInfo()));
-    body.set("childrenMother", maritalStatus.value==="married" ? childrenMother.value.trim() : "");
-    body.set("childrenCount", maritalStatus.value==="married" ? String(childrenCount.value||"0") : "");
-    body.set("childrenNames", JSON.stringify(collectChildrenNames()));
-
-    body.set("hasResidence", hasResidence.checked ? "1":"0");
-    body.set("hasBadge", "0");
-    body.set("hasCertificate", hasCertificate.checked ? "1":"0");
-
-    body.set("pdfFileName", employeeName.value.trim().replace(/\s+/g,"_") + "_documents.pdf");
-    body.set("pdfBase64", pdfBase64);
-
-    const res = await fetch(SCRIPT_URL, { method:"POST", body });
-    const txt = (await res.text()).trim();
-
-    if(txt === "OK"){
-      setProgress(true, 100, "تم الرفع ✅");
-      showStatus("alert-success","تم الرفع بنجاح ✅");
-      alert("تم الرفع بنجاح ✅ لن يُسمح بالإرسال مرة أخرى.");
-      submitBtn.disabled = true;
-    }else if(txt === "DONE"){
-      showStatus("alert-success","تم الرفع مسبقاً ✅ لا يمكن الإرسال مرة أخرى.");
-      alert("تم الرفع مسبقاً ✅");
-      submitBtn.disabled = true;
-    }else{
-      showStatus("alert-danger", txt);
-      submitBtn.disabled = false;
-    }
-
-  }catch(e){
-    console.error(e);
-    showStatus("alert-danger","صار خطأ بالإرسال. جرّب مرة ثانية ويفضل Chrome.");
-    submitBtn.disabled = false;
-  }finally{
-    setProgress(false, 0, "");
-  }
-}
-submitBtn.onclick = submitAll;
-
-/* ============ Init session ============ */
-(function init(){
-  const id = localStorage.getItem("dar_login_id");
-  const name = localStorage.getItem("dar_login_name");
-  if(id && name){
-    loginPage.classList.add("d-none");
-    formPage.classList.remove("d-none");
-    whoUser.textContent = `${name} — ID: ${id}`;
-  }
-})();
-
-</script>
 </body>
 </html>

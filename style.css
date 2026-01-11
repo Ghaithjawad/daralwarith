@@ -1,0 +1,208 @@
+:root{
+  --main:#1aa6a6;
+  --dark:#148c8c;
+  --border:#d9eeee;
+  --text:#0f3f3f;
+  --loginA:#2a3b8f;
+  --loginB:#0d1a5a;
+}
+
+*{box-sizing:border-box}
+
+body{
+  font-family:"Segoe UI",Tahoma,sans-serif;
+  color:var(--text);
+  background-image:url("https://i.suar.me/0A8qj/m");
+  background-repeat:repeat;
+  background-size:420px 420px;
+  background-attachment:fixed;
+}
+
+.wrap{
+  max-width:1050px;
+  margin:26px auto 20px;
+  padding:0 12px;
+}
+
+.cardx{
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
+  overflow:hidden;
+}
+
+.header{
+  padding:22px;
+  text-align:center;
+  color:#fff;
+}
+.header.login{
+  background:linear-gradient(135deg,var(--loginA),var(--loginB));
+}
+.header.form{
+  background:linear-gradient(135deg,var(--main),var(--dark));
+}
+
+.logo{
+  max-width:140px;
+  display:block;
+  margin:0 auto 10px;
+}
+
+.body{padding:22px}
+
+.block{
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:14px;
+  background:#fff;
+}
+
+.section{
+  border:2px dashed var(--main);
+  border-radius:14px;
+  padding:16px;
+  margin-top:14px;
+  background:#f9fefe;
+}
+
+.check-box{
+  border:1.8px solid var(--main);
+  border-radius:12px;
+  padding:12px 16px;
+  background:#f6fdfd;
+}
+
+.form-check-input{
+  width:18px;
+  height:18px;
+  margin-left:10px;
+}
+.form-check-input:checked{
+  background-color:var(--main);
+  border-color:var(--main);
+}
+
+.preview-img{
+  max-height:180px;
+  width:100%;
+  object-fit:contain;
+  border-radius:12px;
+  border:1px solid #e8e8e8;
+  background:#fff;
+}
+
+.main-btn{
+  background:var(--main);
+  border:none;
+  padding:14px 16px;
+  font-size:18px;
+  border-radius:14px;
+  color:#fff;
+}
+.main-btn:hover{background:var(--dark)}
+
+.login-btn{
+  background:var(--loginA);
+  border:none;
+  padding:14px 16px;
+  font-size:18px;
+  border-radius:14px;
+  color:#fff;
+}
+.login-btn:hover{filter:brightness(.92)}
+
+.tip{
+  background:#f2fffe;
+  border:1px solid #cfeeee;
+  border-radius:12px;
+  padding:10px 12px;
+  color:#0f3f3f;
+  font-size:.92rem;
+}
+
+.req{
+  color:#b42318;
+  font-size:.86rem;
+  display:none;
+  margin-top:6px;
+}
+.req.show{display:block}
+
+.footer-note{
+  text-align:center;
+  margin:18px auto 26px;
+  color:#0f3f3f;
+  opacity:.85;
+  font-weight:700;
+}
+
+/* Progress */
+.progress-wrap{display:none}
+.progress-wrap.show{display:block}
+.progress{
+  height:12px;
+  border-radius:999px;
+}
+.progress-bar{
+  border-radius:999px;
+}
+
+/* Camera */
+.cam-wrap{
+  position:relative;
+  width:100%;
+}
+#camVideo{
+  width:100%;
+  border-radius:12px;
+  background:#000;
+}
+.cam-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.id-frame{
+  width:72%;
+  aspect-ratio:8.7 / 5.3;
+  border:4px solid red;
+  border-radius:14px;
+  box-shadow:0 0 0 2000px rgba(0,0,0,.45);
+}
+
+/* Chrome notice */
+.open-chrome{
+  background:#fff3cd;
+  border:1px solid #ffecb5;
+  border-radius:14px;
+  padding:12px;
+}
+
+/* User badge */
+.badge-user{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#ffffff22;
+  border:1px solid #ffffff55;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:700;
+}
+.badge-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#00ff88;
+  box-shadow:0 0 0 4px #00ff8822;
+}
+
+.small-note{
+  font-size:.9rem;
+  color:#666;
+}
