@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>دار الوارث | تسجيل دخول + استمارة</title>
 
   <!-- Bootstrap -->
@@ -10,195 +10,126 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- jsPDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-
 <body>
 
 <div class="wrap">
 
-  <!-- ================= LOGIN PAGE ================= -->
-  <div id="loginPage" class="cardx">
-    <div class="header login">
-      <img src="https://i.suar.me/A3aKJ/m" class="logo" alt="دار الوارث">
-      <h4 class="mb-1">تسجيل الدخول</h4>
-      <p class="mb-0">ادخل الاسم + رقم الـ ID للدخول إلى الاستمارة</p>
-    </div>
-
-    <div class="body">
-      <div id="secureWarn" class="alert alert-warning d-none">
-        الكاميرا لا تعمل إلا على <b>HTTPS</b> أو <b>localhost</b>.
-      </div>
-
-      <div id="openChromeBox" class="open-chrome d-none mb-3">
-        <div class="fw-bold mb-1">ملاحظة مهمة</div>
-        يفضل فتح الرابط بمتصفح Google Chrome.
-        <div class="mt-2 d-flex gap-2">
-          <button class="btn btn-sm btn-primary" id="btnOpenChrome" type="button">فتح في Chrome</button>
-          <button class="btn btn-sm btn-outline-secondary" id="btnHideChrome" type="button">إخفاء</button>
-        </div>
-      </div>
-
-      <div class="block">
-        <label class="fw-bold">الاسم (ثنائي/ثلاثي)</label>
-        <input id="loginName" class="form-control" placeholder="مثال: علي حسن / علي حسن عباس">
-      </div>
-
-      <div class="block">
-        <label class="fw-bold">رقم الـ ID</label>
-        <input id="loginId" class="form-control" placeholder="مثال: 1023">
-      </div>
-
-      <div id="loginError" class="alert alert-danger d-none"></div>
-      <div id="loginDone" class="alert alert-success d-none">
-        تم الرفع مسبقاً ✅
-      </div>
-
-      <button class="w-100 login-btn" id="btnLogin" type="button">دخول</button>
-    </div>
+<!-- ================= LOGIN PAGE ================= -->
+<div id="loginPage" class="cardx">
+  <div class="header login">
+    <h4>تسجيل الدخول</h4>
+    <p>ادخل الاسم + رقم الـ ID</p>
   </div>
 
-  <!-- ================= FORM PAGE ================= -->
-  <div id="formPage" class="cardx d-none mt-4">
-    <div class="header form">
-      <img src="https://i.suar.me/A3aKJ/m" class="logo" alt="دار الوارث">
-      <h4 class="mb-2">استمارة تحديث بيانات موظفي دار الوارث</h4>
+  <div class="body">
+    <input id="loginName" class="form-control mb-3" placeholder="الاسم (ثنائي / ثلاثي)">
+    <input id="loginId" class="form-control mb-3" placeholder="رقم الـ ID">
 
-      <div class="badge-user">
-        <span class="badge-dot"></span>
-        <span id="whoUser">...</span>
-      </div>
-
-      <div class="mt-3">
-        <button type="button" class="btn btn-light btn-sm" id="btnLogout">تسجيل خروج</button>
-      </div>
+    <!-- Loading -->
+    <div id="loginLoading" class="text-center d-none mb-3">
+      <div class="spinner-border text-primary"></div>
+      <div class="mt-2">جاري التحقق من البيانات...</div>
     </div>
 
-    <div class="body">
+    <div id="loginError" class="alert alert-danger d-none"></div>
 
-      <div id="sheetStatus" class="alert d-none"></div>
+    <button id="btnLogin" class="login-btn w-100">دخول</button>
+  </div>
+</div>
 
-      <div id="progressWrap" class="progress-wrap">
-        <div class="small mb-2 text-muted" id="progressText"></div>
-        <div class="progress">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-      </div>
+<!-- ================= FORM PAGE ================= -->
+<div id="formPage" class="cardx d-none">
+  <div class="header form">
+    <h4>استمارة تحديث بيانات الموظف</h4>
+    <div id="whoUser" class="mt-2 fw-bold"></div>
+  </div>
 
-      <!-- بيانات الموظف -->
-      <div class="block">
-        <label class="fw-bold">الاسم الرباعي (إجباري)</label>
-        <input id="employeeName" class="form-control">
-        <div id="nameError" class="req">الاسم لازم يكون 4 كلمات</div>
-      </div>
+  <div class="body">
 
-      <div class="block">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="fw-bold">محل الولادة</label>
-            <input id="birthPlace" class="form-control">
-          </div>
-          <div class="col-md-6">
-            <label class="fw-bold">المواليد</label>
-            <input id="birthDate" class="form-control">
-          </div>
-          <div class="col-md-6">
-            <label class="fw-bold">رقم الهاتف</label>
-            <input id="phone" class="form-control">
-          </div>
-          <div class="col-md-6">
-            <label class="fw-bold">رقم باج العتبة</label>
-            <input id="badgeNumber" class="form-control">
-          </div>
-          <div class="col-md-6">
-            <label class="fw-bold">التحصيل الدراسي</label>
-            <select id="education" class="form-control">
-              <option value="">اختر</option>
-              <option>ابتدائية</option><option>متوسطة</option><option>إعدادية</option>
-              <option>دبلوم</option><option>بكالوريوس</option><option>ماجستير</option><option>دكتوراه</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label class="fw-bold">التخصص</label>
-            <input id="specialty" class="form-control">
-          </div>
-          <div class="col-12">
-            <label class="fw-bold">عنوان السكن</label>
-            <textarea id="address" class="form-control"></textarea>
-          </div>
-        </div>
-      </div>
+    <!-- بيانات الموظف -->
+    <div class="block">
+      <h5>بيانات الموظف</h5>
+      <input id="employeeName" class="form-control mb-2" placeholder="الاسم الرباعي">
+      <input id="birthPlace" class="form-control mb-2" placeholder="محل الولادة">
+      <input id="birthDate" class="form-control mb-2" placeholder="تاريخ الولادة">
+      <input id="phone" class="form-control mb-2" placeholder="رقم الهاتف">
+      <input id="badgeNumber" class="form-control mb-2" placeholder="رقم الباج">
+      <input id="specialty" class="form-control mb-2" placeholder="التخصص">
+      <textarea id="address" class="form-control" placeholder="عنوان السكن"></textarea>
+    </div>
 
-      <!-- البطاقة الوطنية -->
-      <div class="block">
-        <h5>البطاقة الوطنية</h5>
+    <!-- البطاقة الوطنية -->
+    <div class="block">
+      <h5>البطاقة الوطنية</h5>
 
-        <div class="mb-3">
-          <label class="fw-bold">وجه الهوية</label>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary w-50" id="btnCamEmpFace">كاميرا</button>
-            <button class="btn btn-outline-secondary w-50" id="btnStudioEmpFace">استوديو</button>
-          </div>
-          <input type="file" id="empFace" class="d-none">
-          <img id="empFacePreview" class="preview-img d-none">
-        </div>
-
-        <div>
-          <label class="fw-bold">ظهر الهوية</label>
-          <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary w-50" id="btnCamEmpBack">كاميرا</button>
-            <button class="btn btn-outline-secondary w-50" id="btnStudioEmpBack">استوديو</button>
-          </div>
-          <input type="file" id="empBack" class="d-none">
-          <img id="empBackPreview" class="preview-img d-none">
-        </div>
-      </div>
-
-      <button id="submitBtn" class="w-100 main-btn" type="button">
-        إرسال وإنشاء PDF
+      <label>وجه الهوية</label>
+      <button type="button" class="btn btn-outline-secondary w-100 mb-1" id="btnEmpFace">
+        كاميرا / استوديو
       </button>
+      <input type="file" id="empFace" accept="image/*" class="d-none">
+      <img id="empFacePreview" class="preview-img d-none">
 
-      <div class="mt-3 small-note">
-        بعد الإرسال لن يسمح بالإرسال مرة أخرى.
+      <label class="mt-3">ظهر الهوية</label>
+      <button type="button" class="btn btn-outline-secondary w-100 mb-1" id="btnEmpBack">
+        كاميرا / استوديو
+      </button>
+      <input type="file" id="empBack" accept="image/*" class="d-none">
+      <img id="empBackPreview" class="preview-img d-none">
+    </div>
+
+    <!-- بطاقة السكن -->
+    <div class="block">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="hasResidence">
+        <label class="form-check-label">هل توجد بطاقة سكن؟</label>
+      </div>
+
+      <div id="residenceSection" class="mt-3 d-none">
+        <label>وجه بطاقة السكن</label>
+        <input type="file" id="resFace" class="form-control mb-2" accept="image/*">
+        <label>ظهر بطاقة السكن</label>
+        <input type="file" id="resBack" class="form-control" accept="image/*">
       </div>
     </div>
-  </div>
 
-  <div class="footer-note">تطوير شعبة تقنية المعلومات لدار الوارث</div>
-</div>
+    <!-- شهادة -->
+    <div class="block">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="hasCertificate">
+        <label class="form-check-label">هل توجد شهادة؟</label>
+      </div>
 
-<!-- Modal Camera -->
-<div class="modal fade" id="camModal" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">الكاميرا</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="cam-wrap">
-          <video id="camVideo" autoplay playsinline></video>
-          <div class="cam-overlay">
-            <div id="idFrame" class="id-frame"></div>
-          </div>
-        </div>
-        <small id="camHint" class="text-muted">وجّه الهوية داخل الإطار</small>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
-        <button class="btn btn-success" id="btnCapture">التقاط</button>
+      <div id="certificateSection" class="mt-3 d-none">
+        <input type="file" id="certificateFile" class="form-control" accept="image/*">
       </div>
     </div>
+
+    <!-- الحالة الاجتماعية -->
+    <div class="block">
+      <label>الحالة الاجتماعية</label>
+      <select id="maritalStatus" class="form-control">
+        <option value="">اختر</option>
+        <option value="single">أعزب</option>
+        <option value="married">متزوج</option>
+      </select>
+
+      <div id="marriedSection" class="mt-3 d-none">
+        <input id="wivesCount" type="number" class="form-control mb-2" placeholder="عدد الزوجات" min="1" value="1">
+        <input id="childrenCount" type="number" class="form-control mb-2" placeholder="عدد الأبناء" min="0" value="0">
+      </div>
+    </div>
+
+    <button id="submitBtn" class="main-btn w-100">
+      إرسال البيانات
+    </button>
+
   </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 
-<!-- Main JS -->
+<!-- JS -->
 <script src="script.js"></script>
-
 </body>
 </html>
