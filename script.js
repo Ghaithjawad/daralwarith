@@ -1,5 +1,5 @@
 /* ================== CONFIG ================== */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwY8HAzvz8Nz1PO-Jeu48AYyDSXFXLcjHhhZeg6VY7442qynpYaKAEkPbY3fbp5YoU_/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyb1T8X_u71xJWKDXZs6SiFn-SjmNSnYhj-8Un07spTVfRr4y7dgppr3VpwY5c_zoXB/exec";
 
 /* ================== DOM ================== */
 const loginPage = document.getElementById("loginPage");
@@ -237,3 +237,4 @@ submitBtn.addEventListener("click", submitAll);
     whoUser.textContent = `${name} — ID: ${id}`;
   }
 })();
+
