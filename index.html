@@ -136,7 +136,31 @@ button.main-btn:hover{background:var(--dark);}
         </div>
       </div>
     </div>
-    <!-- الحالة الاجتماعية -->
+   
+    <!-- الوطنية -->
+    <div class="card p-4">
+      <h5 class="mb-2">البطاقة الوطنية للموظف <span class="text-muted">(قص ذكي داخل الإطار)</span></h5>
+      <div class="tip mb-3">ضع الهوية داخل الإطار، يصير أخضر ثم يلتقط تلقائياً.</div>
+      <div class="mb-3">
+        <label class="fw-bold mb-2 d-block">وجه الهوية</label>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empFace')">كاميرا</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empFace')">استوديو</button>
+        </div>
+        <input type="file" id="empFace" class="form-control d-none" accept="image/*">
+        <img id="empFacePreview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
+      <div>
+        <label class="fw-bold mb-2 d-block">ظهر الهوية</label>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empBack')">كاميرا</button>
+          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empBack')">استوديو</button>
+        </div>
+        <input type="file" id="empBack" class="form-control d-none" accept="image/*">
+        <img id="empBackPreview" class="preview-img mt-2 d-none" alt="preview">
+      </div>
+    </div>
+     <!-- الحالة الاجتماعية -->
     <div class="card p-4">
       <label class="fw-bold mb-2 d-block">الحالة الاجتماعية</label>
       <select id="maritalStatus" class="form-control">
@@ -169,29 +193,6 @@ button.main-btn:hover{background:var(--dark);}
             <div id="childrenUploads"></div>
           </div>
         </div>
-      </div>
-    </div>
-    <!-- الوطنية -->
-    <div class="card p-4">
-      <h5 class="mb-2">البطاقة الوطنية للموظف <span class="text-muted">(قص ذكي داخل الإطار)</span></h5>
-      <div class="tip mb-3">ضع الهوية داخل الإطار، يصير أخضر ثم يلتقط تلقائياً.</div>
-      <div class="mb-3">
-        <label class="fw-bold mb-2 d-block">وجه الهوية</label>
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empFace')">كاميرا</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empFace')">استوديو</button>
-        </div>
-        <input type="file" id="empFace" class="form-control d-none" accept="image/*">
-        <img id="empFacePreview" class="preview-img mt-2 d-none" alt="preview">
-      </div>
-      <div>
-        <label class="fw-bold mb-2 d-block">ظهر الهوية</label>
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-primary w-50" onclick="openCameraFor('empBack')">كاميرا</button>
-          <button type="button" class="btn btn-outline-secondary w-50" onclick="openStudio('empBack')">استوديو</button>
-        </div>
-        <input type="file" id="empBack" class="form-control d-none" accept="image/*">
-        <img id="empBackPreview" class="preview-img mt-2 d-none" alt="preview">
       </div>
     </div>
     <!-- السكن -->
@@ -301,7 +302,7 @@ button.main-btn:hover{background:var(--dark);}
 /* =========================
    CONFIG
 ========================= */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyb1T8X_u71xJWKDXZs6SiFn-SjmNSnYhj-8Un07spTVfRr4y7dgppr3VpwY5c_zoXB/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMui6fIP6HctPPzxs0C18EaI2LrQp5m98dfb5W3ghOENorKN9qO0WionwWUz4SOxs5/exec";
 /* =========================
    HTTPS/localhost check
 ========================= */
@@ -342,16 +343,21 @@ async function doLogin(){
     body.set("id", id);
     const res = await fetch(SCRIPT_URL, { method:"POST", body });
     const txt = (await res.text()).trim();
-    if(txt === "OK"){
-      localStorage.setItem("dar_login_id", id);
-      localStorage.setItem("dar_login_name", name);
-      document.getElementById("loginPage").classList.add("d-none");
-      document.getElementById("formPage").classList.remove("d-none");
-      // املأ الاسم المبدئي
-      if(window.employeeName) employeeName.value = name;
-      showLoginStatus("alert-success", "تم الدخول ✅");
-      return;
-    }
+   if(txt === "OK"){
+  localStorage.setItem("dar_login_id", id);
+  localStorage.setItem("dar_login_name", name);
+
+  showLoader();                // 👈 لودر
+  document.getElementById("loginPage").classList.add("d-none");
+
+  setTimeout(()=>{
+    hideLoader();
+    document.getElementById("formPage").classList.remove("d-none");
+    employeeName.value = name;
+  }, 1200); // ثانية وربع
+  return;
+}
+
     showLoginStatus("alert-danger", "فشل التحقق");
     showLoginError("الاسم أو الـ ID غير صحيح");
   }catch(e){
@@ -880,20 +886,29 @@ async function generatePDF(){
 }
 async function submitAll(){
   if(!validateBasics()) return;
+
   try{
-    showSheetStatus("alert-info","جاري إرسال البيانات إلى Google Sheet...");
-    const ok = await sendToGoogleSheetSecure();
+    showSheetStatus("alert-info","جاري إرسال البيانات...");
+
+    const ok = await sendToGoogleSheetSecure(); // ⬅️ أولاً الشيت
+
     if(!ok){
-      showSheetStatus("alert-danger","فشل الإرسال للشيت. تأكد من Apps Script (Users/Form) ثم جرّب.");
+      showSheetStatus("alert-danger","فشل الإرسال إلى Google Sheet");
       return;
     }
-    showSheetStatus("alert-success","تم إرسال البيانات ✅ جاري إنشاء PDF...");
-    await generatePDF();
-    showSheetStatus("alert-success","تم إرسال البيانات وإنشاء PDF ✅");
+
+    showSheetStatus("alert-success","تم الإرسال ✅ جاري إنشاء PDF...");
+    
+    await generatePDF(); // ⬅️ بعدها PDF
+
+    showSheetStatus("alert-success","تم الإرسال وإنشاء PDF بنجاح ✅");
+
   }catch(e){
     console.error(e);
-    showSheetStatus("alert-danger","صار خطأ غير متوقع.");
+    showSheetStatus("alert-danger","صار خطأ غير متوقع");
   }
+}
+
 }
 /* =========================
    Preview binding for new inputs created dynamically
@@ -910,7 +925,25 @@ function bindPreview(id){
     }
   });
 }
+  function showLoader(){
+  document.getElementById("loaderPage").classList.remove("d-none");
+}
+function hideLoader(){
+  document.getElementById("loaderPage").classList.add("d-none");
+}
+
 </script>
+  <!-- ===== LOADER ===== -->
+<div id="loaderPage" class="d-none"
+     style="position:fixed;inset:0;z-index:9999;
+     background:rgba(255,255,255,.9);
+     display:flex;align-items:center;justify-content:center;">
+  <div class="text-center">
+    <div class="spinner-border text-primary" style="width:4rem;height:4rem"></div>
+    <div class="mt-3 fw-bold">جاري التحميل...</div>
+  </div>
+</div>
 </body>
 </html>
+
 
